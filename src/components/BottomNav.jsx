@@ -1,17 +1,34 @@
-function BottomNav({ onAddBook }) {
+function BottomNav({ onAddBook, currentPage, onPageChange }) {
   return (
     <nav className="bottom-nav">
-      <button className="nav-item active">
+      <button
+        className={
+          currentPage === 'home'
+            ? 'nav-item active'
+            : 'nav-item'
+        }
+        onClick={() => onPageChange('home')}
+      >
         <span className="nav-icon">⌂</span>
         <span>Home</span>
       </button>
 
-      <button className="nav-item add-nav-item" onClick={onAddBook}>
+      <button
+        className="nav-item add-nav-item"
+        onClick={onAddBook}
+      >
         <span className="add-icon">＋</span>
         <span>Toevoegen</span>
       </button>
 
-      <button className="nav-item">
+      <button
+        className={
+          currentPage === 'profile'
+            ? 'nav-item active'
+            : 'nav-item'
+        }
+        onClick={() => onPageChange('profile')}
+      >
         <span className="nav-icon">👤</span>
         <span>Profiel</span>
       </button>
