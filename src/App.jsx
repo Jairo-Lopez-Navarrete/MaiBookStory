@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { supabase } from './lib/supabaseClient'
 import BookCard from './components/BookCard'
 import BookForm from './components/BookForm'
 import BottomNav from './components/BottomNav'
+import Login from './components/Login'
+import Register from './components/Register'
 
 const defaultBooks = [
   {
@@ -32,30 +35,91 @@ const defaultBooks = [
 ]
 
 function App() {
-  const [books, setBooks] = useState(() => {
-    const savedBooks = localStorage.getItem('books')
+  const [session, setSession] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [showRegister, setShowRegister] = useState(false)
 
-    return savedBooks ? JSON.parse(savedBooks) : defaultBooks
-  })
+  const [books, setBooks] = useState([])
 
   const [showBookForm, setShowBookForm] = useState(false)
   const [editingBook, setEditingBook] = useState(null)
 
   useEffect(() => {
-    localStorage.setItem('books', JSON.stringify(books))
-  }, [books])
+    async function getSession() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
 
-  function handleAddBook(book) {
-    setBooks((currentBooks) => [
-      ...currentBooks,
-      {
-        ...book,
-        id: Date.now(),
-      },
-    ])
+      setSession(session)
+      setLoading(false)
+    }
 
-    setShowBookForm(false)
+    getSession()
+
+    async function loadBooks(userId) {
+  const { data, error } = await supabase
+    .from('books')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Fout bij laden van boeken:', error)
+    return
   }
+
+  setBooks(data)
+}
+
+useEffect(() => {
+  if (session?.user) {
+    loadBooks(session.user.id)
+  }
+}, [session])
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session)
+      },
+    )
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  async function handleAddBook(book) {
+  if (!session?.user) {
+    return
+  }
+
+  const { data, error } = await supabase
+    .from('books')
+    .insert({
+      user_id: session.user.id,
+      title: book.title,
+      author: book.author,
+      rating: book.rating,
+      cover: book.cover,
+    })
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Fout bij toevoegen van boek:', error)
+    alert('Het boek kon niet worden opgeslagen.')
+    return
+  }
+
+  setBooks((currentBooks) => [
+    ...currentBooks,
+    data,
+  ])
+
+  setShowBookForm(false)
+}
 
   function handleEditBook(book) {
     setEditingBook(book)
@@ -91,6 +155,30 @@ function App() {
     setShowBookForm(false)
     setEditingBook(null)
   }
+
+  if (loading) {
+    return <div>Even laden...</div>
+  }
+
+  if (!session) {
+  if (showRegister) {
+    return (
+      <Register
+        onLogin={() => {
+          setShowRegister(false)
+        }}
+      />
+    )
+  }
+
+  return (
+    <Login
+      onRegister={() => {
+        setShowRegister(true)
+      }}
+    />
+  )
+}
 
   return (
     <div className="app">
@@ -170,4 +258,3 @@ function App() {
 }
 
 export default App
-
