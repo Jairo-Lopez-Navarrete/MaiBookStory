@@ -7,33 +7,6 @@ import BottomNav from './components/BottomNav'
 import Login from './components/Login'
 import Register from './components/Register'
 
-const defaultBooks = [
-  {
-    id: 1,
-    title: 'Harry Potter en de Steen der Wijzen',
-    author: 'J.K. Rowling',
-    rating: 5,
-    cover:
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600',
-  },
-  {
-    id: 2,
-    title: 'Dune',
-    author: 'Frank Herbert',
-    rating: 4,
-    cover:
-      'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600',
-  },
-  {
-    id: 3,
-    title: '1984',
-    author: 'George Orwell',
-    rating: 5,
-    cover:
-      'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=600',
-  },
-]
-
 function App() {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -43,6 +16,21 @@ function App() {
 
   const [showBookForm, setShowBookForm] = useState(false)
   const [editingBook, setEditingBook] = useState(null)
+
+  async function loadBooks(userId) {
+    const { data, error } = await supabase
+      .from('books')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Fout bij laden van boeken:', error)
+      return
+    }
+
+    setBooks(data)
+  }
 
   useEffect(() => {
     async function getSession() {
@@ -55,27 +43,6 @@ function App() {
     }
 
     getSession()
-
-    async function loadBooks(userId) {
-  const { data, error } = await supabase
-    .from('books')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-
-  if (error) {
-    console.error('Fout bij laden van boeken:', error)
-    return
-  }
-
-  setBooks(data)
-}
-
-useEffect(() => {
-  if (session?.user) {
-    loadBooks(session.user.id)
-  }
-}, [session])
 
     const {
       data: { subscription },
@@ -90,46 +57,75 @@ useEffect(() => {
     }
   }, [])
 
+  useEffect(() => {
+    if (session?.user) {
+      loadBooks(session.user.id)
+    }
+  }, [session])
+
   async function handleAddBook(book) {
-  if (!session?.user) {
-    return
+    if (!session?.user) {
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('books')
+      .insert({
+        user_id: session.user.id,
+        title: book.title,
+        author: book.author,
+        rating: book.rating,
+        cover: book.cover,
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Fout bij toevoegen van boek:', error)
+      alert('Het boek kon niet worden opgeslagen.')
+      return
+    }
+
+    setBooks((currentBooks) => [
+      ...currentBooks,
+      data,
+    ])
+
+    setShowBookForm(false)
   }
-
-  const { data, error } = await supabase
-    .from('books')
-    .insert({
-      user_id: session.user.id,
-      title: book.title,
-      author: book.author,
-      rating: book.rating,
-      cover: book.cover,
-    })
-    .select()
-    .single()
-
-  if (error) {
-    console.error('Fout bij toevoegen van boek:', error)
-    alert('Het boek kon niet worden opgeslagen.')
-    return
-  }
-
-  setBooks((currentBooks) => [
-    ...currentBooks,
-    data,
-  ])
-
-  setShowBookForm(false)
-}
 
   function handleEditBook(book) {
     setEditingBook(book)
     setShowBookForm(true)
   }
 
-  function handleUpdateBook(updatedBook) {
+  async function handleUpdateBook(updatedBook) {
+    if (!session?.user) {
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('books')
+      .update({
+        title: updatedBook.title,
+        author: updatedBook.author,
+        rating: updatedBook.rating,
+        cover: updatedBook.cover,
+      })
+      .eq('id', updatedBook.id)
+      .eq('user_id', session.user.id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Fout bij bewerken van boek:', error)
+      alert('Het boek kon niet worden aangepast.')
+      return
+    }
+
     setBooks((currentBooks) =>
       currentBooks.map((book) =>
-        book.id === updatedBook.id ? updatedBook : book,
+        book.id === updatedBook.id ? data : book,
       ),
     )
 
@@ -137,19 +133,35 @@ useEffect(() => {
     setShowBookForm(false)
   }
 
-  function handleDeleteBook(bookId) {
-    const confirmed = window.confirm(
-      'Weet je zeker dat je dit boek wilt verwijderen?',
-    )
+  async function handleDeleteBook(bookId) {
+  const confirmed = window.confirm(
+    'Weet je zeker dat je dit boek wilt verwijderen?',
+  )
 
-    if (!confirmed) {
-      return
-    }
-
-    setBooks((currentBooks) =>
-      currentBooks.filter((book) => book.id !== bookId),
-    )
+  if (!confirmed) {
+    return
   }
+
+  if (!session?.user) {
+    return
+  }
+
+  const { error } = await supabase
+    .from('books')
+    .delete()
+    .eq('id', bookId)
+    .eq('user_id', session.user.id)
+
+  if (error) {
+    console.error('Fout bij verwijderen van boek:', error)
+    alert('Het boek kon niet worden verwijderd.')
+    return
+  }
+
+  setBooks((currentBooks) =>
+    currentBooks.filter((book) => book.id !== bookId),
+  )
+}
 
   function handleCloseForm() {
     setShowBookForm(false)
@@ -161,24 +173,24 @@ useEffect(() => {
   }
 
   if (!session) {
-  if (showRegister) {
+    if (showRegister) {
+      return (
+        <Register
+          onLogin={() => {
+            setShowRegister(false)
+          }}
+        />
+      )
+    }
+
     return (
-      <Register
-        onLogin={() => {
-          setShowRegister(false)
+      <Login
+        onRegister={() => {
+          setShowRegister(true)
         }}
       />
     )
   }
-
-  return (
-    <Login
-      onRegister={() => {
-        setShowRegister(true)
-      }}
-    />
-  )
-}
 
   return (
     <div className="app">
@@ -191,7 +203,8 @@ useEffect(() => {
           <div>
             <h2>Jouw boeken</h2>
             <p>
-              {books.length} {books.length === 1 ? 'boek' : 'boeken'}
+              {books.length}{' '}
+              {books.length === 1 ? 'boek' : 'boeken'}
             </p>
           </div>
 
