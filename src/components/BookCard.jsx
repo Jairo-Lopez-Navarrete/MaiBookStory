@@ -3,9 +3,20 @@ import { useRef } from 'react'
 function BookCard({ book, onEdit, onDelete }) {
   const pressTimer = useRef(null)
   const longPressTriggered = useRef(false)
+  const startPosition = useRef(null)
 
-  function startLongPress() {
+  function startLongPress(event) {
     longPressTriggered.current = false
+
+    // Bij touch onthouden we waar de vinger begon.
+    if (event.touches && event.touches.length > 0) {
+      startPosition.current = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      }
+    } else {
+      startPosition.current = null
+    }
 
     pressTimer.current = setTimeout(() => {
       longPressTriggered.current = true
@@ -18,11 +29,45 @@ function BookCard({ book, onEdit, onDelete }) {
     }, 200)
   }
 
-  function stopLongPress() {
+  function cancelLongPress() {
     if (pressTimer.current) {
       clearTimeout(pressTimer.current)
       pressTimer.current = null
     }
+  }
+
+  function handleTouchMove(event) {
+    if (
+      !startPosition.current ||
+      !event.touches ||
+      event.touches.length === 0
+    ) {
+      return
+    }
+
+    const currentX = event.touches[0].clientX
+    const currentY = event.touches[0].clientY
+
+    const moveX =
+      Math.abs(
+        currentX - startPosition.current.x,
+      )
+
+    const moveY =
+      Math.abs(
+        currentY - startPosition.current.y,
+      )
+
+    // Zodra de vinger beweegt, beschouwen we dit
+    // als scrollen en annuleren we de long press.
+    if (moveX > 10 || moveY > 10) {
+      cancelLongPress()
+    }
+  }
+
+  function handleTouchEnd() {
+    cancelLongPress()
+    startPosition.current = null
   }
 
   function handleClick() {
@@ -38,11 +83,12 @@ function BookCard({ book, onEdit, onDelete }) {
     <article
       className="book-card"
       onTouchStart={startLongPress}
-      onTouchEnd={stopLongPress}
-      onTouchCancel={stopLongPress}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
       onMouseDown={startLongPress}
-      onMouseUp={stopLongPress}
-      onMouseLeave={stopLongPress}
+      onMouseUp={cancelLongPress}
+      onMouseLeave={cancelLongPress}
       onClick={handleClick}
     >
       <div className="book-cover">
