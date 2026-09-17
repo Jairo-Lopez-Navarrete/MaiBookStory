@@ -1,119 +1,121 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
 function Profile({ user, bookCount, onLogout }) {
-  const [username, setUsername] = useState('')
-  const [avatarUrl, setAvatarUrl] = useState('')
-  const [status, setStatus] = useState('')
+  const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [editingStatus, setEditingStatus] = useState(false)
-  const [savingAvatar, setSavingAvatar] = useState(false)
+  const [saving, setSaving] = useState(false)
 
-  const [followerCount, setFollowerCount] = useState(0)
-  const [followingCount, setFollowingCount] = useState(0)
+  const [editOpen, setEditOpen] = useState(false)
+  const [editUsername, setEditUsername] = useState('')
+  const [editStatus, setEditStatus] = useState('')
+
+  const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    if (!user?.id) {
+      setLoading(false)
+      return
+    }
+
+    loadProfile()
+  }, [user?.id])
 
   async function loadProfile() {
+    setLoading(true)
+
     const { data, error } = await supabase
       .from('profiles')
-      .select('username, avatar_url, status')
+      .select('*')
       .eq('id', user.id)
       .single()
 
     if (error) {
-      console.error(
-        'Fout bij laden van profiel:',
-        error,
-      )
+      console.error('Profiel laden mislukt:', error)
+      setLoading(false)
       return
     }
 
-    setUsername(data.username)
-    setAvatarUrl(data.avatar_url || '')
-    setStatus(data.status || '')
+    setProfile(data)
+    setEditUsername(data.username || '')
+    setEditStatus(data.status || '')
+    setLoading(false)
   }
 
-  async function loadFollowCounts() {
-    const {
-      data: followers,
-      error: followersError,
-    } = await supabase.rpc(
-      'get_user_follower_count',
-      {
-        profile_user_id: user.id,
-      },
-    )
-
-    if (followersError) {
-      console.error(
-        'Fout bij laden van volgers:',
-        followersError,
-      )
-    } else {
-      setFollowerCount(followers)
-    }
-
-    const {
-      data: following,
-      error: followingError,
-    } = await supabase.rpc(
-      'get_user_following_count',
-      {
-        profile_user_id: user.id,
-      },
-    )
-
-    if (followingError) {
-      console.error(
-        'Fout bij laden van volgend:',
-        followingError,
-      )
-    } else {
-      setFollowingCount(following)
-    }
+  function openEdit() {
+    setEditUsername(profile?.username || '')
+    setEditStatus(profile?.status || '')
+    setEditOpen(true)
   }
 
-  async function handleAvatarChange(event) {
-    const file = event.target.files[0]
+  async function saveProfile() {
+    const username = editUsername.trim()
+    const status = editStatus.trim()
 
-    if (!file) {
+    if (!username) {
+      alert('Je naam mag niet leeg zijn.')
       return
     }
 
-    if (!file.type.startsWith('image/')) {
-      alert('Kies een afbeelding.')
+    setSaving(true)
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        username,
+        status,
+      })
+      .eq('id', user.id)
+      .select()
+      .single()
+
+    if (error) {
+      if (error.code === '23505') {
+        alert('Deze naam is al in gebruik.')
+      } else {
+        alert(`Opslaan mislukt: ${error.message}`)
+      }
+
+      setSaving(false)
       return
     }
 
-    setSavingAvatar(true)
+    setProfile(data)
+    setEditUsername(data.username || '')
+    setEditStatus(data.status || '')
+    setEditOpen(false)
+    setSaving(false)
+  }
+
+  function handlePhotoClick() {
+    fileInputRef.current?.click()
+  }
+
+  async function handleImageChange(event) {
+    const file = event.target.files?.[0]
+
+    if (!file) return
 
     const reader = new FileReader()
 
     reader.onload = async () => {
-      const newAvatarUrl = reader.result
+      const avatarUrl = reader.result
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .update({
-          avatar_url: newAvatarUrl,
+          avatar_url: avatarUrl,
         })
         .eq('id', user.id)
+        .select()
+        .single()
 
       if (error) {
-        console.error(
-          'Fout bij opslaan van profielfoto:',
-          error,
-        )
-
-        alert(
-          'De profielfoto kon niet worden opgeslagen.',
-        )
-
-        setSavingAvatar(false)
+        alert(`Foto opslaan mislukt: ${error.message}`)
         return
       }
 
-      setAvatarUrl(newAvatarUrl)
-      setSavingAvatar(false)
+      setProfile(data)
     }
 
     reader.readAsDataURL(file)
@@ -121,191 +123,149 @@ function Profile({ user, bookCount, onLogout }) {
     event.target.value = ''
   }
 
-  async function saveStatus() {
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        status: status.trim(),
-      })
-      .eq('id', user.id)
-
-    if (error) {
-      console.error(
-        'Fout bij opslaan van status:',
-        error,
-      )
-
-      alert(
-        'De status kon niet worden opgeslagen.',
-      )
-
-      return
-    }
-
-    setStatus(status.trim())
-    setEditingStatus(false)
+  if (loading) {
+    return (
+      <main className="main-content">
+        <p>Profiel laden...</p>
+      </main>
+    )
   }
 
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true)
-
-      await Promise.all([
-        loadProfile(),
-        loadFollowCounts(),
-      ])
-
-      setLoading(false)
-    }
-
-    loadData()
-  }, [user.id])
+  if (!profile) {
+    return (
+      <main className="main-content">
+        <p>Je profiel kon niet worden geladen.</p>
+      </main>
+    )
+  }
 
   return (
-    <main className="profile-page">
-      <div className="profile-header">
+    <main className="main-content profile-page">
+      <section className="profile-card">
         <div className="profile-avatar-wrapper">
-          <label
-            className="profile-avatar profile-avatar-clickable"
-            title="Profielfoto aanpassen"
+          <button
+            type="button"
+            className="profile-avatar-button"
+            onClick={handlePhotoClick}
+            aria-label="Profielfoto wijzigen"
           >
-            {avatarUrl ? (
+            {profile.avatar_url ? (
               <img
-                src={avatarUrl}
-                alt={`Profielfoto van ${username}`}
+                src={profile.avatar_url}
+                alt="Profielfoto"
+                className="profile-avatar"
               />
             ) : (
-              '👤'
+              <div className="profile-avatar profile-avatar-placeholder">
+                👤
+              </div>
             )}
+          </button>
 
-            <span className="profile-avatar-camera">
-              📷
-            </span>
+          <button
+            type="button"
+            className="profile-edit-button"
+            onClick={openEdit}
+            aria-label="Naam en status aanpassen"
+          >
+            ✏️
+          </button>
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              disabled={savingAvatar}
-            />
-          </label>
-
-          {savingAvatar && (
-            <p className="profile-avatar-saving">
-              Profielfoto opslaan...
-            </p>
-          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            hidden
+          />
         </div>
 
-        {loading ? (
-          <p>Profiel laden...</p>
-        ) : (
-          <>
-            <h2>{username}</h2>
+        <h2 className="profile-name">
+          {profile.username}
+        </h2>
 
-            {editingStatus ? (
-              <div className="profile-status-editor">
-                <textarea
-                  value={status}
-                  onChange={(event) =>
-                    setStatus(event.target.value)
-                  }
-                  placeholder="Vertel iets over jezelf..."
-                  rows="3"
-                  maxLength="150"
-                />
-
-                <div className="profile-status-actions">
-                  <button
-                    type="button"
-                    onClick={saveStatus}
-                  >
-                    Opslaan
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setEditingStatus(false)
-                    }
-                  >
-                    Annuleren
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                {status ? (
-                  <p>{status}</p>
-                ) : (
-                  <p>
-                    Nog geen status toegevoegd.
-                  </p>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setEditingStatus(true)
-                  }
-                >
-                  ✏️ Status bewerken
-                </button>
-              </>
-            )}
-
-            <div className="profile-stats">
-              <div>
-                <strong>{bookCount}</strong>
-                <span>boeken</span>
-              </div>
-
-              <div>
-                <strong>{followerCount}</strong>
-                <span>volgers</span>
-              </div>
-
-              <div>
-                <strong>{followingCount}</strong>
-                <span>volgend</span>
-              </div>
-            </div>
-          </>
+        {profile.status && (
+          <p className="profile-status">
+            {profile.status}
+          </p>
         )}
-      </div>
 
-      <div className="profile-info">
-        <div className="profile-info-item">
-          <span>📧</span>
+        <p className="profile-book-count">
+          {bookCount}{' '}
+          {bookCount === 1 ? 'boek' : 'boeken'}
+        </p>
 
-          <div>
-            <strong>E-mail</strong>
-            <p>{user.email}</p>
+        <button
+          type="button"
+          className="logout-button"
+          onClick={onLogout}
+        >
+          Uitloggen
+        </button>
+      </section>
+
+      {editOpen && (
+        <div className="profile-edit-overlay">
+          <div className="profile-edit-modal">
+            <div className="profile-edit-header">
+              <h3>Profiel aanpassen</h3>
+
+              <button
+                type="button"
+                className="profile-edit-close"
+                onClick={() => setEditOpen(false)}
+                aria-label="Sluiten"
+              >
+                ×
+              </button>
+            </div>
+
+            <label>
+              Naam
+              <input
+                type="text"
+                value={editUsername}
+                onChange={(event) =>
+                  setEditUsername(event.target.value)
+                }
+                maxLength={30}
+              />
+            </label>
+
+            <label>
+              Status
+              <input
+                type="text"
+                value={editStatus}
+                onChange={(event) =>
+                  setEditStatus(event.target.value)
+                }
+                maxLength={80}
+                placeholder="Bijvoorbeeld: Lezen is mijn favoriete hobby 📚"
+              />
+            </label>
+
+            <div className="profile-edit-actions">
+              <button
+                type="button"
+                className="profile-edit-cancel"
+                onClick={() => setEditOpen(false)}
+              >
+                Annuleren
+              </button>
+
+              <button
+                type="button"
+                className="profile-edit-save"
+                onClick={saveProfile}
+                disabled={saving}
+              >
+                {saving ? 'Opslaan...' : 'Opslaan'}
+              </button>
+            </div>
           </div>
         </div>
-
-        <div className="profile-info-item">
-          <span>📚</span>
-
-          <div>
-            <strong>Mijn boeken</strong>
-
-            <p>
-              {bookCount}{' '}
-              {bookCount === 1
-                ? 'boek'
-                : 'boeken'}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <button
-        className="logout-button"
-        onClick={onLogout}
-      >
-        🚪 Uitloggen
-      </button>
+      )}
     </main>
   )
 }

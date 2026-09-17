@@ -48,7 +48,7 @@ function UserProfile({ user, onBack }) {
         followersError,
       )
     } else {
-      setFollowerCount(followers)
+      setFollowerCount(followers || 0)
     }
 
     const {
@@ -67,7 +67,7 @@ function UserProfile({ user, onBack }) {
         followingError,
       )
     } else {
-      setFollowingCount(following)
+      setFollowingCount(following || 0)
     }
   }
 
@@ -240,8 +240,12 @@ function UserProfile({ user, onBack }) {
             user.username}
         </h2>
 
-        {profile?.status && (
+        {profile?.status ? (
           <p>{profile.status}</p>
+        ) : (
+          <p className="profile-no-status">
+            Nog geen status toegevoegd.
+          </p>
         )}
 
         {user.id !== profile?.id && (
@@ -258,7 +262,7 @@ function UserProfile({ user, onBack }) {
         {loading ? (
           <p>Profiel laden...</p>
         ) : (
-          <div>
+          <div className="profile-stats">
             <div>
               <strong>{bookCount}</strong>
               <span>boeken</span>

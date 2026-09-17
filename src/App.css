@@ -2154,3 +2154,537 @@ body {
 .cover-preview-clickable:active {
   transform: scale(0.98);
 }
+/* =========================================
+   PROFIEL - NAAM BEWERKEN
+========================================= */
+
+.profile-name-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+.profile-name-display h2 {
+  margin: 0;
+}
+
+.profile-name-editor {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 10px;
+}
+
+.profile-name-editor input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #ddd;
+  border-radius: 12px;
+
+  background: white;
+
+  font-family: inherit;
+  font-size: 16px;
+
+  text-align: center;
+  outline: none;
+}
+
+.profile-name-editor input:focus {
+  border-color: #aaa29a;
+
+  box-shadow:
+    0 0 0 3px rgba(170, 162, 154, 0.12);
+}
+
+.profile-small-edit-button {
+  border: none !important;
+  background: none !important;
+
+  padding: 4px 8px !important;
+  margin: 0 0 10px !important;
+
+  color: #777;
+
+  font-size: 13px !important;
+  font-weight: 500 !important;
+
+  cursor: pointer;
+}
+
+.profile-small-edit-button:active {
+  transform: scale(0.97);
+}
+
+.profile-edit-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-top: 9px;
+}
+
+.profile-edit-actions button {
+  min-height: 40px;
+
+  padding: 8px 15px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #111;
+  color: white;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.profile-edit-actions button:last-child {
+  background: #eeeeee;
+  color: #333;
+}
+
+.profile-edit-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   PROFIEL STATUS
+========================================= */
+
+.profile-status-editor {
+  width: 100%;
+  max-width: 320px;
+
+  margin: 4px auto 10px;
+}
+
+.profile-status-editor textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 12px;
+
+  border: 1px solid #ddd;
+  border-radius: 12px;
+
+  background: white;
+
+  font-family: inherit;
+  font-size: 15px;
+
+  resize: vertical;
+  outline: none;
+}
+
+.profile-status-editor textarea:focus {
+  border-color: #aaa29a;
+
+  box-shadow:
+    0 0 0 3px rgba(170, 162, 154, 0.12);
+}
+
+.profile-status-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-top: 8px;
+}
+
+.profile-status-actions button {
+  min-height: 40px;
+
+  padding: 8px 15px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #111;
+  color: white;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.profile-status-actions button:last-child {
+  background: #eeeeee;
+  color: #333;
+}
+
+.profile-status-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profile-no-status {
+  color: #999 !important;
+}
+
+
+/* =========================================
+   ZOEKEN NAAR GEBRUIKERS
+========================================= */
+
+.user-search-results {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.user-search-result {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #eee;
+  border-radius: 14px;
+
+  background: white;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
+}
+
+.user-search-result:active {
+  transform: scale(0.98);
+  background: #f7f7f7;
+}
+
+
+/* =========================================
+   KLEINE PROFIELFOTO ZOEKRESULTAAT
+========================================= */
+
+.user-search-avatar {
+  width: 50px;
+  height: 50px;
+
+  min-width: 50px;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f1f1f1;
+
+  font-size: 24px;
+}
+
+.user-search-avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+/* =========================================
+   INFORMATIE ZOEKRESULTAAT
+========================================= */
+
+.user-search-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.user-search-info strong {
+  overflow: hidden;
+
+  font-size: 16px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-search-info span {
+  overflow: hidden;
+
+  color: #777;
+
+  font-size: 13px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-search-info .user-search-status {
+  color: #555;
+}
+
+.user-search-message {
+  margin: 10px 4px;
+
+  color: #888;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   KLEINE GSM
+========================================= */
+
+@media (max-width: 380px) {
+  .user-search-avatar {
+    width: 44px;
+    height: 44px;
+
+    min-width: 44px;
+  }
+
+  .user-search-info strong {
+    font-size: 15px;
+  }
+
+  .user-search-info span {
+    font-size: 12px;
+  }
+}
+/* ================================
+   PROFIEL - NIEUWE LAYOUT
+================================ */
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  padding: 20px 16px 30px;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 16px;
+}
+
+.profile-avatar-button {
+  width: 130px;
+  height: 130px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.profile-avatar-button:active {
+  transform: scale(0.97);
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eeeeee;
+  font-size: 52px;
+}
+
+.profile-edit-button {
+  position: absolute;
+  right: -2px;
+  bottom: 4px;
+  width: 38px;
+  height: 38px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.profile-edit-button:active {
+  transform: scale(0.92);
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profile-status {
+  margin: 7px 0 0;
+  color: #777;
+  font-size: 15px;
+}
+
+/* Bewerkscherm */
+
+.profile-edit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 16px;
+}
+
+.profile-edit-modal {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+.profile-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.profile-edit-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.profile-edit-close {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f1f1;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.profile-edit-modal label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-edit-modal input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 7px;
+  padding: 12px 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+}
+
+.profile-edit-modal input:focus {
+  border-color: #999;
+}
+
+.profile-edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.profile-edit-actions button {
+  flex: 1;
+  min-height: 46px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-edit-cancel {
+  background: #eeeeee;
+  color: #333;
+}
+
+.profile-edit-save {
+  background: #222;
+  color: white;
+}
+
+.profile-edit-save:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .profile-avatar-wrapper,
+  .profile-avatar-button {
+    width: 115px;
+    height: 115px;
+  }
+
+  .profile-avatar-placeholder {
+    font-size: 46px;
+  }
+
+  .profile-edit-button {
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+  }
+}
