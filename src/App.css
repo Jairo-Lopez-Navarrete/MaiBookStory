@@ -529,4 +529,264 @@
   .star {
     font-size: 34px;
   }
+  .user-search {
+  margin-bottom: 24px;
+}
+
+.user-search input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.user-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.user-search-result {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-search-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f1f1;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.user-search-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-search-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-search-info strong {
+  font-size: 16px;
+}
+
+.user-search-info span {
+  font-size: 14px;
+  color: #777;
+}
+/* Publiek profiel - boeken */
+
+.user-books {
+  margin-top: 32px;
+}
+
+.user-books h3 {
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.user-books-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.user-book-card {
+  min-width: 0;
+}
+
+.user-book-cover {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f1f1f1;
+  margin-bottom: 8px;
+}
+
+.user-book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.user-book-card h4 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.user-book-card p {
+  margin: 4px 0 6px;
+  font-size: 13px;
+  color: #777;
+  line-height: 1.3;
+}
+
+.user-book-rating {
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+/* Publiek profiel - header */
+
+.profile-page {
+  padding: 20px 16px 100px;
+}
+
+.profile-page > button:first-child {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.profile-header {
+  text-align: center;
+}
+
+.profile-header .profile-avatar {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f1f1;
+  font-size: 40px;
+}
+
+.profile-header .profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.profile-header > p {
+  margin: 8px auto 16px;
+  max-width: 300px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.profile-header > button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.profile-header > div:not(.profile-avatar) {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin-bottom: 8px;
+}
+
+.profile-header > div:not(.profile-avatar) > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.profile-header > div:not(.profile-avatar) strong {
+  font-size: 20px;
+}
+
+.profile-header > div:not(.profile-avatar) span {
+  font-size: 13px;
+  color: #777;
+}
+/* Eigen profiel - statistieken */
+
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin: 24px 0;
+}
+
+.profile-stats > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.profile-stats strong {
+  font-size: 20px;
+}
+
+.profile-stats span {
+  font-size: 13px;
+  color: #777;
+}
+
+/* Eigen profiel - status */
+
+.profile-status-editor {
+  margin-top: 12px;
+}
+
+.profile-status-editor textarea {
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.profile-status-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.profile-status-actions button,
+.profile-header > button {
+  border: none;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
 }

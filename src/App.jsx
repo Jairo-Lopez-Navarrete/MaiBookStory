@@ -7,6 +7,8 @@ import BottomNav from './components/BottomNav'
 import Login from './components/Login'
 import Register from './components/Register'
 import Profile from './components/Profile'
+import UserSearch from './components/UserSearch'
+import UserProfile from './components/UserProfile'
 
 function App() {
   const [session, setSession] = useState(null)
@@ -18,6 +20,7 @@ function App() {
   const [showBookForm, setShowBookForm] = useState(false)
   const [editingBook, setEditingBook] = useState(null)
   const [currentPage, setCurrentPage] = useState('home')
+  const [selectedUser, setSelectedUser] = useState(null)
 
   async function loadBooks(userId) {
     const { data, error } = await supabase
@@ -213,58 +216,69 @@ function App() {
             <h1>📚 Bookshelf</h1>
           </header>
 
-          <main className="main-content">
-            <section className="library-header">
-              <div>
-                <h2>Jouw boeken</h2>
-                <p>
-                  {books.length}{' '}
-                  {books.length === 1 ? 'boek' : 'boeken'}
-                </p>
-              </div>
+<main className="main-content">
+  {selectedUser ? (
+    <UserProfile
+      user={selectedUser}
+      onBack={() => setSelectedUser(null)}
+    />
+  ) : (
+    <>
+      <UserSearch onUserSelect={setSelectedUser} />
 
-              <button
-                className="add-book-button"
-                onClick={() => {
-                  setEditingBook(null)
-                  setShowBookForm(true)
-                }}
-              >
-                <span>＋</span>
-                Boek toevoegen
-              </button>
-            </section>
+      <section className="library-header">
+        <div>
+          <h2>Jouw boeken</h2>
+          <p>
+            {books.length}{' '}
+            {books.length === 1 ? 'boek' : 'boeken'}
+          </p>
+        </div>
 
-            {books.length === 0 ? (
-              <div className="empty-library">
-                <div className="empty-icon">📚</div>
+        <button
+          className="add-book-button"
+          onClick={() => {
+            setEditingBook(null)
+            setShowBookForm(true)
+          }}
+        >
+          <span>＋</span>
+          Boek toevoegen
+        </button>
+      </section>
 
-                <h2>Nog geen boeken</h2>
+      {books.length === 0 ? (
+        <div className="empty-library">
+          <div className="empty-icon">📚</div>
 
-                <p>
-                  Voeg je eerste boek toe aan je persoonlijke bibliotheek.
-                </p>
+          <h2>Nog geen boeken</h2>
 
-                <button
-                  className="empty-add-button"
-                  onClick={() => setShowBookForm(true)}
-                >
-                  ＋ Eerste boek toevoegen
-                </button>
-              </div>
-            ) : (
-              <section className="book-grid">
-                {books.map((book) => (
-                  <BookCard
-                    key={book.id}
-                    book={book}
-                    onEdit={handleEditBook}
-                    onDelete={handleDeleteBook}
-                  />
-                ))}
-              </section>
-            )}
-          </main>
+          <p>
+            Voeg je eerste boek toe aan je persoonlijke bibliotheek.
+          </p>
+
+          <button
+            className="empty-add-button"
+            onClick={() => setShowBookForm(true)}
+          >
+            ＋ Eerste boek toevoegen
+          </button>
+        </div>
+      ) : (
+        <section className="book-grid">
+          {books.map((book) => (
+            <BookCard
+              key={book.id}
+              book={book}
+              onEdit={handleEditBook}
+              onDelete={handleDeleteBook}
+            />
+          ))}
+        </section>
+      )}
+    </>
+  )}
+</main>
         </>
       )}
 
