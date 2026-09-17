@@ -30,7 +30,10 @@ function App() {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('Fout bij laden van boeken:', error)
+      console.error(
+        'Fout bij laden van boeken:',
+        error,
+      )
       return
     }
 
@@ -86,14 +89,21 @@ function App() {
       .single()
 
     if (error) {
-      console.error('Fout bij toevoegen van boek:', error)
-      alert('Het boek kon niet worden opgeslagen.')
+      console.error(
+        'Fout bij toevoegen van boek:',
+        error,
+      )
+
+      alert(
+        'Het boek kon niet worden opgeslagen.',
+      )
+
       return
     }
 
     setBooks((currentBooks) => [
-      ...currentBooks,
       data,
+      ...currentBooks,
     ])
 
     setShowBookForm(false)
@@ -123,14 +133,23 @@ function App() {
       .single()
 
     if (error) {
-      console.error('Fout bij bewerken van boek:', error)
-      alert('Het boek kon niet worden aangepast.')
+      console.error(
+        'Fout bij bewerken van boek:',
+        error,
+      )
+
+      alert(
+        'Het boek kon niet worden aangepast.',
+      )
+
       return
     }
 
     setBooks((currentBooks) =>
       currentBooks.map((book) =>
-        book.id === updatedBook.id ? data : book,
+        book.id === updatedBook.id
+          ? data
+          : book,
       ),
     )
 
@@ -158,13 +177,22 @@ function App() {
       .eq('user_id', session.user.id)
 
     if (error) {
-      console.error('Fout bij verwijderen van boek:', error)
-      alert('Het boek kon niet worden verwijderd.')
+      console.error(
+        'Fout bij verwijderen van boek:',
+        error,
+      )
+
+      alert(
+        'Het boek kon niet worden verwijderd.',
+      )
+
       return
     }
 
     setBooks((currentBooks) =>
-      currentBooks.filter((book) => book.id !== bookId),
+      currentBooks.filter(
+        (book) => book.id !== bookId,
+      ),
     )
   }
 
@@ -176,6 +204,7 @@ function App() {
   async function handleLogout() {
     await supabase.auth.signOut()
     setCurrentPage('home')
+    setSelectedUser(null)
   }
 
   if (loading) {
@@ -213,78 +242,98 @@ function App() {
       ) : (
         <>
           <header className="header">
-            <h1>📚 Bookshelf</h1>
+            <h1>📚 MaiBookStory</h1>
+            <p>Jouw persoonlijke boekenwereld</p>
           </header>
 
-<main className="main-content">
-  {selectedUser ? (
-    <UserProfile
-      user={selectedUser}
-      onBack={() => setSelectedUser(null)}
-    />
-  ) : (
-    <>
-      <UserSearch onUserSelect={setSelectedUser} />
+          <main className="main-content">
+            {selectedUser ? (
+              <UserProfile
+                user={selectedUser}
+                onBack={() => setSelectedUser(null)}
+              />
+            ) : (
+              <>
+                <UserSearch
+                  onUserSelect={setSelectedUser}
+                />
 
-      <section className="library-header">
-        <div>
-          <h2>Jouw boeken</h2>
-          <p>
-            {books.length}{' '}
-            {books.length === 1 ? 'boek' : 'boeken'}
-          </p>
-        </div>
+                <section className="library-header">
+                  <div>
+                    <h2>Mijn boeken</h2>
 
-        <button
-          className="add-book-button"
-          onClick={() => {
-            setEditingBook(null)
-            setShowBookForm(true)
-          }}
-        >
-          <span>＋</span>
-          Boek toevoegen
-        </button>
-      </section>
+                    <p>
+                      {books.length === 0
+                        ? 'Begin je persoonlijke bibliotheek'
+                        : `${books.length} ${
+                            books.length === 1
+                              ? 'boek'
+                              : 'boeken'
+                          } in je bibliotheek`}
+                    </p>
+                  </div>
 
-      {books.length === 0 ? (
-        <div className="empty-library">
-          <div className="empty-icon">📚</div>
+                  <button
+                    className="add-book-button"
+                    onClick={() => {
+                      setEditingBook(null)
+                      setShowBookForm(true)
+                    }}
+                  >
+                    <span>＋</span>
+                    Boek toevoegen
+                  </button>
+                </section>
 
-          <h2>Nog geen boeken</h2>
+                {books.length === 0 ? (
+                  <div className="empty-library">
+                    <div className="empty-icon">
+                      📚
+                    </div>
 
-          <p>
-            Voeg je eerste boek toe aan je persoonlijke bibliotheek.
-          </p>
+                    <h2>Nog geen boeken</h2>
 
-          <button
-            className="empty-add-button"
-            onClick={() => setShowBookForm(true)}
-          >
-            ＋ Eerste boek toevoegen
-          </button>
-        </div>
-      ) : (
-        <section className="book-grid">
-          {books.map((book) => (
-            <BookCard
-              key={book.id}
-              book={book}
-              onEdit={handleEditBook}
-              onDelete={handleDeleteBook}
-            />
-          ))}
-        </section>
-      )}
-    </>
-  )}
-</main>
+                    <p>
+                      Voeg je eerste boek toe aan
+                      je persoonlijke bibliotheek.
+                    </p>
+
+                    <button
+                      className="empty-add-button"
+                      onClick={() =>
+                        setShowBookForm(true)
+                      }
+                    >
+                      ＋ Eerste boek toevoegen
+                    </button>
+                  </div>
+                ) : (
+                  <section className="book-grid">
+                    {books.map((book) => (
+                      <BookCard
+                        key={book.id}
+                        book={book}
+                        onEdit={handleEditBook}
+                        onDelete={handleDeleteBook}
+                      />
+                    ))}
+                  </section>
+                )}
+              </>
+            )}
+          </main>
         </>
       )}
 
       <BottomNav
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={(page) => {
+          setCurrentPage(page)
+
+          if (page === 'home') {
+            setSelectedUser(null)
+          }
+        }}
         onAddBook={() => {
           setEditingBook(null)
           setShowBookForm(true)

@@ -32,6 +32,11 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
       return
     }
 
+    if (!file.type.startsWith('image/')) {
+      alert('Kies een afbeelding.')
+      return
+    }
+
     const reader = new FileReader()
 
     reader.onload = () => {
@@ -83,29 +88,48 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
     <div className="form-overlay">
       <div className="book-form-container">
         <div className="form-header">
-          <button className="back-button" onClick={onClose}>
+          <button
+            type="button"
+            className="back-button"
+            onClick={onClose}
+          >
             ←
           </button>
 
-          <h2>{isEditing ? 'Boek bewerken' : 'Boek toevoegen'}</h2>
+          <h2>
+            {isEditing
+              ? 'Boek bewerken'
+              : 'Boek toevoegen'}
+          </h2>
 
-          <button className="close-button" onClick={onClose}>
+          <button
+            type="button"
+            className="close-button"
+            onClick={onClose}
+          >
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="book-form">
+        <form
+          onSubmit={handleSubmit}
+          className="book-form"
+        >
           <div className="cover-upload">
             <div className="cover-preview">
               {coverPreview ? (
-                <img src={coverPreview} alt="Boek cover preview" />
+                <img
+                  src={coverPreview}
+                  alt="Boek cover preview"
+                />
               ) : (
                 <span>📖</span>
               )}
             </div>
 
             <label className="upload-button">
-              Kies cover
+              📷 Kies cover
+
               <input
                 type="file"
                 accept="image/*"
@@ -115,42 +139,60 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
           </div>
 
           <div className="form-field">
-            <label htmlFor="title">Titel</label>
+            <label htmlFor="title">
+              Titel
+            </label>
 
             <input
               id="title"
               type="text"
               placeholder="Bijvoorbeeld: Harry Potter"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={(event) =>
+                setTitle(event.target.value)
+              }
             />
           </div>
 
           <div className="form-field">
-            <label htmlFor="author">Auteur</label>
+            <label htmlFor="author">
+              Auteur
+            </label>
 
             <input
               id="author"
               type="text"
               placeholder="Bijvoorbeeld: J.K. Rowling"
               value={author}
-              onChange={(event) => setAuthor(event.target.value)}
+              onChange={(event) =>
+                setAuthor(event.target.value)
+              }
             />
           </div>
 
           <div className="form-field">
-            <label>Mijn rating</label>
+            <label>
+              Mijn rating
+            </label>
 
             <div className="star-selector">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   type="button"
-                  className={star <= rating ? 'star selected' : 'star'}
-                  onClick={() => setRating(star)}
+                  className={
+                    star <= rating
+                      ? 'star selected'
+                      : 'star'
+                  }
+                  onClick={() =>
+                    setRating(star)
+                  }
                   aria-label={`${star} sterren`}
                 >
-                  {star <= rating ? '★' : '☆'}
+                  {star <= rating
+                    ? '★'
+                    : '☆'}
                 </button>
               ))}
             </div>
@@ -162,8 +204,13 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
             </p>
           </div>
 
-          <button type="submit" className="save-book-button">
-            {isEditing ? 'Wijzigingen opslaan' : 'Boek toevoegen'}
+          <button
+            type="submit"
+            className="save-book-button"
+          >
+            {isEditing
+              ? 'Wijzigingen opslaan'
+              : 'Boek toevoegen'}
           </button>
         </form>
       </div>
