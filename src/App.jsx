@@ -6,6 +6,9 @@ import {
   saveOfflineBooks,
   saveOfflineBook,
   addToSyncQueue,
+  getSyncQueue,
+  removeFromSyncQueue,
+  deleteOfflineBook,
 } from './lib/offlineStorage'
 import BookCard from './components/BookCard'
 import BookForm from './components/BookForm'
@@ -85,10 +88,78 @@ async function loadBooks(userId) {
       },
     )
 
+    window.addEventListener(
+  'online',
+  syncOfflineBooks,
+)
     return () => {
       subscription.unsubscribe()
     }
   }, [])
+
+  async function syncOfflineBooks() {
+  if (!session?.user) {
+    return
+  }
+
+  if (!navigator.onLine) {
+    return
+  }
+
+  const queue = await getSyncQueue()
+
+  for (const operation of queue) {
+    if (operation.type !== 'create') {
+      continue
+    }
+
+    if (operation.user_id !== session.user.id) {
+      continue
+    }
+
+    const book = operation.book
+
+    const { data, error } = await supabase
+      .from('books')
+      .insert({
+        user_id: session.user.id,
+        title: book.title,
+        author: book.author,
+        rating: book.rating,
+        cover: book.cover,
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.warn(
+        'Offline boek kon nog niet worden gesynchroniseerd.',
+        error,
+      )
+
+      continue
+    }
+
+    await deleteOfflineBook(book.id)
+
+    await removeFromSyncQueue(
+      operation.queueId,
+    )
+
+    setBooks((currentBooks) => {
+      const updatedBooks = currentBooks.map(
+        (currentBook) =>
+          currentBook.id === book.id
+            ? data
+            : currentBook,
+      )
+
+      return updatedBooks
+    })
+  }
+
+  await loadBooks(session.user.id)
+}
 
 async function handleAddBook(bookData) {
   if (!session?.user) {
