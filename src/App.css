@@ -1013,19 +1013,7 @@ body {
   .user-book-card p {
     width: 105px;
   }
-  .book-card {
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-}
-
-.book-card img {
-  -webkit-user-drag: none;
-  user-select: none;
-  -webkit-user-select: none;
-  pointer-events: none;
-}
+ 
 }
 
 /* =========================
@@ -1123,4 +1111,628 @@ body {
   background: #e74c3c;
 
   color: white;
+}
+/* =========================================
+   BOEK LANG INDRUKKEN
+========================================= */
+
+.book-card {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.book-card img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+
+/* =========================================
+   VERWIJDER POPUP
+========================================= */
+
+.delete-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.delete-popup {
+  width: min(90%, 360px);
+  box-sizing: border-box;
+
+  padding: 24px;
+
+  background: white;
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.delete-popup h2 {
+  margin: 0 0 10px;
+}
+
+.delete-popup p {
+  margin: 0 0 24px;
+
+  color: #666;
+  line-height: 1.5;
+}
+
+.delete-popup-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.delete-popup-actions button {
+  flex: 1;
+
+  min-height: 46px;
+
+  padding: 12px 16px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #f1f1f1;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.delete-popup-actions .confirm-delete-button {
+  background: #e74c3c;
+  color: white;
+}
+
+
+/* =========================================
+   BOEK BEWERKEN
+   MOBILE FIRST
+========================================= */
+
+.book-detail-form {
+  width: 100%;
+  max-width: 720px;
+
+  margin: 0 auto;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   FORM HEADER
+========================================= */
+
+.book-detail-form .form-header {
+  position: sticky;
+  top: 0;
+
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 58px;
+
+  padding: 8px 12px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border-bottom: 1px solid #eeeeee;
+
+  backdrop-filter: blur(10px);
+}
+
+.book-detail-form .form-header h2 {
+  margin: 0;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.book-detail-form .back-button,
+.book-detail-form .close-button {
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f4f2ef;
+
+  font-size: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.book-detail-form .book-form {
+  padding: 16px 14px 120px;
+}
+
+
+/* =========================================
+   BOVENSTE GEDEELTE
+========================================= */
+
+.book-top-section {
+  display: flex;
+  flex-direction: column;
+
+  gap: 22px;
+
+  margin-bottom: 26px;
+}
+
+
+/* =========================================
+   COVER
+========================================= */
+
+.book-cover-column {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cover-preview.large {
+  width: min(62vw, 200px);
+  aspect-ratio: 2 / 3;
+
+  height: auto;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  background: #eeeae5;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.cover-preview.large img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.cover-preview.large span {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 48px;
+}
+
+
+/* =========================================
+   COVER UPLOAD
+========================================= */
+
+.book-cover-column .upload-button {
+  width: min(100%, 210px);
+
+  min-height: 46px;
+
+  margin-top: 12px;
+
+  box-sizing: border-box;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f1eee9;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   OVERALL RATING
+========================================= */
+
+.overall-rating {
+  width: 100%;
+
+  margin-top: 12px;
+
+  text-align: center;
+}
+
+.overall-rating h3 {
+  margin: 0 0 6px;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   RATING SELECTOR
+========================================= */
+
+.rating-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 2px;
+}
+
+.rating-star,
+.rating-pepper {
+  width: 38px;
+  height: 38px;
+
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rating-star {
+  color: #d5d5d5;
+}
+
+.rating-star.selected {
+  color: #f5b301;
+}
+
+.rating-pepper {
+  font-size: 21px;
+  opacity: 0.25;
+}
+
+.rating-pepper.selected {
+  opacity: 1;
+}
+
+
+/* =========================================
+   BASISINFORMATIE
+========================================= */
+
+.book-basic-info {
+  width: 100%;
+}
+
+.book-basic-info .form-field {
+  margin-bottom: 15px;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+.form-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #555;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 13px 14px;
+
+  border: 1px solid #dedbd7;
+  border-radius: 12px;
+
+  background: white;
+
+  font-family: inherit;
+  font-size: 16px;
+
+  outline: none;
+}
+
+.form-field input {
+  min-height: 48px;
+}
+
+.form-field textarea {
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: #aaa29a;
+
+  box-shadow:
+    0 0 0 3px rgba(170, 162, 154, 0.12);
+}
+
+
+/* =========================================
+   AUTHOR + PAGES
+========================================= */
+
+.book-info-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+}
+
+
+/* =========================================
+   BOOK RATINGS
+========================================= */
+
+.book-ratings {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 16px;
+
+  background: #f8f6f3;
+
+  border: 1px solid #ebe7e2;
+
+  border-radius: 16px;
+}
+
+.book-ratings h3 {
+  margin: 0 0 12px;
+
+  font-size: 17px;
+}
+
+.rating-row {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 6px;
+
+  border-bottom: 1px solid #e8e3de;
+}
+
+.rating-row:last-child {
+  border-bottom: none;
+}
+
+.rating-row > span {
+  flex: 1;
+
+  color: #4d4a47;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rating-row .rating-selector {
+  flex-shrink: 0;
+}
+
+
+/* =========================================
+   SUMMARY + TROPES
+========================================= */
+
+.book-writing-grid {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0;
+}
+
+.book-writing-grid .form-field {
+  width: 100%;
+}
+
+
+/* =========================================
+   REVIEW + QUOTES
+========================================= */
+
+.book-detail-form textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 14px;
+
+  border: 1px solid #dedbd7;
+
+  border-radius: 12px;
+
+  background: white;
+
+  font-family: inherit;
+
+  font-size: 16px;
+  line-height: 1.55;
+
+  resize: vertical;
+
+  outline: none;
+}
+
+
+/* =========================================
+   OPSLAAN
+========================================= */
+
+.book-detail-form .save-book-button {
+  width: 100%;
+
+  min-height: 52px;
+
+  margin-top: 8px;
+  margin-bottom: 20px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #292725;
+  color: white;
+
+  font-family: inherit;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.12);
+}
+
+.book-detail-form .save-book-button:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================================
+   GROTER SCHERM
+========================================= */
+
+@media (min-width: 700px) {
+  .book-detail-form .book-form {
+    padding: 24px;
+  }
+
+  .book-top-section {
+    display: grid;
+
+    grid-template-columns:
+      170px
+      minmax(220px, 1fr)
+      minmax(250px, 330px);
+
+    gap: 24px;
+
+    align-items: start;
+  }
+
+  .book-writing-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+  }
+}
+
+
+/* =========================================
+   KLEINE GSM
+========================================= */
+
+@media (max-width: 380px) {
+
+  .book-detail-form .book-form {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .book-detail-form .form-header h2 {
+    font-size: 18px;
+  }
+
+  .cover-preview.large {
+    width: 165px;
+  }
+
+  .book-info-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .rating-row {
+    min-height: 44px;
+    gap: 3px;
+  }
+
+  .rating-row > span {
+    font-size: 12px;
+  }
+
+  .rating-star,
+  .rating-pepper {
+    width: 31px;
+    height: 31px;
+
+    font-size: 20px;
+  }
+
+  .rating-pepper {
+    font-size: 18px;
+  }
+}
+.delete-popup-hint {
+  margin-top: -14px;
+  color: #999;
+  font-size: 13px;
+}
+
+.delete-popup-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
