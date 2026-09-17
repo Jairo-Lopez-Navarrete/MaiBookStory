@@ -30,6 +30,7 @@ function App() {
   const [editingBook, setEditingBook] = useState(null)
   const [currentPage, setCurrentPage] = useState('home')
   const [selectedUser, setSelectedUser] = useState(null)
+  const [deleteBook, setDeleteBook] = useState(null)
 
 async function loadBooks(userId) {
   const {
@@ -65,6 +66,14 @@ async function loadBooks(userId) {
 }
 
   useEffect(() => {
+    function handleDeleteRequest(event) {
+  setDeleteBook(event.detail)
+}
+
+window.addEventListener(
+  'request-book-delete',
+  handleDeleteRequest,
+)
     async function getSession() {
   const {
     data: { session },
@@ -81,18 +90,30 @@ async function loadBooks(userId) {
     getSession()
 
     const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session)
-      },
-    )
+  data: { subscription },
+} = supabase.auth.onAuthStateChange(
+  (_event, session) => {
+    setSession(session)
+
+    if (session?.user) {
+      setTimeout(() => {
+        loadBooks(session.user.id)
+      }, 0)
+    } else {
+      setBooks([])
+    }
+  },
+)
 
     window.addEventListener(
   'online',
   syncOfflineBooks,
 )
     return () => {
+      window.removeEventListener(
+  'request-book-delete',
+  handleDeleteRequest,
+)
       subscription.unsubscribe()
     }
   }, [])
@@ -235,56 +256,86 @@ async function handleAddBook(bookData) {
     setShowBookForm(true)
   }
 
-  async function handleUpdateBook(updatedBook) {
-    if (!session?.user) {
-      return
-    }
+async function handleUpdateBook(updatedBook) {
+  if (!session?.user) {
+    return
+  }
 
-    const { data, error } = await supabase
-      .from('books')
-      .update({
-        title: updatedBook.title,
-        author: updatedBook.author,
-        rating: updatedBook.rating,
-        cover: updatedBook.cover,
-      })
-      .eq('id', updatedBook.id)
-      .eq('user_id', session.user.id)
-      .select()
-      .single()
+  const { data, error } = await supabase
+    .from('books')
+    .update({
+      title: updatedBook.title,
+      author: updatedBook.author,
+      pages: updatedBook.pages,
+      recommended_by:
+        updatedBook.recommended_by,
+      genre: updatedBook.genre,
 
-    if (error) {
-      console.error(
-        'Fout bij bewerken van boek:',
-        error,
-      )
+      rating: updatedBook.rating,
 
-      alert(
-        'Het boek kon niet worden aangepast.',
-      )
+      plot_rating:
+        updatedBook.plot_rating,
+      writing_rating:
+        updatedBook.writing_rating,
+      content_rating:
+        updatedBook.content_rating,
+      readability_rating:
+        updatedBook.readability_rating,
+      characters_rating:
+        updatedBook.characters_rating,
+      world_building_rating:
+        updatedBook.world_building_rating,
+      representation_rating:
+        updatedBook.representation_rating,
+      romance_rating:
+        updatedBook.romance_rating,
+      spice_rating:
+        updatedBook.spice_rating,
 
-      return
-    }
+      summary: updatedBook.summary,
+      tropes: updatedBook.tropes,
+      review: updatedBook.review,
+      quotes: updatedBook.quotes,
 
-   setBooks((currentBooks) => {
-  const updatedBooks =
-    currentBooks.map((book) =>
-      book.id === updatedBook.id
-        ? data
-        : book,
+      cover: updatedBook.cover,
+    })
+    .eq('id', updatedBook.id)
+    .eq('user_id', session.user.id)
+    .select()
+    .single()
+
+  if (error) {
+    console.error(
+      'Fout bij bewerken van boek:',
+      error,
     )
 
-  saveOfflineBooks(
-    session.user.id,
-    updatedBooks,
-  )
+    alert(
+      'Het boek kon niet worden aangepast.',
+    )
 
-  return updatedBooks
-})
-
-    setEditingBook(null)
-    setShowBookForm(false)
+    return
   }
+
+  setBooks((currentBooks) => {
+    const updatedBooks =
+      currentBooks.map((book) =>
+        book.id === updatedBook.id
+          ? data
+          : book,
+      )
+
+    saveOfflineBooks(
+      session.user.id,
+      updatedBooks,
+    )
+
+    return updatedBooks
+  })
+
+  setEditingBook(null)
+  setShowBookForm(false)
+}
 
   async function handleDeleteBook(bookId) {
     const confirmed = window.confirm(
@@ -474,6 +525,37 @@ async function handleAddBook(bookData) {
           onClose={handleCloseForm}
         />
       )}
+      {deleteBook && (
+  <div className="delete-popup-overlay">
+    <div className="delete-popup">
+      <h2>Boek verwijderen?</h2>
+
+      <p>
+        Wil je "{deleteBook.title}" verwijderen?
+      </p>
+
+      <div className="delete-popup-actions">
+        <button
+          type="button"
+          onClick={() => setDeleteBook(null)}
+        >
+          Annuleren
+        </button>
+
+        <button
+          type="button"
+          className="confirm-delete-button"
+          onClick={async () => {
+            await handleDeleteBook(deleteBook.id)
+            setDeleteBook(null)
+          }}
+        >
+          Verwijderen
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   )
 }
