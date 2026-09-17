@@ -259,31 +259,20 @@ function App() {
                 />
 
                 <section className="library-header">
-                  <div>
-                    <h2>Mijn boeken</h2>
+  <div>
+    <h2>Mijn boeken</h2>
 
-                    <p>
-                      {books.length === 0
-                        ? 'Begin je persoonlijke bibliotheek'
-                        : `${books.length} ${
-                            books.length === 1
-                              ? 'boek'
-                              : 'boeken'
-                          } in je bibliotheek`}
-                    </p>
-                  </div>
-
-                  <button
-                    className="add-book-button"
-                    onClick={() => {
-                      setEditingBook(null)
-                      setShowBookForm(true)
-                    }}
-                  >
-                    <span>＋</span>
-                    Boek toevoegen
-                  </button>
-                </section>
+    <p>
+      {books.length === 0
+        ? 'Begin je persoonlijke bibliotheek'
+        : `${books.length} ${
+            books.length === 1
+              ? 'boek'
+              : 'boeken'
+          } in je bibliotheek`}
+    </p>
+  </div>
+</section>
 
                 {books.length === 0 ? (
                   <div className="empty-library">
