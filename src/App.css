@@ -1736,3 +1736,307 @@ body {
   opacity: 0.45;
   cursor: not-allowed;
 }
+/* =========================================
+   BOEKEN VAN ANDERE GEBRUIKER
+========================================= */
+
+.user-book-card {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.15s ease;
+}
+
+.user-book-card:active {
+  transform: scale(0.97);
+}
+
+
+/* =========================================
+   LEES-ALLEEN BOEKDETAILS
+========================================= */
+
+.book-details-page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+
+  box-sizing: border-box;
+
+  padding-bottom: 110px;
+}
+
+.book-details-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 8px 12px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border-bottom: 1px solid #eeeeee;
+
+  backdrop-filter: blur(10px);
+}
+
+.book-details-header h2 {
+  flex: 1;
+
+  margin: 0;
+
+  text-align: center;
+
+  font-size: 19px;
+}
+
+.book-details-back {
+  min-width: 42px;
+  min-height: 42px;
+
+  padding: 8px 12px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #f1eee9;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   COVER + BASISINFO
+========================================= */
+
+.book-details-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 20px 14px;
+}
+
+.book-details-cover {
+  width: min(58vw, 200px);
+  aspect-ratio: 2 / 3;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  background: #eeeae5;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.book-details-cover img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.book-details-cover span {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 48px;
+}
+
+.book-details-basic {
+  width: 100%;
+
+  text-align: center;
+}
+
+.book-details-basic h1 {
+  margin: 0 0 6px;
+
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.book-details-author {
+  margin: 0 0 12px;
+
+  color: #666;
+
+  font-size: 16px;
+}
+
+.book-details-overall {
+  margin-bottom: 16px;
+}
+
+.details-rating {
+  color: #f5b301;
+
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+
+.book-details-basic p:not(.book-details-author) {
+  margin: 8px 0;
+
+  color: #555;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   RATINGS
+========================================= */
+
+.book-details-ratings {
+  margin: 0 14px 20px;
+
+  padding: 16px;
+
+  background: #f8f6f3;
+
+  border: 1px solid #ebe7e2;
+
+  border-radius: 16px;
+}
+
+.book-details-ratings h3 {
+  margin: 0 0 10px;
+
+  font-size: 17px;
+}
+
+.details-rating-row {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border-bottom: 1px solid #e8e3de;
+}
+
+.details-rating-row:last-child {
+  border-bottom: none;
+}
+
+.details-rating-row > span {
+  color: #4d4a47;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.details-rating-row .details-rating {
+  flex-shrink: 0;
+
+  font-size: 19px;
+}
+
+.details-peppers {
+  display: flex;
+
+  gap: 2px;
+
+  letter-spacing: 0;
+}
+
+.details-peppers span {
+  font-size: 18px;
+}
+
+.pepper-active {
+  opacity: 1;
+}
+
+.pepper-inactive {
+  opacity: 0.25;
+}
+
+
+/* =========================================
+   TEKSTGEDEELTES
+========================================= */
+
+.book-details-section {
+  margin: 0 14px 18px;
+
+  padding: 16px;
+
+  background: white;
+
+  border: 1px solid #ebe7e2;
+
+  border-radius: 16px;
+}
+
+.book-details-section h3 {
+  margin: 0 0 10px;
+
+  font-size: 17px;
+}
+
+.book-details-section p {
+  margin: 0;
+
+  color: #555;
+
+  font-size: 15px;
+  line-height: 1.65;
+
+  white-space: pre-wrap;
+}
+
+.book-details-quotes {
+  font-style: italic;
+}
+
+
+/* =========================================
+   GROTER SCHERM
+========================================= */
+
+@media (min-width: 700px) {
+  .book-details-top {
+    display: grid;
+
+    grid-template-columns: 200px 1fr;
+
+    align-items: start;
+
+    gap: 28px;
+
+    padding: 28px 24px;
+  }
+
+  .book-details-basic {
+    text-align: left;
+  }
+
+  .book-details-overall {
+    text-align: left;
+  }
+
+  .book-details-ratings,
+  .book-details-section {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+}

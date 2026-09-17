@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import BookDetails from './BookDetails'
 
 function UserProfile({ user, onBack }) {
   const [profile, setProfile] = useState(null)
@@ -9,11 +10,14 @@ function UserProfile({ user, onBack }) {
   const [followingCount, setFollowingCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [isFollowing, setIsFollowing] = useState(false)
+  const [selectedBook, setSelectedBook] = useState(null)
 
   async function loadProfile() {
     const { data, error } = await supabase
       .from('profiles')
-      .select('username, avatar_url, status')
+      .select(
+        'id, username, avatar_url, status',
+      )
       .eq('id', user.id)
       .single()
 
@@ -72,15 +76,24 @@ function UserProfile({ user, onBack }) {
       data: { user: currentUser },
     } = await supabase.auth.getUser()
 
-    if (!currentUser || currentUser.id === user.id) {
+    if (
+      !currentUser ||
+      currentUser.id === user.id
+    ) {
       return
     }
 
     const { data, error } = await supabase
       .from('follows')
       .select('follower_id')
-      .eq('follower_id', currentUser.id)
-      .eq('following_id', user.id)
+      .eq(
+        'follower_id',
+        currentUser.id,
+      )
+      .eq(
+        'following_id',
+        user.id,
+      )
       .maybeSingle()
 
     if (error) {
@@ -99,7 +112,10 @@ function UserProfile({ user, onBack }) {
       data: { user: currentUser },
     } = await supabase.auth.getUser()
 
-    if (!currentUser || currentUser.id === user.id) {
+    if (
+      !currentUser ||
+      currentUser.id === user.id
+    ) {
       return
     }
 
@@ -107,8 +123,14 @@ function UserProfile({ user, onBack }) {
       const { error } = await supabase
         .from('follows')
         .delete()
-        .eq('follower_id', currentUser.id)
-        .eq('following_id', user.id)
+        .eq(
+          'follower_id',
+          currentUser.id,
+        )
+        .eq(
+          'following_id',
+          user.id,
+        )
 
       if (error) {
         console.error(
@@ -119,6 +141,7 @@ function UserProfile({ user, onBack }) {
       }
 
       setIsFollowing(false)
+
       setFollowerCount((count) =>
         Math.max(0, count - 1),
       )
@@ -139,37 +162,55 @@ function UserProfile({ user, onBack }) {
       }
 
       setIsFollowing(true)
-      setFollowerCount((count) => count + 1)
+
+      setFollowerCount(
+        (count) => count + 1,
+      )
     }
   }
 
-async function loadUserBooks() {
-  const { data, error } = await supabase
-    .from('books')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', {
-      ascending: false,
-    })
+  async function loadUserBooks() {
+    const { data, error } = await supabase
+      .from('books')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', {
+        ascending: false,
+      })
 
-  if (error) {
-    console.error(
-      'Fout bij laden van boeken:',
-      error,
-    )
-  } else {
-    setBooks(data || [])
-    setBookCount(data?.length || 0)
+    if (error) {
+      console.error(
+        'Fout bij laden van boeken:',
+        error,
+      )
+    } else {
+      setBooks(data || [])
+      setBookCount(data?.length || 0)
+    }
+
+    setLoading(false)
   }
 
-  setLoading(false)
-}
   useEffect(() => {
+    setSelectedBook(null)
+    setLoading(true)
+
     loadProfile()
     loadFollowCounts()
     checkFollowing()
     loadUserBooks()
   }, [user.id])
+
+  if (selectedBook) {
+    return (
+      <BookDetails
+        book={selectedBook}
+        onBack={() =>
+          setSelectedBook(null)
+        }
+      />
+    )
+  }
 
   return (
     <main className="profile-page">
@@ -195,7 +236,8 @@ async function loadUserBooks() {
         </div>
 
         <h2>
-          {profile?.username || user.username}
+          {profile?.username ||
+            user.username}
         </h2>
 
         {profile?.status && (
@@ -223,52 +265,67 @@ async function loadUserBooks() {
             </div>
 
             <div>
-              <strong>{followerCount}</strong>
+              <strong>
+                {followerCount}
+              </strong>
               <span>volgers</span>
             </div>
 
             <div>
-              <strong>{followingCount}</strong>
+              <strong>
+                {followingCount}
+              </strong>
               <span>volgend</span>
             </div>
           </div>
         )}
       </div>
+
       <section className="user-books">
-  <h3>📚 Boeken</h3>
+        <h3>📚 Boeken</h3>
 
-  {books.length === 0 ? (
-    <p>Deze gebruiker heeft nog geen boeken toegevoegd.</p>
-  ) : (
-    <div className="user-books-grid">
-      {books.map((book) => (
-        <article
-          key={book.id}
-          className="user-book-card"
-        >
-          <div className="user-book-cover">
-            <img
-              src={book.cover}
-              alt={`Cover van ${book.title}`}
-            />
+        {books.length === 0 ? (
+          <p>
+            Deze gebruiker heeft nog geen
+            boeken toegevoegd.
+          </p>
+        ) : (
+          <div className="user-books-grid">
+            {books.map((book) => (
+              <article
+                key={book.id}
+                className="user-book-card"
+                onClick={() =>
+                  setSelectedBook(book)
+                }
+              >
+                <div className="user-book-cover">
+                  <img
+                    src={book.cover}
+                    alt={`Cover van ${book.title}`}
+                  />
+                </div>
+
+                <h4>{book.title}</h4>
+
+                <p>{book.author}</p>
+
+                <div
+                  className="user-book-rating"
+                  aria-label={`Rating: ${book.rating} van 5`}
+                >
+                  {'★'.repeat(
+                    book.rating,
+                  )}
+                  {'☆'.repeat(
+                    5 - book.rating,
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
-
-          <h4>{book.title}</h4>
-
-          <p>{book.author}</p>
-
-          <div
-            className="user-book-rating"
-            aria-label={`Rating: ${book.rating} van 5`}
-          >
-            {'★'.repeat(book.rating)}
-            {'☆'.repeat(5 - book.rating)}
-          </div>
-        </article>
-      ))}
-    </div>
-  )}
-</section>
+        )}
+      </section>
     </main>
   )
 }
