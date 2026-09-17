@@ -2140,3 +2140,17 @@ body {
 
   cursor: not-allowed;
 }
+
+.cover-preview-clickable {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cover-preview-clickable input {
+  display: none;
+}
+
+.cover-preview-clickable:active {
+  transform: scale(0.98);
+}

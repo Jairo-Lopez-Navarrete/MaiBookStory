@@ -110,6 +110,8 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
     }
 
     reader.readAsDataURL(file)
+
+    event.target.value = ''
   }
 
   function handleSubmit(event) {
@@ -255,7 +257,10 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
         >
           <section className="book-top-section">
             <div className="book-cover-column">
-              <div className="cover-preview large">
+              <label
+                className="cover-preview large cover-preview-clickable"
+                title="Cover kiezen"
+              >
                 {coverPreview ? (
                   <img
                     src={coverPreview}
@@ -264,10 +269,6 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
                 ) : (
                   <span>📖</span>
                 )}
-              </div>
-
-              <label className="upload-button">
-                📷 Kies cover
 
                 <input
                   type="file"
