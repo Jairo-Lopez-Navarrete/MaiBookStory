@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { supabase } from './lib/supabaseClient'
+import {
+  getOfflineBooks,
+  saveOfflineBooks,
+  saveOfflineBook,
+  addToSyncQueue,
+} from './lib/offlineStorage'
 import BookCard from './components/BookCard'
 import BookForm from './components/BookForm'
 import BottomNav from './components/BottomNav'
@@ -22,33 +28,52 @@ function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [selectedUser, setSelectedUser] = useState(null)
 
-  async function loadBooks(userId) {
-    const { data, error } = await supabase
-      .from('books')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
+async function loadBooks(userId) {
+  const {
+    data,
+    error,
+  } = await supabase
+    .from('books')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', {
+      ascending: false,
+    })
 
-    if (error) {
-      console.error(
-        'Fout bij laden van boeken:',
-        error,
-      )
-      return
-    }
+  if (error) {
+    console.warn(
+      'Geen verbinding met Supabase. Offline boeken worden geladen.',
+    )
 
-    setBooks(data)
+    const offlineBooks =
+      await getOfflineBooks(userId)
+
+    setBooks(offlineBooks)
+
+    return
   }
+
+  setBooks(data || [])
+
+  await saveOfflineBooks(
+    userId,
+    data || [],
+  )
+}
 
   useEffect(() => {
     async function getSession() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-      setSession(session)
-      setLoading(false)
-    }
+  setSession(session)
+  setLoading(false)
+
+  if (session?.user) {
+    loadBooks(session.user.id)
+  }
+}
 
     getSession()
 
@@ -65,49 +90,74 @@ function App() {
     }
   }, [])
 
-  useEffect(() => {
-    if (session?.user) {
-      loadBooks(session.user.id)
-    }
-  }, [session])
+async function handleAddBook(bookData) {
+  if (!session?.user) {
+    return
+  }
 
-  async function handleAddBook(book) {
-    if (!session?.user) {
-      return
-    }
+  const {
+    data,
+    error,
+  } = await supabase
+    .from('books')
+    .insert({
+      ...bookData,
+      user_id: session.user.id,
+    })
+    .select()
+    .single()
 
-    const { data, error } = await supabase
-      .from('books')
-      .insert({
-        user_id: session.user.id,
-        title: book.title,
-        author: book.author,
-        rating: book.rating,
-        cover: book.cover,
-      })
-      .select()
-      .single()
+  if (!error && data) {
+    setBooks((currentBooks) => {
+      const updatedBooks = [
+        data,
+        ...currentBooks,
+      ]
 
-    if (error) {
-      console.error(
-        'Fout bij toevoegen van boek:',
-        error,
+      saveOfflineBooks(
+        session.user.id,
+        updatedBooks,
       )
 
-      alert(
-        'Het boek kon niet worden opgeslagen.',
-      )
-
-      return
-    }
-
-    setBooks((currentBooks) => [
-      data,
-      ...currentBooks,
-    ])
+      return updatedBooks
+    })
 
     setShowBookForm(false)
+    return
   }
+
+  console.warn(
+    'Boek wordt offline opgeslagen.',
+  )
+
+  const offlineBook = {
+    ...bookData,
+    id: `offline-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2)}`,
+    user_id: session.user.id,
+    created_at: new Date().toISOString(),
+    offline_only: true,
+  }
+
+  await saveOfflineBook(
+    session.user.id,
+    offlineBook,
+  )
+
+  await addToSyncQueue({
+    type: 'create',
+    user_id: session.user.id,
+    book: offlineBook,
+  })
+
+  setBooks((currentBooks) => [
+    offlineBook,
+    ...currentBooks,
+  ])
+
+  setShowBookForm(false)
+}
 
   function handleEditBook(book) {
     setEditingBook(book)
@@ -145,13 +195,21 @@ function App() {
       return
     }
 
-    setBooks((currentBooks) =>
-      currentBooks.map((book) =>
-        book.id === updatedBook.id
-          ? data
-          : book,
-      ),
+   setBooks((currentBooks) => {
+  const updatedBooks =
+    currentBooks.map((book) =>
+      book.id === updatedBook.id
+        ? data
+        : book,
     )
+
+  saveOfflineBooks(
+    session.user.id,
+    updatedBooks,
+  )
+
+  return updatedBooks
+})
 
     setEditingBook(null)
     setShowBookForm(false)
@@ -189,11 +247,19 @@ function App() {
       return
     }
 
-    setBooks((currentBooks) =>
-      currentBooks.filter(
-        (book) => book.id !== bookId,
-      ),
+    setBooks((currentBooks) => {
+  const updatedBooks =
+    currentBooks.filter(
+      (book) => book.id !== bookId,
     )
+
+  saveOfflineBooks(
+    session.user.id,
+    updatedBooks,
+  )
+
+  return updatedBooks
+})
   }
 
   function handleCloseForm() {
