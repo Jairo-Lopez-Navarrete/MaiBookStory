@@ -7,6 +7,7 @@ function Profile({ user, bookCount, onLogout }) {
   const [status, setStatus] = useState('')
   const [loading, setLoading] = useState(true)
   const [editingStatus, setEditingStatus] = useState(false)
+  const [savingAvatar, setSavingAvatar] = useState(false)
 
   const [followerCount, setFollowerCount] = useState(0)
   const [followingCount, setFollowingCount] = useState(0)
@@ -71,6 +72,55 @@ function Profile({ user, bookCount, onLogout }) {
     }
   }
 
+  async function handleAvatarChange(event) {
+    const file = event.target.files[0]
+
+    if (!file) {
+      return
+    }
+
+    if (!file.type.startsWith('image/')) {
+      alert('Kies een afbeelding.')
+      return
+    }
+
+    setSavingAvatar(true)
+
+    const reader = new FileReader()
+
+    reader.onload = async () => {
+      const newAvatarUrl = reader.result
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          avatar_url: newAvatarUrl,
+        })
+        .eq('id', user.id)
+
+      if (error) {
+        console.error(
+          'Fout bij opslaan van profielfoto:',
+          error,
+        )
+
+        alert(
+          'De profielfoto kon niet worden opgeslagen.',
+        )
+
+        setSavingAvatar(false)
+        return
+      }
+
+      setAvatarUrl(newAvatarUrl)
+      setSavingAvatar(false)
+    }
+
+    reader.readAsDataURL(file)
+
+    event.target.value = ''
+  }
+
   async function saveStatus() {
     const { error } = await supabase
       .from('profiles')
@@ -114,14 +164,36 @@ function Profile({ user, bookCount, onLogout }) {
   return (
     <main className="profile-page">
       <div className="profile-header">
-        <div className="profile-avatar">
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt={`Profielfoto van ${username}`}
+        <div className="profile-avatar-wrapper">
+          <label
+            className="profile-avatar profile-avatar-clickable"
+            title="Profielfoto aanpassen"
+          >
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt={`Profielfoto van ${username}`}
+              />
+            ) : (
+              '👤'
+            )}
+
+            <span className="profile-avatar-camera">
+              📷
+            </span>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              disabled={savingAvatar}
             />
-          ) : (
-            '👤'
+          </label>
+
+          {savingAvatar && (
+            <p className="profile-avatar-saving">
+              Profielfoto opslaan...
+            </p>
           )}
         </div>
 

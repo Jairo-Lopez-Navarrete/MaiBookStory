@@ -2040,3 +2040,103 @@ body {
     margin-right: 24px;
   }
 }
+/* =========================================================
+   PROFIELFOTO AANPASSEN
+   ========================================================= */
+
+.profile-avatar-wrapper {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  margin-bottom: 10px;
+}
+
+.profile-avatar-clickable {
+  position: relative;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.profile-avatar-clickable:active {
+  transform: scale(0.96);
+}
+
+.profile-avatar-clickable input {
+  display: none;
+}
+
+.profile-avatar-camera {
+  position: absolute;
+
+  right: -2px;
+  bottom: -2px;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    2px solid var(--paper-light);
+
+  border-radius: 50%;
+
+  background: var(--brown);
+
+  font-size: 14px;
+
+  box-shadow:
+    0 2px 6px var(--shadow);
+}
+
+.profile-avatar-actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.profile-avatar-actions button {
+  min-height: 40px;
+
+  padding:
+    8px
+    14px;
+
+  border-radius: 11px;
+
+  background: var(--brown);
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.profile-avatar-actions button:last-child {
+  background: var(--paper-dark);
+
+  color: var(--ink);
+}
+
+.profile-avatar-actions button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
