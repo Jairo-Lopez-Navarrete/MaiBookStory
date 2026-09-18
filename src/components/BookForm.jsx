@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const monthNames = [
   'january',
@@ -26,33 +26,23 @@ function BookForm({
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [pages, setPages] = useState('')
-  const [recommendedBy, setRecommendedBy] =
-    useState('')
+  const [recommendedBy, setRecommendedBy] = useState('')
   const [genre, setGenre] = useState('')
 
   const [rating, setRating] = useState(0)
-  const [plotRating, setPlotRating] =
+  const [plotRating, setPlotRating] = useState(0)
+  const [writingRating, setWritingRating] = useState(0)
+  const [contentRating, setContentRating] = useState(0)
+  const [readabilityRating, setReadabilityRating] = useState(0)
+  const [charactersRating, setCharactersRating] = useState(0)
+  const [worldBuildingRating, setWorldBuildingRating] =
     useState(0)
-  const [writingRating, setWritingRating] =
+  const [representationRating, setRepresentationRating] =
     useState(0)
-  const [contentRating, setContentRating] =
-    useState(0)
-  const [readabilityRating, setReadabilityRating] =
-    useState(0)
-  const [charactersRating, setCharactersRating] =
-    useState(0)
-  const [
-    worldBuildingRating,
-    setWorldBuildingRating,
-  ] = useState(0)
-  const [
-    representationRating,
-    setRepresentationRating,
-  ] = useState(0)
-  const [romanceRating, setRomanceRating] =
-    useState(0)
-  const [spiceRating, setSpiceRating] =
-    useState(0)
+  const [romanceRating, setRomanceRating] = useState(0)
+  const [spiceRating, setSpiceRating] = useState(0)
+
+  const [owned, setOwned] = useState(false)
 
   const [summary, setSummary] = useState('')
   const [tropes, setTropes] = useState('')
@@ -60,8 +50,9 @@ function BookForm({
   const [quotes, setQuotes] = useState('')
 
   const [cover, setCover] = useState('')
-  const [coverPreview, setCoverPreview] =
-    useState('')
+  const [coverPreview, setCoverPreview] = useState('')
+
+  const ratingPointer = useRef(null)
 
   const isEditing = Boolean(book)
 
@@ -70,21 +61,13 @@ function BookForm({
       setTitle(book.title || '')
       setAuthor(book.author || '')
       setPages(book.pages || '')
-      setRecommendedBy(
-        book.recommended_by || '',
-      )
+      setRecommendedBy(book.recommended_by || '')
       setGenre(book.genre || '')
 
       setRating(Number(book.rating) || 0)
-      setPlotRating(
-        Number(book.plot_rating) || 0,
-      )
-      setWritingRating(
-        Number(book.writing_rating) || 0,
-      )
-      setContentRating(
-        Number(book.content_rating) || 0,
-      )
+      setPlotRating(Number(book.plot_rating) || 0)
+      setWritingRating(Number(book.writing_rating) || 0)
+      setContentRating(Number(book.content_rating) || 0)
       setReadabilityRating(
         Number(book.readability_rating) || 0,
       )
@@ -97,12 +80,10 @@ function BookForm({
       setRepresentationRating(
         Number(book.representation_rating) || 0,
       )
-      setRomanceRating(
-        Number(book.romance_rating) || 0,
-      )
-      setSpiceRating(
-        Number(book.spice_rating) || 0,
-      )
+      setRomanceRating(Number(book.romance_rating) || 0)
+      setSpiceRating(Number(book.spice_rating) || 0)
+
+      setOwned(Boolean(book.owned))
 
       setSummary(book.summary || '')
       setTropes(book.tropes || '')
@@ -129,6 +110,8 @@ function BookForm({
       setRomanceRating(0)
       setSpiceRating(0)
 
+      setOwned(false)
+
       setSummary('')
       setTropes('')
       setReview('')
@@ -145,19 +128,13 @@ function BookForm({
       book?.reading_year
     ) {
       return {
-        month: Number(
-          book.reading_month,
-        ),
-        year: Number(
-          book.reading_year,
-        ),
+        month: Number(book.reading_month),
+        year: Number(book.reading_year),
       }
     }
 
     if (book?.created_at) {
-      const date = new Date(
-        book.created_at,
-      )
+      const date = new Date(book.created_at)
 
       return {
         month: date.getMonth() + 1,
@@ -208,15 +185,7 @@ function BookForm({
       return
     }
 
-    if (rating === 0) {
-      alert(
-        'Geef het boek een overall rating.',
-      )
-      return
-    }
-
-    const existingPeriod =
-      getExistingBookPeriod()
+    const existingPeriod = getExistingBookPeriod()
 
     const bookData = {
       title: title.trim(),
@@ -229,36 +198,22 @@ function BookForm({
       recommended_by:
         recommendedBy.trim() || null,
 
-      genre: genre.trim() || null,
+      genre:
+        genre.trim() || null,
 
       rating,
 
-      plot_rating:
-        plotRating || null,
+      plot_rating: plotRating,
+      writing_rating: writingRating,
+      content_rating: contentRating,
+      readability_rating: readabilityRating,
+      characters_rating: charactersRating,
+      world_building_rating: worldBuildingRating,
+      representation_rating: representationRating,
+      romance_rating: romanceRating,
+      spice_rating: spiceRating,
 
-      writing_rating:
-        writingRating || null,
-
-      content_rating:
-        contentRating || null,
-
-      readability_rating:
-        readabilityRating || null,
-
-      characters_rating:
-        charactersRating || null,
-
-      world_building_rating:
-        worldBuildingRating || null,
-
-      representation_rating:
-        representationRating || null,
-
-      romance_rating:
-        romanceRating || null,
-
-      spice_rating:
-        spiceRating || null,
+      owned,
 
       summary:
         summary.trim() || null,
@@ -295,60 +250,164 @@ function BookForm({
     }
   }
 
-  function handleHalfRating(
+  function getRatingFromPointer(
     event,
-    number,
-    setValue,
+    container,
+    step,
   ) {
     const rect =
-      event.currentTarget.getBoundingClientRect()
+      container.getBoundingClientRect()
 
-    const clickPosition =
+    if (!rect.width) {
+      return 0
+    }
+
+    const position =
       event.clientX - rect.left
 
-    const isLeftHalf =
-      clickPosition < rect.width / 2
+    const percentage =
+      Math.max(
+        0,
+        Math.min(
+          1,
+          position / rect.width,
+        ),
+      )
 
-    setValue(
-      isLeftHalf
-        ? number - 0.5
-        : number,
+    const rawValue = percentage * 5
+
+    return Math.max(
+      0,
+      Math.min(
+        5,
+        Math.round(rawValue / step) * step,
+      ),
     )
+  }
+
+  function updateRatingFromPointer(
+    event,
+    container,
+    setValue,
+    step,
+  ) {
+    const nextValue =
+      getRatingFromPointer(
+        event,
+        container,
+        step,
+      )
+
+    setValue(nextValue)
+  }
+
+  function handleRatingPointerDown(
+    event,
+    setValue,
+    step,
+  ) {
+    const container =
+      event.currentTarget
+
+    ratingPointer.current = {
+      container,
+      setValue,
+      step,
+    }
+
+    container.setPointerCapture?.(
+      event.pointerId,
+    )
+
+    updateRatingFromPointer(
+      event,
+      container,
+      setValue,
+      step,
+    )
+  }
+
+  function handleRatingPointerMove(
+    event,
+  ) {
+    const active =
+      ratingPointer.current
+
+    if (!active) {
+      return
+    }
+
+    updateRatingFromPointer(
+      event,
+      active.container,
+      active.setValue,
+      active.step,
+    )
+  }
+
+  function handleRatingPointerUp(event) {
+    const active =
+      ratingPointer.current
+
+    if (!active) {
+      return
+    }
+
+    active.container.releasePointerCapture?.(
+      event.pointerId,
+    )
+
+    ratingPointer.current = null
+  }
+
+  function handleRatingPointerCancel() {
+    ratingPointer.current = null
   }
 
   function renderStars(value, setValue) {
     return (
-      <div className="journal-rating-stars">
+      <div
+        className="journal-rating-stars"
+        onPointerDown={(event) =>
+          handleRatingPointerDown(
+            event,
+            setValue,
+            0.5,
+          )
+        }
+        onPointerMove={
+          handleRatingPointerMove
+        }
+        onPointerUp={
+          handleRatingPointerUp
+        }
+        onPointerCancel={
+          handleRatingPointerCancel
+        }
+        onPointerLeave={
+          handleRatingPointerCancel
+        }
+        role="slider"
+        aria-valuemin="0"
+        aria-valuemax="5"
+        aria-valuenow={value}
+        aria-label={`Rating ${value} van 5`}
+      >
         {[1, 2, 3, 4, 5].map(
           (number) => {
-            const fill =
-              Math.max(
-                0,
-                Math.min(
-                  1,
-                  value - (number - 1),
-                ),
-              )
+            const fill = Math.max(
+              0,
+              Math.min(
+                1,
+                value - (number - 1),
+              ),
+            )
 
             return (
-              <button
+              <span
                 key={number}
-                type="button"
                 className="journal-star"
-                onClick={(event) =>
-                  handleHalfRating(
-                    event,
-                    number,
-                    setValue,
-                  )
-                }
-                aria-label={
-                  fill >= 1
-                    ? `${number} van 5`
-                    : fill > 0
-                      ? `${number - 0.5} van 5`
-                      : `${number - 0.5} tot ${number} van 5`
-                }
+                aria-hidden="true"
               >
                 <span className="journal-star-empty">
                   ☆
@@ -364,7 +423,7 @@ function BookForm({
                     ★
                   </span>
                 )}
-              </button>
+              </span>
             )
           },
         )}
@@ -372,58 +431,53 @@ function BookForm({
     )
   }
 
-  function renderPeppers(
-    value,
-    setValue,
-  ) {
+  function renderPeppers(value, setValue) {
     return (
-      <div className="journal-rating-stars journal-peppers">
+      <div
+        className="journal-rating-stars journal-peppers"
+        onPointerDown={(event) =>
+          handleRatingPointerDown(
+            event,
+            setValue,
+            1,
+          )
+        }
+        onPointerMove={
+          handleRatingPointerMove
+        }
+        onPointerUp={
+          handleRatingPointerUp
+        }
+        onPointerCancel={
+          handleRatingPointerCancel
+        }
+        onPointerLeave={
+          handleRatingPointerCancel
+        }
+        role="slider"
+        aria-valuemin="0"
+        aria-valuemax="5"
+        aria-valuenow={value}
+        aria-label={`Spice ${value} van 5`}
+      >
         {[1, 2, 3, 4, 5].map(
-          (number) => {
-            const fill =
-              Math.max(
-                0,
-                Math.min(
-                  1,
-                  value - (number - 1),
-                ),
-              )
+          (number) => (
+            <span
+              key={number}
+              className="journal-pepper"
+              aria-hidden="true"
+            >
+              <span className="journal-pepper-empty">
+                🌶️
+              </span>
 
-            return (
-              <button
-                key={number}
-                type="button"
-                className="journal-pepper"
-                onClick={(event) =>
-                  handleHalfRating(
-                    event,
-                    number,
-                    setValue,
-                  )
-                }
-                aria-label={
-                  fill >= 1
-                    ? `${number} van 5 spice`
-                    : `${number - 0.5} van 5 spice`
-                }
-              >
-                <span className="journal-pepper-empty">
+              {value >= number && (
+                <span className="journal-pepper-fill">
                   🌶️
                 </span>
-
-                {fill > 0 && (
-                  <span
-                    className="journal-pepper-fill"
-                    style={{
-                      width: `${fill * 100}%`,
-                    }}
-                  >
-                    🌶️
-                  </span>
-                )}
-              </button>
-            )
-          },
+              )}
+            </span>
+          ),
         )}
       </div>
     )
@@ -440,8 +494,6 @@ function BookForm({
   return (
     <div className="journal-form-overlay">
       <div className="journal-book-form">
-        {/* HEADER */}
-
         <header className="journal-form-header">
           <div className="journal-form-header-stars">
             ✦ ✧
@@ -462,11 +514,7 @@ function BookForm({
                 : 'new book'}
             </span>
 
-            <h2>
-              {isEditing
-                ? 'book review'
-                : 'book review'}
-            </h2>
+            <h2>book review</h2>
 
             <p>
               {isEditing
@@ -485,8 +533,6 @@ function BookForm({
           </button>
         </header>
 
-        {/* PERIODE */}
-
         <div className="journal-form-period">
           <span>reading month</span>
 
@@ -501,11 +547,7 @@ function BookForm({
           onSubmit={handleSubmit}
           className="journal-book-form-content"
         >
-          {/* HOOFDGEDEELTE */}
-
           <section className="journal-review-main">
-            {/* COVER */}
-
             <div className="journal-cover-section">
               <label
                 className="journal-cover-frame"
@@ -515,8 +557,7 @@ function BookForm({
                   <img
                     src={coverPreview}
                     alt={`Cover van ${
-                      title ||
-                      'het boek'
+                      title || 'het boek'
                     }`}
                   />
                 ) : (
@@ -548,8 +589,6 @@ function BookForm({
                 )}
               </div>
             </div>
-
-            {/* BOEK INFO */}
 
             <div className="journal-book-details">
               <div className="journal-field">
@@ -619,9 +658,7 @@ function BookForm({
                     id="recommendedBy"
                     type="text"
                     placeholder="Who recommended it?"
-                    value={
-                      recommendedBy
-                    }
+                    value={recommendedBy}
                     onChange={(event) =>
                       setRecommendedBy(
                         event.target.value,
@@ -649,25 +686,47 @@ function BookForm({
                 </div>
               </div>
 
-              <div className="journal-read-info">
-                <span>
-                  reading month
+              <label className="journal-owned-toggle">
+                <input
+                  type="checkbox"
+                  checked={owned}
+                  onChange={(event) =>
+                    setOwned(
+                      event.target.checked,
+                    )
+                  }
+                />
+
+                <span className="journal-owned-checkbox">
+                  {owned ? '✓' : ''}
                 </span>
 
+                <span className="journal-owned-text">
+                  <strong>in bezit</strong>
+                  <small>
+                    ik heb dit boek daadwerkelijk
+                  </small>
+                </span>
+              </label>
+
+              <div className="journal-read-info">
+                <span>reading month</span>
+
                 <strong>
-                  {monthNames[
-                    displayMonth - 1
-                  ]}{' '}
+                  {
+                    monthNames[
+                      displayMonth - 1
+                    ]
+                  }{' '}
                   {displayYear}
                 </strong>
               </div>
             </div>
 
-            {/* RATINGS */}
-
             <aside className="journal-ratings-panel">
               <div className="journal-panel-title">
                 <span>book ratings</span>
+
                 <small>
                   rate your reading
                 </small>
@@ -675,6 +734,7 @@ function BookForm({
 
               <div className="journal-rating-row">
                 <span>plot</span>
+
                 {renderStars(
                   plotRating,
                   setPlotRating,
@@ -683,6 +743,7 @@ function BookForm({
 
               <div className="journal-rating-row">
                 <span>writing</span>
+
                 {renderStars(
                   writingRating,
                   setWritingRating,
@@ -691,6 +752,7 @@ function BookForm({
 
               <div className="journal-rating-row">
                 <span>content</span>
+
                 {renderStars(
                   contentRating,
                   setContentRating,
@@ -698,9 +760,8 @@ function BookForm({
               </div>
 
               <div className="journal-rating-row">
-                <span>
-                  readability
-                </span>
+                <span>readability</span>
+
                 {renderStars(
                   readabilityRating,
                   setReadabilityRating,
@@ -708,9 +769,8 @@ function BookForm({
               </div>
 
               <div className="journal-rating-row">
-                <span>
-                  characters
-                </span>
+                <span>characters</span>
+
                 {renderStars(
                   charactersRating,
                   setCharactersRating,
@@ -718,9 +778,8 @@ function BookForm({
               </div>
 
               <div className="journal-rating-row">
-                <span>
-                  world building
-                </span>
+                <span>world building</span>
+
                 {renderStars(
                   worldBuildingRating,
                   setWorldBuildingRating,
@@ -728,9 +787,8 @@ function BookForm({
               </div>
 
               <div className="journal-rating-row">
-                <span>
-                  representation
-                </span>
+                <span>representation</span>
+
                 {renderStars(
                   representationRating,
                   setRepresentationRating,
@@ -739,6 +797,7 @@ function BookForm({
 
               <div className="journal-rating-row">
                 <span>romance</span>
+
                 {renderStars(
                   romanceRating,
                   setRomanceRating,
@@ -747,6 +806,7 @@ function BookForm({
 
               <div className="journal-rating-row">
                 <span>spice</span>
+
                 {renderPeppers(
                   spiceRating,
                   setSpiceRating,
@@ -754,8 +814,6 @@ function BookForm({
               </div>
             </aside>
           </section>
-
-          {/* SUMMARY + TROPES */}
 
           <section className="journal-writing-columns">
             <div className="journal-writing-card">
@@ -797,8 +855,6 @@ function BookForm({
             </div>
           </section>
 
-          {/* REVIEW */}
-
           <section className="journal-writing-card journal-review-card">
             <div className="journal-writing-title">
               <span>03</span>
@@ -818,8 +874,6 @@ function BookForm({
             />
           </section>
 
-          {/* QUOTES */}
-
           <section className="journal-writing-card journal-quotes-card">
             <div className="journal-writing-title">
               <span>04</span>
@@ -838,8 +892,6 @@ function BookForm({
               }
             />
           </section>
-
-          {/* OPSLAAN */}
 
           <button
             type="submit"

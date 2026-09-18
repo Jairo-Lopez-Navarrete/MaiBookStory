@@ -6382,24 +6382,35 @@ body {
 .journal-rating-stars {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 0;
+  width: max-content;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: ew-resize;
 }
 
 .journal-star,
 .journal-pepper {
   position: relative;
-  width: 26px;
-  height: 30px;
+  flex: 0 0 auto;
+  width: 21px;
+  height: 26px;
   padding: 0;
   border: none;
   background: transparent;
-  cursor: pointer;
-  font-size: 25px;
-  line-height: 30px;
+  font-size: 21px;
+  line-height: 26px;
+  display: block;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  pointer-events: none;
+}
+
+.journal-pepper {
+  width: 22px;
+  height: 26px;
+  font-size: 18px;
+  line-height: 26px;
 }
 
 .journal-star-empty {
@@ -6408,6 +6419,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #d9cfd1;
 }
 
 .journal-star-fill {
@@ -6421,14 +6433,12 @@ body {
   justify-content: flex-start;
   color: #e7a4b4;
   pointer-events: none;
-}
-
-.journal-star:hover {
-  transform: scale(1.08);
+  white-space: nowrap;
 }
 
 .journal-pepper {
   font-size: 20px;
+  line-height: 30px;
 }
 
 .journal-pepper-empty {
@@ -6443,13 +6453,10 @@ body {
 
 .journal-pepper-fill {
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  overflow: hidden;
+  inset: 0;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   pointer-events: none;
 }
 
