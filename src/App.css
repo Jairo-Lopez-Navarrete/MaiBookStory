@@ -7264,3 +7264,137 @@ body {
     padding: 18px 14px;
   }
 }
+/* =====================================================
+   PROFILE - BOEKEN TELLERS NAAST ELKAAR
+===================================================== */
+
+.cute-profile-book-stats-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+/* Beide tellers compact maken */
+
+.cute-profile-book-stats-row
+  .cute-profile-book-count,
+.cute-profile-book-stats-row
+  .cute-profile-owned-button {
+  min-width: 0;
+
+  min-height: 68px;
+
+  box-sizing: border-box;
+
+  padding: 10px;
+
+  border-radius: 17px;
+}
+
+/* Bibliotheek */
+
+.cute-profile-book-stats-row
+  .cute-profile-book-count {
+  gap: 8px;
+}
+
+/* Icoon bibliotheek */
+
+.cute-profile-book-stats-row
+  .cute-profile-book-icon {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  font-size: 18px;
+}
+
+/* Getal bibliotheek */
+
+.cute-profile-book-stats-row
+  .cute-profile-book-count
+  strong {
+  font-size: 25px;
+}
+
+/* Tekst bibliotheek */
+
+.cute-profile-book-stats-row
+  .cute-profile-book-count
+  div
+  span {
+  font-size: 8px;
+}
+
+/* Owned */
+
+.cute-profile-book-stats-row
+  .cute-profile-owned-button {
+  gap: 8px;
+
+  box-shadow:
+    0 5px 13px
+      rgba(120, 110, 65, 0.07);
+}
+
+.cute-profile-book-stats-row
+  .cute-profile-owned-icon {
+  width: 36px;
+  height: 36px;
+
+  font-size: 18px;
+}
+
+.cute-profile-book-stats-row
+  .cute-profile-owned-content
+  strong {
+  font-size: 25px;
+}
+
+.cute-profile-book-stats-row
+  .cute-profile-owned-content
+  span {
+  font-size: 8px;
+}
+
+
+/* -----------------------------------------------------
+   MOBIEL
+----------------------------------------------------- */
+
+@media (max-width: 390px) {
+  .cute-profile-book-stats-row {
+    gap: 7px;
+  }
+
+  .cute-profile-book-stats-row
+    .cute-profile-book-count,
+  .cute-profile-book-stats-row
+    .cute-profile-owned-button {
+    padding: 8px;
+  }
+
+  .cute-profile-book-stats-row
+    .cute-profile-book-icon,
+  .cute-profile-book-stats-row
+    .cute-profile-owned-icon {
+    width: 32px;
+    height: 32px;
+
+    font-size: 16px;
+  }
+
+  .cute-profile-book-stats-row
+    .cute-profile-book-count
+    strong,
+  .cute-profile-book-stats-row
+    .cute-profile-owned-content
+    strong {
+    font-size: 22px;
+  }
+}

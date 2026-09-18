@@ -306,7 +306,13 @@ function Profile({
             )}
           </div>
 
-          <div className="cute-profile-stats">
+          {/* =========================================
+              BOEKEN TELLERS
+              ========================================= */}
+
+          <div className="cute-profile-book-stats-row">
+            {/* ALLE BOEKEN IN BIBLIOTHEEK */}
+
             <div className="cute-profile-book-count">
               <span className="cute-profile-book-icon">
                 📚
@@ -323,18 +329,20 @@ function Profile({
               </div>
             </div>
 
+            {/* BOEKEN DIE IK BEZIT */}
+
             <button
               type="button"
-              className="cute-profile-book-count cute-profile-owned-button"
+              className="cute-profile-owned-button"
               onClick={() =>
                 setOwnedOpen(true)
               }
             >
-              <span className="cute-profile-book-icon">
+              <span className="cute-profile-owned-icon">
                 🏠
               </span>
 
-              <div>
+              <span className="cute-profile-owned-content">
                 <strong>
                   {ownedBooks.length}
                 </strong>
@@ -344,7 +352,7 @@ function Profile({
                     ? 'boek in bezit'
                     : 'boeken in bezit'}
                 </span>
-              </div>
+              </span>
             </button>
           </div>
         </div>
@@ -354,6 +362,10 @@ function Profile({
           <div />
           <span>✦</span>
         </div>
+
+        {/* =========================================
+            GENRE STATISTIEKEN
+            ========================================= */}
 
         <section className="cute-profile-statistics">
           <div className="cute-profile-statistics-heading">
@@ -447,6 +459,10 @@ function Profile({
         </div>
       </section>
 
+      {/* ===========================================
+          OWNED BOOKS MODAL
+          =========================================== */}
+
       {ownedOpen && (
         <div className="cute-profile-owned-overlay">
           <div className="cute-profile-owned-modal">
@@ -527,6 +543,10 @@ function Profile({
           </div>
         </div>
       )}
+
+      {/* ===========================================
+          EDIT PROFILE MODAL
+          =========================================== */}
 
       {editOpen && (
         <div className="cute-profile-edit-overlay">
