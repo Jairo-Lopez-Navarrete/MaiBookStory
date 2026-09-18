@@ -3013,3 +3013,650 @@ body {
     font-size: 20px;
   }
 }
+
+/* =====================================================
+   MAIBOOKSTORY — DIGITAL READING JOURNAL THEME
+   ===================================================== */
+
+:root {
+  --journal-cream: #fffaf0;
+  --journal-paper: #fffdf7;
+  --journal-pink: #f8cfd3;
+  --journal-pink-soft: #fde8e7;
+  --journal-green: #dfe8b9;
+  --journal-green-dark: #82962e;
+  --journal-yellow: #f5df9a;
+  --journal-brown: #725b4b;
+  --journal-dark: #59483d;
+  --journal-muted: #a18f82;
+  --journal-line: #eadfce;
+  --journal-shadow: rgba(104, 77, 55, 0.10);
+}
+
+/* =========================
+   APP ACHTERGROND
+========================= */
+
+.journal-app {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 8% 5%,
+      rgba(248, 207, 211, 0.55) 0,
+      rgba(248, 207, 211, 0) 180px
+    ),
+    radial-gradient(
+      circle at 95% 18%,
+      rgba(223, 232, 185, 0.65) 0,
+      rgba(223, 232, 185, 0) 210px
+    ),
+    var(--journal-cream);
+  color: var(--journal-dark);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.journal-header {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 26px 20px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.journal-brand {
+  position: relative;
+  z-index: 1;
+}
+
+.journal-brand-small {
+  display: block;
+  margin-bottom: -4px;
+  color: var(--journal-green-dark);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+.journal-brand h1 {
+  margin: 0;
+  color: var(--journal-green-dark);
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: clamp(32px, 8vw, 46px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+}
+
+.journal-brand p {
+  margin: 8px 0 0;
+  color: var(--journal-brown);
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+  font-size: 15px;
+}
+
+.journal-header-decoration {
+  color: var(--journal-yellow);
+  font-size: 28px;
+  transform: translateY(-10px);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.journal-main {
+  width: 100%;
+  max-width: 920px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 0 16px 120px;
+}
+
+/* =========================
+   ZOEKEN + JAAR
+========================= */
+
+.journal-top-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.journal-top-row .user-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.journal-year-picker {
+  flex: 0 0 auto;
+  min-width: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 5px 9px 6px;
+  border: 1px solid var(--journal-line);
+  border-radius: 14px;
+  background: rgba(255, 253, 247, 0.85);
+  box-shadow: 0 3px 12px var(--journal-shadow);
+}
+
+.journal-year-picker span {
+  color: var(--journal-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.journal-year-picker select {
+  width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--journal-brown);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* =========================
+   MAAND
+========================= */
+
+.journal-month-section {
+  position: relative;
+  width: 100%;
+  min-height: 145px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 10px 4px;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.journal-month-section::before {
+  content: '✦';
+  position: absolute;
+  top: 3px;
+  left: 16%;
+  color: var(--journal-yellow);
+  font-size: 18px;
+}
+
+.journal-month-section::after {
+  content: '✧';
+  position: absolute;
+  right: 15%;
+  bottom: 5px;
+  color: var(--journal-pink);
+  font-size: 23px;
+}
+
+.journal-month-card {
+  position: relative;
+  flex: 1;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 18px 20px 15px;
+  border: 1px solid rgba(234, 223, 206, 0.9);
+  border-radius: 28px;
+  background:
+    linear-gradient(
+      145deg,
+      #fffdf8 0%,
+      #fff6e9 100%
+    );
+  box-shadow:
+    0 9px 25px var(--journal-shadow),
+    inset 0 0 0 4px
+      rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+
+.journal-month-label {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--journal-muted);
+  font-family:
+    'Milkyway Demo',
+    cursive;
+  font-size: 12px;
+}
+
+.journal-month-card h2 {
+  margin: 0;
+  color: var(--journal-pink);
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: clamp(36px, 9vw, 58px);
+  line-height: 0.95;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.journal-month-year {
+  display: block;
+  margin-top: 5px;
+  color: var(--journal-brown);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.journal-month-stars {
+  margin-top: 7px;
+  color: var(--journal-yellow);
+  font-size: 14px;
+  letter-spacing: 5px;
+}
+
+.journal-month-arrow {
+  position: relative;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border: 1px solid var(--journal-line);
+  border-radius: 50%;
+  background: var(--journal-paper);
+  color: var(--journal-brown);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px var(--journal-shadow);
+}
+
+.journal-month-arrow:active {
+  transform: scale(0.92);
+}
+
+/* =========================
+   LIBRARY TITEL
+========================= */
+
+.journal-library {
+  width: 100%;
+}
+
+.journal-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 2px 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--journal-line);
+}
+
+.journal-section-heading > div:first-child > span {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--journal-green-dark);
+  font-family:
+    'Milkyway Demo',
+    cursive;
+  font-size: 13px;
+}
+
+.journal-section-heading h2 {
+  margin: 0;
+  color: var(--journal-brown);
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 31px;
+  line-height: 1;
+}
+
+.journal-book-count {
+  min-width: 55px;
+  padding: 6px 9px;
+  border-radius: 13px;
+  background: var(--journal-pink-soft);
+  text-align: center;
+}
+
+.journal-book-count strong {
+  display: block;
+  color: var(--journal-brown);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.journal-book-count small {
+  color: var(--journal-muted);
+  font-size: 9px;
+}
+
+/* =========================
+   BOEK GRID
+========================= */
+
+.journal-book-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.journal-book-grid .book-card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--journal-line);
+  border-radius: 19px;
+  background: var(--journal-paper);
+  box-shadow:
+    0 5px 16px var(--journal-shadow);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.journal-book-grid .book-card:nth-child(3n + 1) {
+  background: #fffdf6;
+}
+
+.journal-book-grid .book-card:nth-child(3n + 2) {
+  background: #fff5f3;
+}
+
+.journal-book-grid .book-card:nth-child(3n) {
+  background: #f5f8e8;
+}
+
+.journal-book-grid .book-card:active {
+  transform: scale(0.98);
+}
+
+.journal-book-grid .book-cover {
+  width: 100%;
+  aspect-ratio: 0.72;
+  overflow: hidden;
+  border-radius: 13px;
+  background: #eee5d9;
+}
+
+.journal-book-grid .book-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.journal-book-grid .book-info {
+  padding: 9px 3px 4px;
+}
+
+.journal-book-grid .book-info .rating {
+  margin-bottom: 4px;
+  color: #e8bb61;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.journal-book-grid .book-info h3 {
+  margin: 0;
+  color: var(--journal-brown);
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 18px;
+  line-height: 1.05;
+}
+
+.journal-book-grid .book-info p {
+  margin: 4px 0 0;
+  color: var(--journal-muted);
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+/* =========================
+   LEGE MAAND
+========================= */
+
+.journal-empty {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 8px 0;
+  padding: 40px 22px;
+  border: 1px solid var(--journal-line);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      135deg,
+      #fffdf7,
+      #fff3f1
+    );
+  text-align: center;
+  box-shadow: 0 6px 20px var(--journal-shadow);
+}
+
+.journal-empty-decoration {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  color: var(--journal-yellow);
+  font-size: 22px;
+}
+
+.journal-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: var(--journal-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 29px;
+}
+
+.journal-empty h3 {
+  margin: 0;
+  color: var(--journal-brown);
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 27px;
+}
+
+.journal-empty p {
+  max-width: 300px;
+  margin: 8px auto 18px;
+  color: var(--journal-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.journal-add-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 14px;
+  background: var(--journal-pink);
+  color: var(--journal-brown);
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px var(--journal-shadow);
+}
+
+.journal-add-button span {
+  font-family: sans-serif;
+  font-size: 19px;
+}
+
+.journal-add-button:active {
+  transform: scale(0.97);
+}
+
+/* =========================
+   LAADSCREEN
+========================= */
+
+.journal-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--journal-cream);
+  color: var(--journal-brown);
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 24px;
+}
+
+/* =========================
+   COMPACTE USER SEARCH
+========================= */
+
+.journal-top-row .user-search-collapsed {
+  width: 42px;
+  flex: 0 0 42px;
+}
+
+.journal-top-row .user-search-toggle {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--journal-line);
+  border-radius: 50%;
+  background: var(--journal-paper);
+  box-shadow: 0 3px 10px var(--journal-shadow);
+}
+
+.journal-top-row .user-search-expanded {
+  flex: 1;
+}
+
+.journal-top-row .user-search-input-wrap {
+  height: 42px;
+  border: 1px solid var(--journal-line);
+  border-radius: 18px;
+  background: var(--journal-paper);
+  box-shadow: 0 3px 10px var(--journal-shadow);
+}
+
+.journal-top-row .user-search-close {
+  background: var(--journal-pink-soft);
+  color: var(--journal-brown);
+}
+
+/* =========================
+   TABLET / DESKTOP
+========================= */
+
+@media (min-width: 700px) {
+  .journal-main {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .journal-book-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .journal-header {
+    padding-top: 34px;
+  }
+
+  .journal-month-section {
+    min-height: 170px;
+  }
+}
+
+/* =========================
+   KLEINE TELEFOONS
+========================= */
+
+@media (max-width: 420px) {
+  .journal-header {
+    padding-top: 20px;
+  }
+
+  .journal-header-decoration {
+    font-size: 20px;
+  }
+
+  .journal-brand h1 {
+    font-size: 34px;
+  }
+
+  .journal-brand p {
+    font-size: 13px;
+  }
+
+  .journal-month-card {
+    padding: 15px 12px 13px;
+    border-radius: 23px;
+  }
+
+  .journal-month-card h2 {
+    font-size: 39px;
+  }
+
+  .journal-month-arrow {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+  }
+
+  .journal-section-heading h2 {
+    font-size: 28px;
+  }
+
+  .journal-book-grid {
+    gap: 10px;
+  }
+
+  .journal-book-grid .book-card {
+    padding: 7px;
+    border-radius: 16px;
+  }
+
+  .journal-book-grid .book-info h3 {
+    font-size: 16px;
+  }
+}
