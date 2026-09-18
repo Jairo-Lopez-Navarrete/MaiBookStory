@@ -6377,3 +6377,130 @@ body {
     font-size: 18px;
   }
 }
+/* HALF STAR RATINGS */
+
+.journal-rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.journal-star,
+.journal-pepper {
+  position: relative;
+  width: 26px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 30px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.journal-star-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.journal-star-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #e7a4b4;
+  pointer-events: none;
+}
+
+.journal-star:hover {
+  transform: scale(1.08);
+}
+
+.journal-pepper {
+  font-size: 20px;
+}
+
+.journal-pepper-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(1);
+  opacity: 0.3;
+}
+
+.journal-pepper-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: none;
+}
+
+.journal-pepper:hover,
+.journal-star:hover {
+  opacity: 0.85;
+}
+/* STARTPAGINA - HALVE STERREN */
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.rating-star {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 22px;
+  font-size: 20px;
+  line-height: 22px;
+}
+
+.rating-star-empty {
+  position: absolute;
+  inset: 0;
+}
+
+.rating-star-half {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 42%;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.rating-star.full {
+  color: #e7a4b4;
+}
+
+.rating-star.empty {
+  color: #d9cfd1;
+}
+
+.rating-star.half {
+  color: #e7a4b4;
+}
+
+.rating-star.half .rating-star-empty {
+  color: #d9cfd1;
+}

@@ -79,6 +79,65 @@ function BookCard({ book, onEdit, onDelete }) {
     onEdit(book)
   }
 
+  function renderRating(rating) {
+    const numericRating = Number(rating) || 0
+
+    return (
+      <div
+        className="rating"
+        aria-label={`Rating: ${numericRating} van 5`}
+      >
+        {[1, 2, 3, 4, 5].map(
+          (starNumber) => {
+            const amount =
+              numericRating -
+              (starNumber - 1)
+
+            if (amount >= 1) {
+              return (
+                <span
+                  key={starNumber}
+                  className="rating-star full"
+                  aria-hidden="true"
+                >
+                  ★
+                </span>
+              )
+            }
+
+            if (amount >= 0.5) {
+              return (
+                <span
+                  key={starNumber}
+                  className="rating-star half"
+                  aria-hidden="true"
+                >
+                  <span className="rating-star-empty">
+                    ☆
+                  </span>
+
+                  <span className="rating-star-half">
+                    ★
+                  </span>
+                </span>
+              )
+            }
+
+            return (
+              <span
+                key={starNumber}
+                className="rating-star empty"
+                aria-hidden="true"
+              >
+                ☆
+              </span>
+            )
+          },
+        )}
+      </div>
+    )
+  }
+
   return (
     <article
       className="book-card"
@@ -100,13 +159,7 @@ function BookCard({ book, onEdit, onDelete }) {
       </div>
 
       <div className="book-info">
-        <div
-          className="rating"
-          aria-label={`Rating: ${book.rating} van 5`}
-        >
-          {'★'.repeat(book.rating)}
-          {'☆'.repeat(5 - book.rating)}
-        </div>
+        {renderRating(book.rating)}
 
         <h3>{book.title}</h3>
 

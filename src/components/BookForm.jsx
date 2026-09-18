@@ -75,31 +75,33 @@ function BookForm({
       )
       setGenre(book.genre || '')
 
-      setRating(book.rating || 0)
-      setPlotRating(book.plot_rating || 0)
+      setRating(Number(book.rating) || 0)
+      setPlotRating(
+        Number(book.plot_rating) || 0,
+      )
       setWritingRating(
-        book.writing_rating || 0,
+        Number(book.writing_rating) || 0,
       )
       setContentRating(
-        book.content_rating || 0,
+        Number(book.content_rating) || 0,
       )
       setReadabilityRating(
-        book.readability_rating || 0,
+        Number(book.readability_rating) || 0,
       )
       setCharactersRating(
-        book.characters_rating || 0,
+        Number(book.characters_rating) || 0,
       )
       setWorldBuildingRating(
-        book.world_building_rating || 0,
+        Number(book.world_building_rating) || 0,
       )
       setRepresentationRating(
-        book.representation_rating || 0,
+        Number(book.representation_rating) || 0,
       )
       setRomanceRating(
-        book.romance_rating || 0,
+        Number(book.romance_rating) || 0,
       )
       setSpiceRating(
-        book.spice_rating || 0,
+        Number(book.spice_rating) || 0,
       )
 
       setSummary(book.summary || '')
@@ -293,29 +295,78 @@ function BookForm({
     }
   }
 
+  function handleHalfRating(
+    event,
+    number,
+    setValue,
+  ) {
+    const rect =
+      event.currentTarget.getBoundingClientRect()
+
+    const clickPosition =
+      event.clientX - rect.left
+
+    const isLeftHalf =
+      clickPosition < rect.width / 2
+
+    setValue(
+      isLeftHalf
+        ? number - 0.5
+        : number,
+    )
+  }
+
   function renderStars(value, setValue) {
     return (
       <div className="journal-rating-stars">
         {[1, 2, 3, 4, 5].map(
-          (number) => (
-            <button
-              key={number}
-              type="button"
-              className={
-                number <= value
-                  ? 'journal-star selected'
-                  : 'journal-star'
-              }
-              onClick={() =>
-                setValue(number)
-              }
-              aria-label={`${number} van 5`}
-            >
-              {number <= value
-                ? '★'
-                : '☆'}
-            </button>
-          ),
+          (number) => {
+            const fill =
+              Math.max(
+                0,
+                Math.min(
+                  1,
+                  value - (number - 1),
+                ),
+              )
+
+            return (
+              <button
+                key={number}
+                type="button"
+                className="journal-star"
+                onClick={(event) =>
+                  handleHalfRating(
+                    event,
+                    number,
+                    setValue,
+                  )
+                }
+                aria-label={
+                  fill >= 1
+                    ? `${number} van 5`
+                    : fill > 0
+                      ? `${number - 0.5} van 5`
+                      : `${number - 0.5} tot ${number} van 5`
+                }
+              >
+                <span className="journal-star-empty">
+                  ☆
+                </span>
+
+                {fill > 0 && (
+                  <span
+                    className="journal-star-fill"
+                    style={{
+                      width: `${fill * 100}%`,
+                    }}
+                  >
+                    ★
+                  </span>
+                )}
+              </button>
+            )
+          },
         )}
       </div>
     )
@@ -328,23 +379,51 @@ function BookForm({
     return (
       <div className="journal-rating-stars journal-peppers">
         {[1, 2, 3, 4, 5].map(
-          (number) => (
-            <button
-              key={number}
-              type="button"
-              className={
-                number <= value
-                  ? 'journal-pepper selected'
-                  : 'journal-pepper'
-              }
-              onClick={() =>
-                setValue(number)
-              }
-              aria-label={`${number} van 5 spice`}
-            >
-              🌶️
-            </button>
-          ),
+          (number) => {
+            const fill =
+              Math.max(
+                0,
+                Math.min(
+                  1,
+                  value - (number - 1),
+                ),
+              )
+
+            return (
+              <button
+                key={number}
+                type="button"
+                className="journal-pepper"
+                onClick={(event) =>
+                  handleHalfRating(
+                    event,
+                    number,
+                    setValue,
+                  )
+                }
+                aria-label={
+                  fill >= 1
+                    ? `${number} van 5 spice`
+                    : `${number - 0.5} van 5 spice`
+                }
+              >
+                <span className="journal-pepper-empty">
+                  🌶️
+                </span>
+
+                {fill > 0 && (
+                  <span
+                    className="journal-pepper-fill"
+                    style={{
+                      width: `${fill * 100}%`,
+                    }}
+                  >
+                    🌶️
+                  </span>
+                )}
+              </button>
+            )
+          },
         )}
       </div>
     )
