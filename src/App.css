@@ -3660,3 +3660,1551 @@ body {
     font-size: 16px;
   }
 }
+/* =====================================================
+   BOOK REVIEW — MAGDA STYLE
+===================================================== */
+
+.journal-form-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  overflow-y: auto;
+  padding: 20px 12px 40px;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(255, 218, 155, 0.55) 0,
+      transparent 110px
+    ),
+    radial-gradient(
+      circle at 92% 12%,
+      rgba(255, 189, 192, 0.55) 0,
+      transparent 150px
+    ),
+    #f9dfe0;
+}
+
+.journal-book-form {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* HEADER */
+
+.journal-form-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px;
+  padding: 15px 55px;
+  text-align: center;
+}
+
+.journal-form-heading span {
+  display: block;
+  margin-bottom: 4px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.journal-form-heading h2 {
+  margin: 0;
+  color: #f38d91;
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: clamp(42px, 9vw, 70px);
+  line-height: 0.9;
+  text-transform: lowercase;
+}
+
+.journal-form-heading p {
+  margin: 10px 0 0;
+  color: #d7797e;
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+  font-size: 16px;
+}
+
+.journal-form-header-stars {
+  position: absolute;
+  left: 10px;
+  top: 18px;
+  color: #f7c65d;
+  font-size: 31px;
+  letter-spacing: 4px;
+}
+
+.journal-form-header::after {
+  content: '✦ ✧';
+  position: absolute;
+  right: 10px;
+  top: 17px;
+  color: #f7c65d;
+  font-size: 31px;
+  letter-spacing: 4px;
+}
+
+.journal-form-back,
+.journal-form-close {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  color: #725b4b;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(110, 75, 55, 0.1);
+}
+
+.journal-form-back {
+  left: 5px;
+}
+
+.journal-form-close {
+  right: 5px;
+  font-size: 27px;
+}
+
+.journal-form-back:active,
+.journal-form-close:active {
+  transform: scale(0.92);
+}
+
+/* PERIODE */
+
+.journal-form-period {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 15px;
+  padding: 7px 17px;
+  border: 1px solid #ead1bd;
+  border-radius: 18px;
+  background: #fff7e9;
+  color: #9a806c;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(100, 75, 55, 0.08);
+}
+
+.journal-form-period span {
+  margin-right: 7px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.journal-form-period strong {
+  color: #79921f;
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 16px;
+  text-transform: lowercase;
+}
+
+.journal-form-period em {
+  margin-left: 5px;
+  font-style: normal;
+  font-size: 12px;
+}
+
+/* CONTENT */
+
+.journal-book-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* HOOFD REVIEW */
+
+.journal-review-main {
+  display: grid;
+  grid-template-columns:
+    180px
+    minmax(260px, 1fr)
+    300px;
+  gap: 16px;
+  align-items: start;
+}
+
+/* COVER */
+
+.journal-cover-section {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.journal-cover-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 0.69;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #d9c4ac;
+  border-radius: 18px;
+  background: #f1e3d2;
+  box-shadow: 0 6px 15px rgba(100, 75, 55, 0.1);
+  cursor: pointer;
+}
+
+.journal-cover-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 11px;
+}
+
+.journal-cover-frame input {
+  display: none;
+}
+
+.journal-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 11px;
+  background: #eadcc9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #a68c73;
+  font-size: 35px;
+  text-align: center;
+}
+
+.journal-cover-placeholder span {
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* OVERALL */
+
+.journal-overall {
+  padding: 9px 5px;
+  border: 1px solid #e5cdb5;
+  border-radius: 13px;
+  background: #fff8ed;
+  text-align: center;
+}
+
+.journal-overall > span {
+  display: block;
+  margin-bottom: 3px;
+  color: #a58b75;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* BOEK INFO */
+
+.journal-book-details {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid #e5d2bb;
+  border-radius: 18px;
+  background: #fff8ed;
+  box-shadow: 0 5px 15px rgba(100, 75, 55, 0.07);
+}
+
+.journal-field {
+  min-width: 0;
+  margin-bottom: 10px;
+}
+
+.journal-field label {
+  display: block;
+  margin-bottom: 4px;
+  color: #957761;
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.journal-field input,
+.journal-writing-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dfcdb8;
+  border-radius: 10px;
+  background: #fffdf8;
+  color: #655247;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.journal-field input {
+  height: 38px;
+  padding: 0 10px;
+}
+
+.journal-field input:focus,
+.journal-writing-card textarea:focus {
+  border-color: #e8a8a9;
+  box-shadow: 0 0 0 3px rgba(232, 168, 169, 0.12);
+}
+
+.journal-field input::placeholder,
+.journal-writing-card textarea::placeholder {
+  color: #c2aa96;
+}
+
+.journal-two-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.journal-read-info {
+  margin-top: 4px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: #edf1d7;
+  color: #809331;
+  font-size: 11px;
+}
+
+.journal-read-info span {
+  margin-right: 5px;
+  text-transform: uppercase;
+  font-size: 9px;
+}
+
+.journal-read-info strong {
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 14px;
+}
+
+/* RATINGS */
+
+.journal-ratings-panel {
+  padding: 13px;
+  border: 1px solid #e2cfb7;
+  border-radius: 18px;
+  background: #fff8ed;
+  box-shadow: 0 5px 15px rgba(100, 75, 55, 0.07);
+}
+
+.journal-panel-title {
+  margin-bottom: 9px;
+  padding-bottom: 7px;
+  border-bottom: 1px dashed #dfcdb7;
+  text-align: center;
+}
+
+.journal-panel-title span {
+  display: block;
+  color: #8a704f;
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 19px;
+  text-transform: lowercase;
+}
+
+.journal-panel-title small {
+  color: #b09a85;
+  font-size: 9px;
+}
+
+.journal-rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  min-height: 29px;
+  border-bottom: 1px solid rgba(226, 207, 183, 0.45);
+}
+
+.journal-rating-row:last-child {
+  border-bottom: none;
+}
+
+.journal-rating-row > span {
+  color: #947d68;
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+.journal-rating-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.journal-star {
+  width: 21px;
+  height: 25px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #d9c5ae;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.journal-star.selected {
+  color: #e5b54e;
+}
+
+.journal-star:active {
+  transform: scale(0.9);
+}
+
+.journal-pepper {
+  width: 21px;
+  height: 25px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  opacity: 0.28;
+  filter: grayscale(0.3);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.journal-pepper.selected {
+  opacity: 1;
+  filter: none;
+}
+
+/* SCHRIJFKAARTEN */
+
+.journal-writing-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.journal-writing-card {
+  padding: 14px;
+  border: 1px solid #e2ceb6;
+  border-radius: 18px;
+  background: #fff8ed;
+  box-shadow: 0 5px 15px rgba(100, 75, 55, 0.06);
+}
+
+.journal-writing-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.journal-writing-title span {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #f5c8ca;
+  color: #9a6f6f;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.journal-writing-title h3 {
+  margin: 0;
+  color: #806955;
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 21px;
+  text-transform: lowercase;
+}
+
+.journal-writing-card textarea {
+  display: block;
+  min-height: 150px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+/* REVIEW */
+
+.journal-review-card {
+  background:
+    linear-gradient(
+      135deg,
+      #fff8ed 0%,
+      #fffdf8 100%
+    );
+}
+
+.journal-review-card textarea {
+  min-height: 190px;
+}
+
+/* QUOTES */
+
+.journal-quotes-card {
+  background: #f0f3dc;
+}
+
+.journal-quotes-card .journal-writing-title span {
+  background: #d7e1a6;
+}
+
+.journal-quotes-card textarea {
+  min-height: 150px;
+  background: #fffef8;
+}
+
+/* OPSLAAN */
+
+.journal-save-button {
+  min-height: 54px;
+  margin: 2px auto 0;
+  padding: 0 28px;
+  border: none;
+  border-radius: 18px;
+  background: #f3aeb1;
+  color: #72554c;
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: 21px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(120, 80, 70, 0.12);
+}
+
+.journal-save-button span {
+  margin: 0 9px;
+  color: #f7d66e;
+}
+
+.journal-save-button:active {
+  transform: scale(0.97);
+}
+
+/* TABLET */
+
+@media (max-width: 850px) {
+  .journal-review-main {
+    grid-template-columns:
+      145px
+      minmax(220px, 1fr)
+      250px;
+  }
+
+  .journal-rating-row > span {
+    font-size: 10px;
+  }
+
+  .journal-star,
+  .journal-pepper {
+    width: 19px;
+  }
+}
+
+/* MOBIEL */
+
+@media (max-width: 680px) {
+  .journal-form-overlay {
+    padding: 0 0 30px;
+  }
+
+  .journal-book-form {
+    width: 100%;
+  }
+
+  .journal-form-header {
+    min-height: 125px;
+    padding: 15px 48px;
+  }
+
+  .journal-form-heading h2 {
+    font-size: 48px;
+  }
+
+  .journal-form-heading p {
+    font-size: 13px;
+  }
+
+  .journal-form-header-stars,
+  .journal-form-header::after {
+    font-size: 22px;
+  }
+
+  .journal-form-back,
+  .journal-form-close {
+    width: 38px;
+    height: 38px;
+  }
+
+  .journal-form-back {
+    left: 10px;
+  }
+
+  .journal-form-close {
+    right: 10px;
+  }
+
+  .journal-form-period {
+    margin-bottom: 12px;
+  }
+
+  .journal-book-form-content {
+    padding: 0 10px;
+  }
+
+  .journal-review-main {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 10px;
+  }
+
+  .journal-cover-section {
+    grid-row: span 2;
+  }
+
+  .journal-book-details {
+    padding: 10px;
+  }
+
+  .journal-two-fields {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .journal-field {
+    margin-bottom: 8px;
+  }
+
+  .journal-field label {
+    font-size: 12px;
+  }
+
+  .journal-field input {
+    height: 36px;
+    font-size: 13px;
+  }
+
+  .journal-ratings-panel {
+    grid-column: 1 / -1;
+    padding: 11px;
+  }
+
+  .journal-rating-row {
+    min-height: 30px;
+  }
+
+  .journal-rating-row > span {
+    font-size: 11px;
+  }
+
+  .journal-writing-columns {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .journal-writing-card {
+    padding: 12px;
+  }
+
+  .journal-writing-card textarea {
+    min-height: 140px;
+  }
+
+  .journal-review-card textarea {
+    min-height: 190px;
+  }
+
+  .journal-save-button {
+    width: 100%;
+    min-height: 50px;
+    font-size: 19px;
+  }
+}
+
+/* HEEL KLEIN */
+
+@media (max-width: 390px) {
+  .journal-form-heading h2 {
+    font-size: 43px;
+  }
+
+  .journal-form-heading p {
+    font-size: 12px;
+  }
+
+  .journal-review-main {
+    grid-template-columns: 95px 1fr;
+  }
+
+  .journal-cover-frame {
+    padding: 5px;
+  }
+
+  .journal-rating-row > span {
+    max-width: 85px;
+  }
+
+  .journal-star,
+  .journal-pepper {
+    width: 18px;
+  }
+}
+/* =====================================================
+   BOOK DETAILS — CUTE READING JOURNAL
+===================================================== */
+
+.book-details-page {
+  position: fixed;
+  inset: 0;
+  z-index: 1900;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 20px 12px 40px;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(255, 218, 155, 0.55) 0,
+      transparent 110px
+    ),
+    radial-gradient(
+      circle at 92% 12%,
+      rgba(255, 189, 192, 0.55) 0,
+      transparent 150px
+    ),
+    #f9dfe0;
+}
+
+.book-details-container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+.book-details-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px;
+  padding: 15px 60px;
+  text-align: center;
+}
+
+.book-details-heading span {
+  display: block;
+  margin-bottom: 4px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.book-details-heading h2 {
+  margin: 0;
+  color: #f38d91;
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+  font-size: clamp(42px, 9vw, 70px);
+  line-height: 0.9;
+  text-transform: lowercase;
+}
+
+.book-details-heading p {
+  max-width: 420px;
+  margin: 10px auto 0;
+  overflow: hidden;
+  color: #d7797e;
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-details-header-stars,
+.book-details-header-stars-right {
+  position: absolute;
+  top: 18px;
+  color: #f7c65d;
+  font-size: 31px;
+  letter-spacing: 4px;
+}
+
+.book-details-header-stars {
+  left: 10px;
+}
+
+.book-details-header-stars-right {
+  right: 10px;
+}
+
+/* TERUG */
+
+.book-details-back {
+  position: absolute;
+  left: 5px;
+
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.78);
+
+  color: #725b4b;
+  font-size: 22px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(110, 75, 55, 0.1);
+}
+
+.book-details-back:active {
+  transform: scale(0.92);
+}
+
+/* PERIODE */
+
+.book-details-period {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 15px;
+  padding: 7px 17px;
+
+  border: 1px solid #ead1bd;
+  border-radius: 18px;
+
+  background: #fff7e9;
+
+  color: #9a806c;
+  text-align: center;
+
+  box-shadow:
+    0 4px 12px rgba(100, 75, 55, 0.08);
+}
+
+.book-details-period span {
+  margin-right: 7px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.book-details-period strong {
+  color: #79921f;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 16px;
+  text-transform: lowercase;
+}
+
+.book-details-period em {
+  margin-left: 5px;
+  color: #9a806c;
+  font-size: 12px;
+  font-style: normal;
+}
+
+/* CONTENT */
+
+.book-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* HOOFDGEDEELTE */
+
+.book-details-main {
+  display: grid;
+
+  grid-template-columns:
+    180px
+    minmax(260px, 1fr)
+    300px;
+
+  gap: 16px;
+  align-items: start;
+}
+
+/* COVER */
+
+.book-details-cover-section {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.book-details-cover {
+  width: 100%;
+  aspect-ratio: 0.69;
+
+  padding: 8px;
+  box-sizing: border-box;
+
+  border: 1px solid #d9c4ac;
+  border-radius: 18px;
+
+  background: #f1e3d2;
+
+  box-shadow:
+    0 6px 15px rgba(100, 75, 55, 0.1);
+}
+
+.book-details-cover img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 11px;
+}
+
+/* OVERALL */
+
+.book-details-overall {
+  padding: 9px 5px;
+
+  border: 1px solid #e5cdb5;
+  border-radius: 13px;
+
+  background: #fff8ed;
+
+  text-align: center;
+}
+
+.book-details-overall > span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #a58b75;
+
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* INFO */
+
+.book-details-info {
+  min-width: 0;
+
+  padding: 13px;
+
+  border: 1px solid #e5d2bb;
+  border-radius: 18px;
+
+  background: #fff8ed;
+
+  box-shadow:
+    0 5px 15px rgba(100, 75, 55, 0.07);
+}
+
+.book-details-info-label {
+  margin-bottom: 8px;
+  padding-bottom: 7px;
+
+  border-bottom: 1px dashed #dfcdb7;
+
+  color: #806955;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 20px;
+  text-transform: lowercase;
+}
+
+.book-details-info-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  min-height: 42px;
+
+  padding: 8px 0;
+
+  border-bottom: 1px solid
+    rgba(226, 207, 183, 0.55);
+}
+
+.book-details-info-row:last-of-type {
+  border-bottom: none;
+}
+
+.book-details-info-row span {
+  flex-shrink: 0;
+
+  color: #a58b75;
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.book-details-info-row strong {
+  max-width: 65%;
+
+  color: #655247;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  text-align: right;
+
+  overflow-wrap: anywhere;
+}
+
+.book-details-reading-badge {
+  margin-top: 9px;
+  padding: 9px 11px;
+
+  border-radius: 10px;
+
+  background: #edf1d7;
+
+  color: #809331;
+
+  font-size: 11px;
+}
+
+.book-details-reading-badge span {
+  margin-right: 5px;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+}
+
+.book-details-reading-badge strong {
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 14px;
+}
+
+/* RATINGS */
+
+.book-details-ratings {
+  padding: 13px;
+
+  border: 1px solid #e2cfb7;
+  border-radius: 18px;
+
+  background: #fff8ed;
+
+  box-shadow:
+    0 5px 15px rgba(100, 75, 55, 0.07);
+}
+
+.book-details-ratings-title {
+  margin-bottom: 9px;
+  padding-bottom: 7px;
+
+  border-bottom: 1px dashed #dfcdb7;
+
+  text-align: center;
+}
+
+.book-details-ratings-title span {
+  display: block;
+
+  color: #8a704f;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 19px;
+
+  text-transform: lowercase;
+}
+
+.book-details-ratings-title small {
+  color: #b09a85;
+  font-size: 9px;
+}
+
+.book-details-rating-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 5px;
+
+  min-height: 29px;
+
+  border-bottom: 1px solid
+    rgba(226, 207, 183, 0.45);
+}
+
+.book-details-rating-row:last-child {
+  border-bottom: none;
+}
+
+.book-details-rating-row > span {
+  color: #947d68;
+
+  font-size: 11px;
+
+  line-height: 1.1;
+}
+
+.details-rating-stars {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0;
+
+  flex-shrink: 0;
+}
+
+.details-star {
+  width: 21px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #d9c5ae;
+
+  font-size: 17px;
+  line-height: 1;
+}
+
+.details-star.selected {
+  color: #e5b54e;
+}
+
+.details-pepper {
+  width: 21px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0.28;
+
+  filter: grayscale(0.3);
+
+  font-size: 14px;
+}
+
+.details-pepper.selected {
+  opacity: 1;
+  filter: none;
+}
+
+/* TEKSTKAARTEN */
+
+.book-details-writing-columns {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 15px;
+}
+
+.book-details-writing-card {
+  padding: 14px;
+
+  border: 1px solid #e2ceb6;
+  border-radius: 18px;
+
+  background: #fff8ed;
+
+  box-shadow:
+    0 5px 15px rgba(100, 75, 55, 0.06);
+}
+
+.book-details-writing-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 10px;
+}
+
+.book-details-writing-title span {
+  width: 25px;
+  height: 25px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f5c8ca;
+
+  color: #9a6f6f;
+
+  font-size: 10px;
+}
+
+.book-details-writing-title h3 {
+  margin: 0;
+
+  color: #806955;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 21px;
+
+  text-transform: lowercase;
+}
+
+.book-details-text {
+  min-height: 120px;
+
+  color: #655247;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.book-details-text p {
+  margin: 0;
+}
+
+.book-details-empty {
+  color: #bba491;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 14px;
+
+  font-style: italic;
+}
+
+/* REVIEW */
+
+.book-details-review-card {
+  background:
+    linear-gradient(
+      135deg,
+      #fff8ed 0%,
+      #fffdf8 100%
+    );
+}
+
+.book-details-review-card .book-details-text {
+  min-height: 180px;
+}
+
+/* QUOTES */
+
+.book-details-quotes-card {
+  background: #f0f3dc;
+}
+
+.book-details-quotes-card
+  .book-details-writing-title
+  span {
+  background: #d7e1a6;
+}
+
+.book-details-quotes-card
+  .book-details-text {
+  min-height: 140px;
+}
+
+/* FOOTER */
+
+.book-details-footer {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  padding: 5px 0 12px;
+
+  color: #d7797e;
+
+  text-align: center;
+}
+
+.book-details-footer span {
+  color: #f4c75d;
+  font-size: 18px;
+}
+
+.book-details-footer p {
+  margin: 0;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 14px;
+}
+
+/* TABLET */
+
+@media (max-width: 850px) {
+  .book-details-main {
+    grid-template-columns:
+      145px
+      minmax(220px, 1fr)
+      250px;
+  }
+
+  .book-details-rating-row > span {
+    font-size: 10px;
+  }
+
+  .details-star,
+  .details-pepper {
+    width: 19px;
+  }
+}
+
+/* MOBIEL */
+
+@media (max-width: 680px) {
+  .book-details-page {
+    padding: 0 0 30px;
+  }
+
+  .book-details-header {
+    min-height: 125px;
+
+    padding: 15px 48px;
+  }
+
+  .book-details-heading h2 {
+    font-size: 48px;
+  }
+
+  .book-details-heading p {
+    max-width: 230px;
+
+    font-size: 13px;
+  }
+
+  .book-details-header-stars,
+  .book-details-header-stars-right {
+    font-size: 22px;
+  }
+
+  .book-details-header-stars {
+    left: 10px;
+  }
+
+  .book-details-header-stars-right {
+    right: 10px;
+  }
+
+  .book-details-back {
+    left: 10px;
+
+    width: 38px;
+    height: 38px;
+  }
+
+  .book-details-period {
+    margin-bottom: 12px;
+  }
+
+  .book-details-content {
+    padding: 0 10px;
+  }
+
+  .book-details-main {
+    display: grid;
+
+    grid-template-columns:
+      110px
+      1fr;
+
+    gap: 10px;
+  }
+
+  .book-details-cover-section {
+    grid-row: span 2;
+  }
+
+  .book-details-info {
+    padding: 10px;
+  }
+
+  .book-details-info-label {
+    font-size: 18px;
+  }
+
+  .book-details-info-row {
+    min-height: 37px;
+
+    padding: 6px 0;
+  }
+
+  .book-details-info-row span {
+    font-size: 8px;
+  }
+
+  .book-details-info-row strong {
+    font-size: 13px;
+  }
+
+  .book-details-ratings {
+    grid-column: 1 / -1;
+
+    padding: 11px;
+  }
+
+  .book-details-rating-row {
+    min-height: 30px;
+  }
+
+  .book-details-rating-row > span {
+    font-size: 11px;
+  }
+
+  .book-details-writing-columns {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .book-details-writing-card {
+    padding: 12px;
+  }
+
+  .book-details-text {
+    min-height: 120px;
+
+    font-size: 14px;
+  }
+
+  .book-details-review-card .book-details-text {
+    min-height: 180px;
+  }
+
+  .book-details-quotes-card .book-details-text {
+    min-height: 130px;
+  }
+}
+
+/* HEEL KLEINE TELEFOONS */
+
+@media (max-width: 390px) {
+  .book-details-heading h2 {
+    font-size: 43px;
+  }
+
+  .book-details-heading p {
+    font-size: 12px;
+  }
+
+  .book-details-main {
+    grid-template-columns:
+      95px
+      1fr;
+  }
+
+  .book-details-cover {
+    padding: 5px;
+  }
+
+  .book-details-rating-row > span {
+    max-width: 85px;
+  }
+
+  .details-star,
+  .details-pepper {
+    width: 18px;
+  }
+}

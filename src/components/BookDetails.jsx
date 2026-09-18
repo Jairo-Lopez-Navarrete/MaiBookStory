@@ -1,11 +1,73 @@
+const monthNames = [
+  'januari',
+  'februari',
+  'maart',
+  'april',
+  'mei',
+  'juni',
+  'juli',
+  'augustus',
+  'september',
+  'oktober',
+  'november',
+  'december',
+]
+
 function BookDetails({ book, onBack }) {
+  if (!book) {
+    return null
+  }
+
+  function getBookPeriod() {
+    if (
+      book.reading_month &&
+      book.reading_year
+    ) {
+      return {
+        month: Number(book.reading_month),
+        year: Number(book.reading_year),
+      }
+    }
+
+    if (book.created_at) {
+      const date = new Date(book.created_at)
+
+      return {
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      }
+    }
+
+    return {
+      month: null,
+      year: null,
+    }
+  }
+
   function renderStars(value) {
     const rating = Number(value) || 0
 
     return (
-      <div className="details-rating">
-        {'★'.repeat(rating)}
-        {'☆'.repeat(5 - rating)}
+      <div
+        className="details-rating-stars"
+        aria-label={`Rating: ${rating} van 5`}
+      >
+        {[1, 2, 3, 4, 5].map(
+          (number) => (
+            <span
+              key={number}
+              className={
+                number <= rating
+                  ? 'details-star selected'
+                  : 'details-star'
+              }
+            >
+              {number <= rating
+                ? '★'
+                : '☆'}
+            </span>
+          ),
+        )}
       </div>
     )
   }
@@ -14,162 +76,313 @@ function BookDetails({ book, onBack }) {
     const rating = Number(value) || 0
 
     return (
-      <div className="details-rating details-peppers">
-        {[1, 2, 3, 4, 5].map((number) => (
-          <span
-            key={number}
-            className={
-              number <= rating
-                ? 'pepper-active'
-                : 'pepper-inactive'
-            }
-          >
-            🌶️
-          </span>
-        ))}
+      <div
+        className="details-rating-stars details-peppers"
+        aria-label={`Spice rating: ${rating} van 5`}
+      >
+        {[1, 2, 3, 4, 5].map(
+          (number) => (
+            <span
+              key={number}
+              className={
+                number <= rating
+                  ? 'details-pepper selected'
+                  : 'details-pepper'
+              }
+            >
+              🌶️
+            </span>
+          ),
+        )}
       </div>
     )
   }
 
+  const period = getBookPeriod()
+
+  const readingMonth =
+    period.month
+      ? monthNames[period.month - 1]
+      : null
+
   return (
-    <main className="book-details-page">
-      <div className="book-details-header">
-        <button
-          type="button"
-          className="book-details-back"
-          onClick={onBack}
-        >
-          ← Terug
-        </button>
-
-        <h2>Boekdetails</h2>
-      </div>
-
-      <section className="book-details-top">
-        <div className="book-details-cover">
-          {book.cover ? (
-            <img
-              src={book.cover}
-              alt={`Cover van ${book.title}`}
-            />
-          ) : (
-            <span>📖</span>
-          )}
-        </div>
-
-        <div className="book-details-basic">
-          <h1>{book.title}</h1>
-
-          <p className="book-details-author">
-            {book.author}
-          </p>
-
-          <div className="book-details-overall">
-            {renderStars(book.rating)}
+    <div className="book-details-page">
+      <div className="book-details-container">
+        <header className="book-details-header">
+          <div className="book-details-header-stars">
+            ✦ ✧
           </div>
 
-          {book.pages && (
+          <button
+            type="button"
+            className="book-details-back"
+            onClick={onBack}
+            aria-label="Terug"
+          >
+            ←
+          </button>
+
+          <div className="book-details-heading">
+            <span>my reading journal</span>
+
+            <h2>book review</h2>
+
             <p>
-              <strong>Pages:</strong>{' '}
-              {book.pages}
+              {book.title}
             </p>
-          )}
+          </div>
 
-          {book.recommended_by && (
+          <div className="book-details-header-stars-right">
+            ✧ ✦
+          </div>
+        </header>
+
+        {readingMonth && (
+          <div className="book-details-period">
+            <span>reading month</span>
+
+            <strong>
+              {readingMonth}
+            </strong>
+
+            <em>
+              {period.year}
+            </em>
+          </div>
+        )}
+
+        <main className="book-details-content">
+          <section className="book-details-main">
+            <div className="book-details-cover-section">
+              <div className="book-details-cover">
+                <img
+                  src={
+                    book.cover ||
+                    'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600'
+                  }
+                  alt={`Cover van ${book.title}`}
+                />
+              </div>
+
+              <div className="book-details-overall">
+                <span>
+                  overall rating
+                </span>
+
+                {renderStars(
+                  book.rating,
+                )}
+              </div>
+            </div>
+
+            <div className="book-details-info">
+              <div className="book-details-info-label">
+                book information
+              </div>
+
+              <div className="book-details-info-row">
+                <span>title</span>
+                <strong>
+                  {book.title || '—'}
+                </strong>
+              </div>
+
+              <div className="book-details-info-row">
+                <span>author</span>
+                <strong>
+                  {book.author || '—'}
+                </strong>
+              </div>
+
+              <div className="book-details-info-row">
+                <span>nr. of pages</span>
+                <strong>
+                  {book.pages || '—'}
+                </strong>
+              </div>
+
+              <div className="book-details-info-row">
+                <span>genre</span>
+                <strong>
+                  {book.genre || '—'}
+                </strong>
+              </div>
+
+              <div className="book-details-info-row">
+                <span>recommended by</span>
+                <strong>
+                  {book.recommended_by || '—'}
+                </strong>
+              </div>
+
+              {readingMonth && (
+                <div className="book-details-reading-badge">
+                  <span>read in</span>
+
+                  <strong>
+                    {readingMonth}{' '}
+                    {period.year}
+                  </strong>
+                </div>
+              )}
+            </div>
+
+            <aside className="book-details-ratings">
+              <div className="book-details-ratings-title">
+                <span>
+                  book ratings
+                </span>
+
+                <small>
+                  {book.title}
+                </small>
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>plot</span>
+                {renderStars(
+                  book.plot_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>writing</span>
+                {renderStars(
+                  book.writing_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>content</span>
+                {renderStars(
+                  book.content_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>readability</span>
+                {renderStars(
+                  book.readability_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>characters</span>
+                {renderStars(
+                  book.characters_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>world building</span>
+                {renderStars(
+                  book.world_building_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>representation</span>
+                {renderStars(
+                  book.representation_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>romance</span>
+                {renderStars(
+                  book.romance_rating,
+                )}
+              </div>
+
+              <div className="book-details-rating-row">
+                <span>spice</span>
+                {renderPeppers(
+                  book.spice_rating,
+                )}
+              </div>
+            </aside>
+          </section>
+
+          <section className="book-details-writing-columns">
+            <article className="book-details-writing-card">
+              <div className="book-details-writing-title">
+                <span>01</span>
+                <h3>summary</h3>
+              </div>
+
+              <div className="book-details-text">
+                {book.summary ? (
+                  <p>{book.summary}</p>
+                ) : (
+                  <span className="book-details-empty">
+                    Geen summary toegevoegd.
+                  </span>
+                )}
+              </div>
+            </article>
+
+            <article className="book-details-writing-card">
+              <div className="book-details-writing-title">
+                <span>02</span>
+                <h3>tropes</h3>
+              </div>
+
+              <div className="book-details-text">
+                {book.tropes ? (
+                  <p>{book.tropes}</p>
+                ) : (
+                  <span className="book-details-empty">
+                    Geen tropes toegevoegd.
+                  </span>
+                )}
+              </div>
+            </article>
+          </section>
+
+          <section className="book-details-writing-card book-details-review-card">
+            <div className="book-details-writing-title">
+              <span>03</span>
+              <h3>review</h3>
+            </div>
+
+            <div className="book-details-text">
+              {book.review ? (
+                <p>{book.review}</p>
+              ) : (
+                <span className="book-details-empty">
+                  Geen review toegevoegd.
+                </span>
+              )}
+            </div>
+          </section>
+
+          <section className="book-details-writing-card book-details-quotes-card">
+            <div className="book-details-writing-title">
+              <span>04</span>
+              <h3>quotes</h3>
+            </div>
+
+            <div className="book-details-text">
+              {book.quotes ? (
+                <p>{book.quotes}</p>
+              ) : (
+                <span className="book-details-empty">
+                  Geen favoriete quotes toegevoegd.
+                </span>
+              )}
+            </div>
+          </section>
+
+          <div className="book-details-footer">
+            <span>✦</span>
             <p>
-              <strong>Recommended by:</strong>{' '}
-              {book.recommended_by}
+              a little piece of her reading journal
             </p>
-          )}
-
-          {book.genre && (
-            <p>
-              <strong>Genre:</strong>{' '}
-              {book.genre}
-            </p>
-          )}
-        </div>
-      </section>
-
-      <section className="book-details-ratings">
-        <h3>Book Ratings</h3>
-
-        <div className="details-rating-row">
-          <span>Plot</span>
-          {renderStars(book.plot_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>Writing</span>
-          {renderStars(book.writing_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>Content</span>
-          {renderStars(book.content_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>Readability</span>
-          {renderStars(book.readability_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>Characters</span>
-          {renderStars(book.characters_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>World building</span>
-          {renderStars(book.world_building_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>Representation</span>
-          {renderStars(book.representation_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>Romance</span>
-          {renderStars(book.romance_rating)}
-        </div>
-
-        <div className="details-rating-row">
-          <span>Spice</span>
-          {renderPeppers(book.spice_rating)}
-        </div>
-      </section>
-
-      {book.summary && (
-        <section className="book-details-section">
-          <h3>Summary</h3>
-          <p>{book.summary}</p>
-        </section>
-      )}
-
-      {book.tropes && (
-        <section className="book-details-section">
-          <h3>Tropes</h3>
-          <p>{book.tropes}</p>
-        </section>
-      )}
-
-      {book.review && (
-        <section className="book-details-section">
-          <h3>Review</h3>
-          <p>{book.review}</p>
-        </section>
-      )}
-
-      {book.quotes && (
-        <section className="book-details-section">
-          <h3>Quotes</h3>
-          <p className="book-details-quotes">
-            {book.quotes}
-          </p>
-        </section>
-      )}
-    </main>
+            <span>✦</span>
+          </div>
+        </main>
+      </div>
+    </div>
   )
 }
 

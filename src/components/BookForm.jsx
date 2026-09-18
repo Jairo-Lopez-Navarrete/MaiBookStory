@@ -31,7 +31,8 @@ function BookForm({
   const [genre, setGenre] = useState('')
 
   const [rating, setRating] = useState(0)
-  const [plotRating, setPlotRating] = useState(0)
+  const [plotRating, setPlotRating] =
+    useState(0)
   const [writingRating, setWritingRating] =
     useState(0)
   const [contentRating, setContentRating] =
@@ -40,15 +41,18 @@ function BookForm({
     useState(0)
   const [charactersRating, setCharactersRating] =
     useState(0)
-  const [worldBuildingRating, setWorldBuildingRating] =
-    useState(0)
+  const [
+    worldBuildingRating,
+    setWorldBuildingRating,
+  ] = useState(0)
   const [
     representationRating,
     setRepresentationRating,
   ] = useState(0)
   const [romanceRating, setRomanceRating] =
     useState(0)
-  const [spiceRating, setSpiceRating] = useState(0)
+  const [spiceRating, setSpiceRating] =
+    useState(0)
 
   const [summary, setSummary] = useState('')
   const [tropes, setTropes] = useState('')
@@ -94,7 +98,9 @@ function BookForm({
       setRomanceRating(
         book.romance_rating || 0,
       )
-      setSpiceRating(book.spice_rating || 0)
+      setSpiceRating(
+        book.spice_rating || 0,
+      )
 
       setSummary(book.summary || '')
       setTropes(book.tropes || '')
@@ -137,13 +143,19 @@ function BookForm({
       book?.reading_year
     ) {
       return {
-        month: Number(book.reading_month),
-        year: Number(book.reading_year),
+        month: Number(
+          book.reading_month,
+        ),
+        year: Number(
+          book.reading_year,
+        ),
       }
     }
 
     if (book?.created_at) {
-      const date = new Date(book.created_at)
+      const date = new Date(
+        book.created_at,
+      )
 
       return {
         month: date.getMonth() + 1,
@@ -195,7 +207,9 @@ function BookForm({
     }
 
     if (rating === 0) {
-      alert('Geef het boek een overall rating.')
+      alert(
+        'Geef het boek een overall rating.',
+      )
       return
     }
 
@@ -205,35 +219,56 @@ function BookForm({
     const bookData = {
       title: title.trim(),
       author: author.trim(),
+
       pages: pages
         ? Number(pages)
         : null,
+
       recommended_by:
         recommendedBy.trim() || null,
+
       genre: genre.trim() || null,
 
       rating,
 
-      plot_rating: plotRating || null,
-      writing_rating: writingRating || null,
-      content_rating: contentRating || null,
+      plot_rating:
+        plotRating || null,
+
+      writing_rating:
+        writingRating || null,
+
+      content_rating:
+        contentRating || null,
+
       readability_rating:
         readabilityRating || null,
+
       characters_rating:
         charactersRating || null,
+
       world_building_rating:
         worldBuildingRating || null,
+
       representation_rating:
         representationRating || null,
+
       romance_rating:
         romanceRating || null,
+
       spice_rating:
         spiceRating || null,
 
-      summary: summary.trim() || null,
-      tropes: tropes.trim() || null,
-      review: review.trim() || null,
-      quotes: quotes.trim() || null,
+      summary:
+        summary.trim() || null,
+
+      tropes:
+        tropes.trim() || null,
+
+      review:
+        review.trim() || null,
+
+      quotes:
+        quotes.trim() || null,
 
       cover:
         cover ||
@@ -260,7 +295,7 @@ function BookForm({
 
   function renderStars(value, setValue) {
     return (
-      <div className="rating-selector">
+      <div className="journal-rating-stars">
         {[1, 2, 3, 4, 5].map(
           (number) => (
             <button
@@ -268,8 +303,8 @@ function BookForm({
               type="button"
               className={
                 number <= value
-                  ? 'rating-star selected'
-                  : 'rating-star'
+                  ? 'journal-star selected'
+                  : 'journal-star'
               }
               onClick={() =>
                 setValue(number)
@@ -286,9 +321,12 @@ function BookForm({
     )
   }
 
-  function renderPeppers(value, setValue) {
+  function renderPeppers(
+    value,
+    setValue,
+  ) {
     return (
-      <div className="rating-selector">
+      <div className="journal-rating-stars journal-peppers">
         {[1, 2, 3, 4, 5].map(
           (number) => (
             <button
@@ -296,8 +334,8 @@ function BookForm({
               type="button"
               className={
                 number <= value
-                  ? 'rating-pepper selected'
-                  : 'rating-pepper'
+                  ? 'journal-pepper selected'
+                  : 'journal-pepper'
               }
               onClick={() =>
                 setValue(number)
@@ -321,67 +359,109 @@ function BookForm({
     : selectedYear
 
   return (
-    <div className="form-overlay">
-      <div className="book-form-container book-detail-form">
-        <div className="form-header">
+    <div className="journal-form-overlay">
+      <div className="journal-book-form">
+        {/* HEADER */}
+
+        <header className="journal-form-header">
+          <div className="journal-form-header-stars">
+            ✦ ✧
+          </div>
+
           <button
             type="button"
-            className="back-button"
+            className="journal-form-back"
             onClick={onClose}
           >
             ←
           </button>
 
-          <h2>
-            {isEditing
-              ? 'Boek bewerken'
-              : 'Boek toevoegen'}
-          </h2>
+          <div className="journal-form-heading">
+            <span>
+              {isEditing
+                ? 'my reading journal'
+                : 'new book'}
+            </span>
+
+            <h2>
+              {isEditing
+                ? 'book review'
+                : 'book review'}
+            </h2>
+
+            <p>
+              {isEditing
+                ? 'edit & keep track of your book'
+                : 'add a new book to your library'}
+            </p>
+          </div>
 
           <button
             type="button"
-            className="close-button"
+            className="journal-form-close"
             onClick={onClose}
+            aria-label="Sluiten"
           >
             ×
           </button>
-        </div>
+        </header>
 
-        <div className="book-form-period">
-          📅{' '}
-          {isEditing
-            ? `Dit boek staat in ${monthNames[displayMonth - 1]} ${displayYear}`
-            : `Dit boek wordt opgeslagen in ${monthNames[displayMonth - 1]} ${displayYear}`}
+        {/* PERIODE */}
+
+        <div className="journal-form-period">
+          <span>reading month</span>
+
+          <strong>
+            {monthNames[displayMonth - 1]}
+          </strong>
+
+          <em>{displayYear}</em>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="book-form"
+          className="journal-book-form-content"
         >
-          <section className="book-top-section">
-            <div className="book-cover-column">
+          {/* HOOFDGEDEELTE */}
+
+          <section className="journal-review-main">
+            {/* COVER */}
+
+            <div className="journal-cover-section">
               <label
-                className="cover-preview large cover-preview-clickable"
+                className="journal-cover-frame"
                 title="Cover kiezen"
               >
                 {coverPreview ? (
                   <img
                     src={coverPreview}
-                    alt="Boek cover"
+                    alt={`Cover van ${
+                      title ||
+                      'het boek'
+                    }`}
                   />
                 ) : (
-                  <span>📖</span>
+                  <div className="journal-cover-placeholder">
+                    📖
+                    <span>
+                      insert
+                      <br />
+                      book cover
+                    </span>
+                  </div>
                 )}
 
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleImageChange}
+                  onChange={
+                    handleImageChange
+                  }
                 />
               </label>
 
-              <div className="overall-rating">
-                <h3>Overall rating</h3>
+              <div className="journal-overall">
+                <span>overall rating</span>
 
                 {renderStars(
                   rating,
@@ -390,16 +470,18 @@ function BookForm({
               </div>
             </div>
 
-            <div className="book-basic-info">
-              <div className="form-field">
+            {/* BOEK INFO */}
+
+            <div className="journal-book-details">
+              <div className="journal-field">
                 <label htmlFor="title">
-                  Titel
+                  title
                 </label>
 
                 <input
                   id="title"
                   type="text"
-                  placeholder="Titel van het boek"
+                  placeholder="Book title"
                   value={title}
                   onChange={(event) =>
                     setTitle(
@@ -409,16 +491,16 @@ function BookForm({
                 />
               </div>
 
-              <div className="book-info-row">
-                <div className="form-field">
+              <div className="journal-two-fields">
+                <div className="journal-field">
                   <label htmlFor="author">
-                    Author
+                    author
                   </label>
 
                   <input
                     id="author"
                     type="text"
-                    placeholder="Auteur"
+                    placeholder="Author"
                     value={author}
                     onChange={(event) =>
                       setAuthor(
@@ -428,16 +510,16 @@ function BookForm({
                   />
                 </div>
 
-                <div className="form-field">
+                <div className="journal-field">
                   <label htmlFor="pages">
-                    Pages
+                    nr. of pages
                   </label>
 
                   <input
                     id="pages"
                     type="number"
                     min="1"
-                    placeholder="Aantal"
+                    placeholder="Pages"
                     value={pages}
                     onChange={(event) =>
                       setPages(
@@ -448,17 +530,19 @@ function BookForm({
                 </div>
               </div>
 
-              <div className="book-info-row">
-                <div className="form-field">
+              <div className="journal-two-fields">
+                <div className="journal-field">
                   <label htmlFor="recommendedBy">
-                    Recommended by
+                    recommended by
                   </label>
 
                   <input
                     id="recommendedBy"
                     type="text"
-                    placeholder="Wie raadde het aan?"
-                    value={recommendedBy}
+                    placeholder="Who recommended it?"
+                    value={
+                      recommendedBy
+                    }
                     onChange={(event) =>
                       setRecommendedBy(
                         event.target.value,
@@ -467,9 +551,9 @@ function BookForm({
                   />
                 </div>
 
-                <div className="form-field">
+                <div className="journal-field">
                   <label htmlFor="genre">
-                    Genre
+                    genre
                   </label>
 
                   <input
@@ -485,95 +569,126 @@ function BookForm({
                   />
                 </div>
               </div>
+
+              <div className="journal-read-info">
+                <span>
+                  reading month
+                </span>
+
+                <strong>
+                  {monthNames[
+                    displayMonth - 1
+                  ]}{' '}
+                  {displayYear}
+                </strong>
+              </div>
             </div>
 
-            <div className="book-ratings">
-              <h3>Book Ratings</h3>
+            {/* RATINGS */}
 
-              <div className="rating-row">
-                <span>Plot:</span>
+            <aside className="journal-ratings-panel">
+              <div className="journal-panel-title">
+                <span>book ratings</span>
+                <small>
+                  rate your reading
+                </small>
+              </div>
+
+              <div className="journal-rating-row">
+                <span>plot</span>
                 {renderStars(
                   plotRating,
                   setPlotRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>Writing:</span>
+              <div className="journal-rating-row">
+                <span>writing</span>
                 {renderStars(
                   writingRating,
                   setWritingRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>Content:</span>
+              <div className="journal-rating-row">
+                <span>content</span>
                 {renderStars(
                   contentRating,
                   setContentRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>Readability:</span>
+              <div className="journal-rating-row">
+                <span>
+                  readability
+                </span>
                 {renderStars(
                   readabilityRating,
                   setReadabilityRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>Characters:</span>
+              <div className="journal-rating-row">
+                <span>
+                  characters
+                </span>
                 {renderStars(
                   charactersRating,
                   setCharactersRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>World building:</span>
+              <div className="journal-rating-row">
+                <span>
+                  world building
+                </span>
                 {renderStars(
                   worldBuildingRating,
                   setWorldBuildingRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>Representation:</span>
+              <div className="journal-rating-row">
+                <span>
+                  representation
+                </span>
                 {renderStars(
                   representationRating,
                   setRepresentationRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>Romance:</span>
+              <div className="journal-rating-row">
+                <span>romance</span>
                 {renderStars(
                   romanceRating,
                   setRomanceRating,
                 )}
               </div>
 
-              <div className="rating-row">
-                <span>Spice:</span>
+              <div className="journal-rating-row">
+                <span>spice</span>
                 {renderPeppers(
                   spiceRating,
                   setSpiceRating,
                 )}
               </div>
-            </div>
+            </aside>
           </section>
 
-          <section className="book-writing-grid">
-            <div className="form-field">
-              <label htmlFor="summary">
-                Summary
-              </label>
+          {/* SUMMARY + TROPES */}
+
+          <section className="journal-writing-columns">
+            <div className="journal-writing-card">
+              <div className="journal-writing-title">
+                <span>01</span>
+                <h3>summary</h3>
+              </div>
 
               <textarea
                 id="summary"
                 rows="8"
-                placeholder="Schrijf hier je samenvatting..."
+                placeholder="Write your summary here..."
                 value={summary}
                 onChange={(event) =>
                   setSummary(
@@ -583,15 +698,16 @@ function BookForm({
               />
             </div>
 
-            <div className="form-field">
-              <label htmlFor="tropes">
-                Tropes
-              </label>
+            <div className="journal-writing-card">
+              <div className="journal-writing-title">
+                <span>02</span>
+                <h3>tropes</h3>
+              </div>
 
               <textarea
                 id="tropes"
                 rows="8"
-                placeholder="Bijvoorbeeld: enemies to lovers, found family..."
+                placeholder="Enemies to lovers, found family..."
                 value={tropes}
                 onChange={(event) =>
                   setTropes(
@@ -602,15 +718,18 @@ function BookForm({
             </div>
           </section>
 
-          <div className="form-field">
-            <label htmlFor="review">
-              Review
-            </label>
+          {/* REVIEW */}
+
+          <section className="journal-writing-card journal-review-card">
+            <div className="journal-writing-title">
+              <span>03</span>
+              <h3>review</h3>
+            </div>
 
             <textarea
               id="review"
               rows="10"
-              placeholder="Schrijf hier je review..."
+              placeholder="Write your review here..."
               value={review}
               onChange={(event) =>
                 setReview(
@@ -618,17 +737,20 @@ function BookForm({
                 )
               }
             />
-          </div>
+          </section>
 
-          <div className="form-field">
-            <label htmlFor="quotes">
-              Quotes
-            </label>
+          {/* QUOTES */}
+
+          <section className="journal-writing-card journal-quotes-card">
+            <div className="journal-writing-title">
+              <span>04</span>
+              <h3>quotes</h3>
+            </div>
 
             <textarea
               id="quotes"
               rows="8"
-              placeholder="Zet hier je favoriete quotes..."
+              placeholder="Write your favourite quotes here..."
               value={quotes}
               onChange={(event) =>
                 setQuotes(
@@ -636,15 +758,21 @@ function BookForm({
                 )
               }
             />
-          </div>
+          </section>
+
+          {/* OPSLAAN */}
 
           <button
             type="submit"
-            className="save-book-button"
+            className="journal-save-button"
           >
+            <span>✦</span>
+
             {isEditing
-              ? 'Wijzigingen opslaan'
-              : 'Boek toevoegen'}
+              ? 'save changes'
+              : 'add book'}
+
+            <span>✦</span>
           </button>
         </form>
       </div>
