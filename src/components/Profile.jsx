@@ -31,7 +31,11 @@ function Profile({ user, bookCount, onLogout }) {
       .single()
 
     if (error) {
-      console.error('Profiel laden mislukt:', error)
+      console.error(
+        'Profiel laden mislukt:',
+        error,
+      )
+
       setLoading(false)
       return
     }
@@ -73,7 +77,9 @@ function Profile({ user, bookCount, onLogout }) {
       if (error.code === '23505') {
         alert('Deze naam is al in gebruik.')
       } else {
-        alert(`Opslaan mislukt: ${error.message}`)
+        alert(
+          `Opslaan mislukt: ${error.message}`,
+        )
       }
 
       setSaving(false)
@@ -94,24 +100,29 @@ function Profile({ user, bookCount, onLogout }) {
   async function handleImageChange(event) {
     const file = event.target.files?.[0]
 
-    if (!file) return
+    if (!file) {
+      return
+    }
 
     const reader = new FileReader()
 
     reader.onload = async () => {
       const avatarUrl = reader.result
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({
-          avatar_url: avatarUrl,
-        })
-        .eq('id', user.id)
-        .select()
-        .single()
+      const { data, error } =
+        await supabase
+          .from('profiles')
+          .update({
+            avatar_url: avatarUrl,
+          })
+          .eq('id', user.id)
+          .select()
+          .single()
 
       if (error) {
-        alert(`Foto opslaan mislukt: ${error.message}`)
+        alert(
+          `Foto opslaan mislukt: ${error.message}`,
+        )
         return
       }
 
@@ -125,51 +136,77 @@ function Profile({ user, bookCount, onLogout }) {
 
   if (loading) {
     return (
-      <main className="main-content">
-        <p>Profiel laden...</p>
+      <main className="main-content cute-profile-loading">
+        <div className="cute-profile-loading-card">
+          <span>✦</span>
+          <p>Profiel laden...</p>
+          <span>✦</span>
+        </div>
       </main>
     )
   }
 
   if (!profile) {
     return (
-      <main className="main-content">
-        <p>Je profiel kon niet worden geladen.</p>
+      <main className="main-content cute-profile-loading">
+        <div className="cute-profile-loading-card">
+          <span>✦</span>
+          <p>
+            Je profiel kon niet worden geladen.
+          </p>
+          <span>✦</span>
+        </div>
       </main>
     )
   }
 
   return (
-    <main className="main-content profile-page">
-      <section className="profile-card">
-        <div className="profile-avatar-wrapper">
-          <button
-            type="button"
-            className="profile-avatar-button"
-            onClick={handlePhotoClick}
-            aria-label="Profielfoto wijzigen"
-          >
-            {profile.avatar_url ? (
-              <img
-                src={profile.avatar_url}
-                alt="Profielfoto"
-                className="profile-avatar"
-              />
-            ) : (
-              <div className="profile-avatar profile-avatar-placeholder">
-                👤
-              </div>
-            )}
-          </button>
+    <main className="main-content cute-profile-page">
+      <section className="cute-profile-card">
+        <div className="cute-profile-decoration-top">
+          <span>✦</span>
+          <span>✧</span>
+          <span>✦</span>
+        </div>
 
-          <button
-            type="button"
-            className="profile-edit-button"
-            onClick={openEdit}
-            aria-label="Naam en status aanpassen"
-          >
-            ✏️
-          </button>
+        <div className="cute-profile-heading">
+          <span>my reading journal</span>
+
+          <h2>my profile</h2>
+
+          <p>een klein kijkje in mijn boekenwereld</p>
+        </div>
+
+        <div className="cute-profile-avatar-area">
+          <div className="cute-profile-avatar-frame">
+            <button
+              type="button"
+              className="cute-profile-avatar-button"
+              onClick={handlePhotoClick}
+              aria-label="Profielfoto wijzigen"
+            >
+              {profile.avatar_url ? (
+                <img
+                  src={profile.avatar_url}
+                  alt="Profielfoto"
+                  className="cute-profile-avatar"
+                />
+              ) : (
+                <div className="cute-profile-avatar cute-profile-avatar-placeholder">
+                  👤
+                </div>
+              )}
+            </button>
+
+            <button
+              type="button"
+              className="cute-profile-edit-button"
+              onClick={openEdit}
+              aria-label="Naam en status aanpassen"
+            >
+              ✏️
+            </button>
+          </div>
 
           <input
             ref={fileInputRef}
@@ -178,89 +215,145 @@ function Profile({ user, bookCount, onLogout }) {
             onChange={handleImageChange}
             hidden
           />
+
+          <p className="cute-profile-photo-hint">
+            tik op je foto om deze te wijzigen
+          </p>
         </div>
 
-        <h2 className="profile-name">
-          {profile.username}
-        </h2>
+        <div className="cute-profile-info">
+          <div className="cute-profile-name-section">
+            <span className="cute-profile-small-label">
+              reader
+            </span>
 
-        {profile.status && (
-          <p className="profile-status">
-            {profile.status}
-          </p>
-        )}
+            <h3>{profile.username}</h3>
 
-        <p className="profile-book-count">
-          {bookCount}{' '}
-          {bookCount === 1 ? 'boek' : 'boeken'}
-        </p>
+            {profile.status && (
+              <p>{profile.status}</p>
+            )}
+          </div>
+
+          <div className="cute-profile-book-count">
+            <span className="cute-profile-book-icon">
+              📚
+            </span>
+
+            <div>
+              <strong>{bookCount}</strong>
+
+              <span>
+                {bookCount === 1
+                  ? 'boek in mijn bibliotheek'
+                  : 'boeken in mijn bibliotheek'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="cute-profile-divider">
+          <span>✦</span>
+          <div />
+          <span>✦</span>
+        </div>
 
         <button
           type="button"
-          className="logout-button"
+          className="cute-profile-logout"
           onClick={onLogout}
         >
+          <span>♡</span>
           Uitloggen
+          <span>♡</span>
         </button>
+
+        <div className="cute-profile-footer">
+          <span>✦</span>
+
+          <p>
+            made for little reading moments
+          </p>
+
+          <span>✦</span>
+        </div>
       </section>
 
       {editOpen && (
-        <div className="profile-edit-overlay">
-          <div className="profile-edit-modal">
-            <div className="profile-edit-header">
-              <h3>Profiel aanpassen</h3>
+        <div className="cute-profile-edit-overlay">
+          <div className="cute-profile-edit-modal">
+            <div className="cute-profile-edit-stars">
+              ✦ ✧ ✦
+            </div>
+
+            <div className="cute-profile-edit-header">
+              <div>
+                <span>my reading journal</span>
+                <h3>edit profile</h3>
+              </div>
 
               <button
                 type="button"
-                className="profile-edit-close"
-                onClick={() => setEditOpen(false)}
+                className="cute-profile-edit-close"
+                onClick={() =>
+                  setEditOpen(false)
+                }
                 aria-label="Sluiten"
               >
                 ×
               </button>
             </div>
 
-            <label>
-              Naam
+            <label className="cute-profile-field">
+              <span>naam</span>
+
               <input
                 type="text"
                 value={editUsername}
                 onChange={(event) =>
-                  setEditUsername(event.target.value)
+                  setEditUsername(
+                    event.target.value,
+                  )
                 }
                 maxLength={30}
               />
             </label>
 
-            <label>
-              Status
+            <label className="cute-profile-field">
+              <span>status</span>
+
               <input
                 type="text"
                 value={editStatus}
                 onChange={(event) =>
-                  setEditStatus(event.target.value)
+                  setEditStatus(
+                    event.target.value,
+                  )
                 }
                 maxLength={80}
                 placeholder="Bijvoorbeeld: Lezen is mijn favoriete hobby 📚"
               />
             </label>
 
-            <div className="profile-edit-actions">
+            <div className="cute-profile-edit-actions">
               <button
                 type="button"
-                className="profile-edit-cancel"
-                onClick={() => setEditOpen(false)}
+                className="cute-profile-edit-cancel"
+                onClick={() =>
+                  setEditOpen(false)
+                }
               >
                 Annuleren
               </button>
 
               <button
                 type="button"
-                className="profile-edit-save"
+                className="cute-profile-edit-save"
                 onClick={saveProfile}
                 disabled={saving}
               >
-                {saving ? 'Opslaan...' : 'Opslaan'}
+                {saving
+                  ? 'Opslaan...'
+                  : 'Opslaan'}
               </button>
             </div>
           </div>

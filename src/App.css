@@ -5208,3 +5208,1172 @@ body {
     width: 18px;
   }
 }
+/* =====================================================
+   BOTTOM NAV — CUTE READING JOURNAL STYLE
+===================================================== */
+
+.journal-bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 12px;
+  z-index: 1500;
+
+  width: calc(100% - 24px);
+  max-width: 520px;
+
+  transform: translateX(-50%);
+
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  align-items: end;
+
+  padding: 8px 10px 9px;
+
+  border: 1px solid #e5cdb5;
+  border-radius: 25px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 248, 237, 0.97),
+      rgba(255, 241, 229, 0.97)
+    );
+
+  box-shadow:
+    0 10px 30px rgba(110, 75, 55, 0.14);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.journal-nav-item,
+.journal-add-nav-item {
+  position: relative;
+
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 2px;
+
+  border: none;
+  background: transparent;
+
+  color: #a58b75;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease;
+}
+
+.journal-nav-item {
+  min-height: 54px;
+}
+
+.journal-nav-item:active,
+.journal-add-nav-item:active {
+  transform: scale(0.93);
+}
+
+/* ICONEN */
+
+.journal-nav-icon {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #b29a86;
+
+  font-family:
+    'Arial',
+    sans-serif;
+
+  font-size: 22px;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+/* ACTIEVE PAGINA */
+
+.journal-nav-item.active {
+  color: #d7797e;
+}
+
+.journal-nav-item.active .journal-nav-icon {
+  background: #f6cacc;
+  color: #9a6f6f;
+
+  box-shadow:
+    0 3px 8px rgba(150, 100, 100, 0.12);
+}
+
+/* KLEIN STERRETJE BIJ ACTIEVE KNOP */
+
+.journal-nav-item.active::after {
+  content: '✦';
+
+  position: absolute;
+
+  right: calc(50% - 24px);
+  top: 1px;
+
+  color: #f2c45d;
+
+  font-size: 9px;
+}
+
+/* TOEVOEGEN */
+
+.journal-add-nav-item {
+  min-height: 67px;
+
+  margin-top: -20px;
+
+  padding: 7px 10px 6px;
+
+  border: 1px solid #e5b7a9;
+  border-radius: 19px;
+
+  background: #f3aeb1;
+
+  color: #72554c;
+
+  box-shadow:
+    0 7px 15px rgba(120, 80, 70, 0.16);
+}
+
+.journal-add-icon {
+  width: 37px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fff5e8;
+
+  color: #d7797e;
+
+  font-family:
+    'Arial',
+    sans-serif;
+
+  font-size: 25px;
+
+  line-height: 1;
+
+  box-shadow:
+    0 3px 8px rgba(120, 80, 70, 0.1);
+}
+
+.journal-add-nav-item > span:last-child {
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 14px;
+}
+
+/* KLEIN DECORATIEF STERRETJE */
+
+.journal-add-nav-item::before {
+  content: '✦';
+
+  position: absolute;
+
+  right: 7px;
+  top: 3px;
+
+  color: #f7d66e;
+
+  font-size: 11px;
+}
+
+/* DESKTOP */
+
+@media (min-width: 700px) {
+  .journal-bottom-nav {
+    bottom: 18px;
+
+    padding: 9px 12px;
+  }
+
+  .journal-nav-item {
+    min-height: 56px;
+  }
+
+  .journal-add-nav-item {
+    min-height: 70px;
+  }
+}
+
+/* MOBIEL */
+
+@media (max-width: 420px) {
+  .journal-bottom-nav {
+    bottom: 8px;
+
+    width: calc(100% - 16px);
+
+    padding: 7px 7px 8px;
+
+    border-radius: 22px;
+  }
+
+  .journal-nav-item,
+  .journal-add-nav-item {
+    font-size: 12px;
+  }
+
+  .journal-nav-item {
+    min-height: 51px;
+  }
+
+  .journal-nav-icon {
+    width: 28px;
+    height: 28px;
+
+    font-size: 21px;
+  }
+
+  .journal-add-nav-item {
+    min-height: 63px;
+
+    margin-top: -17px;
+
+    border-radius: 17px;
+  }
+
+  .journal-add-icon {
+    width: 34px;
+    height: 34px;
+
+    font-size: 23px;
+  }
+
+  .journal-add-nav-item > span:last-child {
+    font-size: 13px;
+  }
+}
+/* =====================================================
+   PROFILE — CUTE READING JOURNAL STYLE
+===================================================== */
+
+.cute-profile-page {
+  min-height: calc(100vh - 90px);
+
+  box-sizing: border-box;
+
+  padding:
+    25px 12px
+    115px;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(255, 218, 155, 0.55) 0,
+      transparent 110px
+    ),
+    radial-gradient(
+      circle at 92% 12%,
+      rgba(255, 189, 192, 0.55) 0,
+      transparent 150px
+    ),
+    #f9dfe0;
+}
+
+/* KAART */
+
+.cute-profile-card {
+  position: relative;
+
+  width: 100%;
+  max-width: 650px;
+
+  box-sizing: border-box;
+
+  margin: 0 auto;
+
+  padding: 25px 25px 20px;
+
+  border: 1px solid #e2c8ae;
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff8ed 0%,
+      #fffdf8 100%
+    );
+
+  box-shadow:
+    0 10px 30px
+      rgba(110, 75, 55, 0.1);
+
+  overflow: hidden;
+}
+
+/* DECORATIE */
+
+.cute-profile-decoration-top {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  margin-bottom: 7px;
+
+  color: #f4c75d;
+
+  font-size: 18px;
+}
+
+.cute-profile-decoration-top span:nth-child(2) {
+  color: #f2aeb1;
+  font-size: 13px;
+}
+
+/* HEADER */
+
+.cute-profile-heading {
+  text-align: center;
+}
+
+.cute-profile-heading > span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #b29a86;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+}
+
+.cute-profile-heading h2 {
+  margin: 0;
+
+  color: #f38d91;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: clamp(48px, 11vw, 72px);
+
+  line-height: 0.9;
+
+  text-transform: lowercase;
+}
+
+.cute-profile-heading p {
+  margin: 10px 0 0;
+
+  color: #d7797e;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 15px;
+}
+
+/* AVATAR */
+
+.cute-profile-avatar-area {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  margin-top: 23px;
+}
+
+.cute-profile-avatar-frame {
+  position: relative;
+
+  width: 145px;
+  height: 145px;
+
+  padding: 7px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d9c4ac;
+
+  border-radius: 50%;
+
+  background: #f5e6d5;
+
+  box-shadow:
+    0 7px 18px
+      rgba(100, 75, 55, 0.12);
+}
+
+.cute-profile-avatar-frame::before {
+  content: '✦';
+
+  position: absolute;
+
+  top: -9px;
+  left: 4px;
+
+  color: #f3c75e;
+
+  font-size: 18px;
+
+  z-index: 2;
+}
+
+.cute-profile-avatar-frame::after {
+  content: '✧';
+
+  position: absolute;
+
+  right: 1px;
+  bottom: 5px;
+
+  color: #f3aeb1;
+
+  font-size: 17px;
+
+  z-index: 2;
+}
+
+.cute-profile-avatar-button {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: #eadcc9;
+
+  cursor: pointer;
+}
+
+.cute-profile-avatar {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.cute-profile-avatar-placeholder {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #a68c73;
+
+  font-size: 48px;
+}
+
+.cute-profile-avatar-button:active {
+  transform: scale(0.97);
+}
+
+/* POTLOODJE BEWERKEN */
+
+.cute-profile-edit-button {
+  position: absolute;
+
+  right: -2px;
+  bottom: 4px;
+
+  width: 38px;
+  height: 38px;
+
+  border: 2px solid #fff8ed;
+
+  border-radius: 50%;
+
+  background: #f3aeb1;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 10px
+      rgba(110, 75, 55, 0.14);
+}
+
+.cute-profile-edit-button:active {
+  transform: scale(0.9);
+}
+
+.cute-profile-photo-hint {
+  margin: 10px 0 0;
+
+  color: #b29a86;
+
+  font-size: 10px;
+
+  font-style: italic;
+}
+
+/* PROFIEL INFO */
+
+.cute-profile-info {
+  margin-top: 22px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 12px;
+}
+
+.cute-profile-name-section,
+.cute-profile-book-count {
+  min-width: 0;
+
+  padding: 15px;
+
+  border: 1px solid #e5d2bb;
+
+  border-radius: 17px;
+
+  background: #fff8ed;
+}
+
+.cute-profile-name-section {
+  text-align: center;
+}
+
+.cute-profile-small-label {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #b09a85;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+.cute-profile-name-section h3 {
+  margin: 0;
+
+  color: #806955;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 27px;
+
+  line-height: 1.1;
+
+  overflow-wrap: anywhere;
+}
+
+.cute-profile-name-section p {
+  margin: 7px 0 0;
+
+  color: #a58b75;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 13px;
+
+  line-height: 1.35;
+
+  overflow-wrap: anywhere;
+}
+
+.cute-profile-book-count {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  background: #edf1d7;
+
+  border-color: #dbe4b4;
+
+  color: #809331;
+}
+
+.cute-profile-book-icon {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fff8ed;
+
+  font-size: 22px;
+}
+
+.cute-profile-book-count div {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.cute-profile-book-count strong {
+  color: #809331;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 29px;
+
+  line-height: 0.9;
+}
+
+.cute-profile-book-count div span {
+  margin-top: 4px;
+
+  color: #91a14d;
+
+  font-size: 9px;
+
+  line-height: 1.15;
+}
+
+/* LIJN */
+
+.cute-profile-divider {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 21px 0 15px;
+
+  color: #f1c45c;
+}
+
+.cute-profile-divider div {
+  flex: 1;
+
+  height: 1px;
+
+  border-top: 1px dashed #dfcdb7;
+}
+
+/* UITLOGGEN */
+
+.cute-profile-logout {
+  width: 100%;
+
+  min-height: 50px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  border: 1px solid #e5b7a9;
+
+  border-radius: 17px;
+
+  background: #f3aeb1;
+
+  color: #72554c;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 14px
+      rgba(120, 80, 70, 0.1);
+}
+
+.cute-profile-logout span {
+  color: #f7d66e;
+
+  font-size: 17px;
+}
+
+.cute-profile-logout:active {
+  transform: scale(0.98);
+}
+
+/* FOOTER */
+
+.cute-profile-footer {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 17px;
+
+  color: #d7797e;
+}
+
+.cute-profile-footer span {
+  color: #f4c75d;
+
+  font-size: 14px;
+}
+
+.cute-profile-footer p {
+  margin: 0;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 12px;
+}
+
+/* LADEN */
+
+.cute-profile-loading {
+  min-height: calc(100vh - 90px);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(255, 218, 155, 0.55) 0,
+      transparent 110px
+    ),
+    #f9dfe0;
+}
+
+.cute-profile-loading-card {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 18px 25px;
+
+  border: 1px solid #e2c8ae;
+
+  border-radius: 20px;
+
+  background: #fff8ed;
+
+  color: #d7797e;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  box-shadow:
+    0 7px 20px
+      rgba(110, 75, 55, 0.1);
+}
+
+.cute-profile-loading-card span {
+  color: #f3c75e;
+}
+
+.cute-profile-loading-card p {
+  margin: 0;
+}
+
+/* =====================================================
+   PROFILE EDIT MODAL
+===================================================== */
+
+.cute-profile-edit-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2500;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background:
+    rgba(102, 74, 61, 0.28);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.cute-profile-edit-modal {
+  position: relative;
+
+  width: 100%;
+  max-width: 450px;
+
+  padding: 24px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #e2c8ae;
+
+  border-radius: 25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff8ed,
+      #fffdf8
+    );
+
+  box-shadow:
+    0 15px 45px
+      rgba(90, 60, 50, 0.18);
+}
+
+.cute-profile-edit-stars {
+  margin-bottom: 7px;
+
+  color: #f4c75d;
+
+  text-align: center;
+
+  font-size: 16px;
+
+  letter-spacing: 5px;
+}
+
+.cute-profile-edit-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.cute-profile-edit-header span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #b29a86;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.1em;
+}
+
+.cute-profile-edit-header h3 {
+  margin: 0;
+
+  color: #f38d91;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 35px;
+
+  line-height: 0.95;
+
+  text-transform: lowercase;
+}
+
+.cute-profile-edit-close {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f5d7d4;
+
+  color: #9a6f6f;
+
+  font-size: 24px;
+
+  cursor: pointer;
+}
+
+.cute-profile-edit-close:active {
+  transform: scale(0.92);
+}
+
+/* INPUTS */
+
+.cute-profile-field {
+  display: block;
+
+  margin-bottom: 15px;
+}
+
+.cute-profile-field > span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #957761;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  text-transform: lowercase;
+}
+
+.cute-profile-field input {
+  width: 100%;
+
+  height: 43px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #dfcdb8;
+
+  border-radius: 11px;
+
+  background: #fffdf8;
+
+  color: #655247;
+
+  font-family:
+    'Milkyway Demo',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+.cute-profile-field input:focus {
+  border-color: #e8a8a9;
+
+  box-shadow:
+    0 0 0 3px
+      rgba(232, 168, 169, 0.12);
+}
+
+.cute-profile-field input::placeholder {
+  color: #c2aa96;
+}
+
+/* MODAL KNOPPEN */
+
+.cute-profile-edit-actions {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.cute-profile-edit-actions button {
+  min-height: 47px;
+
+  border-radius: 14px;
+
+  font-family:
+    'Childhood',
+    'Comic Sans MS',
+    cursive;
+
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+.cute-profile-edit-cancel {
+  border: 1px solid #decbb7;
+
+  background: #f7eee3;
+
+  color: #917762;
+}
+
+.cute-profile-edit-save {
+  border: 1px solid #e5b7a9;
+
+  background: #f3aeb1;
+
+  color: #72554c;
+
+  box-shadow:
+    0 5px 12px
+      rgba(120, 80, 70, 0.1);
+}
+
+.cute-profile-edit-save:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+.cute-profile-edit-actions button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* MOBIEL */
+
+@media (max-width: 600px) {
+  .cute-profile-page {
+    padding:
+      15px 10px
+      105px;
+  }
+
+  .cute-profile-card {
+    padding: 21px 15px 17px;
+
+    border-radius: 24px;
+  }
+
+  .cute-profile-heading h2 {
+    font-size: 51px;
+  }
+
+  .cute-profile-heading p {
+    font-size: 13px;
+  }
+
+  .cute-profile-avatar-frame {
+    width: 125px;
+    height: 125px;
+  }
+
+  .cute-profile-info {
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+  }
+
+  .cute-profile-name-section,
+  .cute-profile-book-count {
+    padding: 13px;
+  }
+
+  .cute-profile-book-count {
+    justify-content: center;
+  }
+
+  .cute-profile-edit-modal {
+    padding: 20px 17px;
+
+    border-radius: 22px;
+  }
+
+  .cute-profile-edit-header h3 {
+    font-size: 32px;
+  }
+}
+
+/* HEEL KLEINE TELEFOONS */
+
+@media (max-width: 390px) {
+  .cute-profile-heading h2 {
+    font-size: 45px;
+  }
+
+  .cute-profile-avatar-frame {
+    width: 112px;
+    height: 112px;
+  }
+
+  .cute-profile-name-section h3 {
+    font-size: 24px;
+  }
+
+  .cute-profile-logout {
+    font-size: 18px;
+  }
+}
