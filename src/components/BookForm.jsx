@@ -702,10 +702,7 @@ function BookForm({
                 </span>
 
                 <span className="journal-owned-text">
-                  <strong>in bezit</strong>
-                  <small>
-                    ik heb dit boek daadwerkelijk
-                  </small>
+                  <strong>Owned</strong>
                 </span>
               </label>
 
