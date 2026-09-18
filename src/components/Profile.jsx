@@ -177,31 +177,53 @@ function Profile({
   }
 
   /*
-   * GENRE STATISTIEKEN
+   * VASTE HOOFDGENRES
    *
-   * We maken hier een hiërarchie van de genres.
+   * Deze genres bestaan altijd als hoofdgenre,
+   * ook wanneer er geen boek exact dat genre heeft.
    *
-   * Voorbeeld:
+   * Bijvoorbeeld:
    *
-   * Fantasy
-   * High Fantasy
    * Urban Fantasy
-   * Dark Fantasy
-   *
-   * wordt:
-   *
+   *       ↓
    * Fantasy
-   *   ├─ High Fantasy
-   *   ├─ Urban Fantasy
-   *   └─ Dark Fantasy
    *
-   * Fantasy zelf wordt dus NOOIT nogmaals
-   * als subgenre onder Fantasy geplaatst.
+   * Sexy Thriller
+   *       ↓
+   * Thriller
+   *
+   * Sexy Horror
+   *       ↓
+   * Horror
+   */
+
+  const mainGenres = [
+    'Fantasy',
+    'Romance',
+    'Thriller',
+    'Horror',
+    'Mystery',
+    'Science Fiction',
+    'Historical Fiction',
+    'Contemporary',
+    'Young Adult',
+    'Literary Fiction',
+    'Adventure',
+    'Dystopian',
+    'Paranormal',
+  ]
+
+  /*
+   * GENRE STATISTIEKEN
    */
 
   const genreGroups = (() => {
     const genreMap = new Map()
 
+    /*
+     * Eerst alle daadwerkelijk gebruikte genres
+     * verzamelen.
+     */
     books.forEach((book) => {
       const originalGenre = book.genre?.trim()
 
@@ -224,76 +246,86 @@ function Profile({
       genreMap.get(normalized).count += 1
     })
 
-    const genres = Array.from(
-      genreMap.values(),
+    /*
+     * Maak de vaste hoofdgenres aan.
+     *
+     * Alleen hoofdgenres die daadwerkelijk
+     * boeken bevatten worden uiteindelijk getoond.
+     */
+    const groups = mainGenres.map(
+      (mainGenre) => {
+        const mainKey =
+          normalizeGenre(mainGenre)
+
+        return {
+          key: mainKey,
+          name: mainGenre,
+          count: 0,
+          subgenres: [],
+        }
+      },
     )
 
-    const groups = genres.map((genre) => ({
-      ...genre,
-      subgenres: [],
-    }))
+    /*
+     * Houd bij welke genres al onder een
+     * hoofdgenre geplaatst zijn.
+     */
+    const assignedGenres = new Set()
 
     /*
-     * Zoek automatisch naar hoofdgenres.
-     *
-     * Bijvoorbeeld:
-     *
-     * Fantasy
-     * High Fantasy
-     *
-     * De woorden van "Fantasy" zitten volledig
-     * in "High Fantasy", dus High Fantasy wordt
-     * onder Fantasy geplaatst.
+     * Kijk voor ieder gebruikt genre of het
+     * onder één van de vaste hoofdgenres valt.
      */
-
-    genres.forEach((childGenre) => {
-      const childWords = getGenreWords(
-        childGenre.name,
+    genreMap.forEach((genre) => {
+      const genreWords = getGenreWords(
+        genre.name,
       )
 
-      const possibleParents = genres.filter(
-        (parentGenre) => {
+      const possibleParents =
+        groups.filter((parent) => {
+          const parentWords =
+            getGenreWords(parent.name)
+
           /*
-           * Een genre kan nooit zijn eigen ouder zijn.
+           * Het genre zelf mag niet zijn eigen
+           * hoofdgenre worden.
            */
           if (
-            parentGenre.key === childGenre.key
+            parent.key === genre.key
           ) {
             return false
           }
 
-          const parentWords = getGenreWords(
-            parentGenre.name,
-          )
-
           /*
-           * Een ouder moet korter zijn dan
-           * het subgenre.
+           * Het hoofdgenre moet minder woorden
+           * hebben dan het subgenre.
            */
           if (
             parentWords.length >=
-            childWords.length
+            genreWords.length
           ) {
             return false
           }
 
           /*
            * Alle woorden van het hoofdgenre
-           * moeten voorkomen in het subgenre.
+           * moeten voorkomen in het genre.
            */
-          return parentWords.every((word) =>
-            childWords.includes(word),
+          return parentWords.every(
+            (word) =>
+              genreWords.includes(word),
           )
-        },
-      )
+        })
 
-      if (possibleParents.length === 0) {
+      if (
+        possibleParents.length === 0
+      ) {
         return
       }
 
       /*
-       * Als er meerdere mogelijke ouders zijn,
-       * gebruiken we de meest specifieke match.
+       * Als meerdere hoofdgenres mogelijk zijn,
+       * gebruiken we de meest specifieke.
        */
       possibleParents.sort(
         (a, b) =>
@@ -301,90 +333,139 @@ function Profile({
           getGenreWords(a.name).length,
       )
 
-      const parent = possibleParents[0]
+      const parent =
+        possibleParents[0]
 
-      const parentGroup = groups.find(
-        (group) => group.key === parent.key,
-      )
-
-      if (!parentGroup) {
-        return
-      }
-
-      parentGroup.subgenres.push({
-        ...childGenre,
+      parent.subgenres.push({
+        ...genre,
       })
+
+      assignedGenres.add(genre.key)
     })
 
     /*
-     * Alle genres die onder een hoofdgenre zitten,
-     * verwijderen we uit de hoofdlijst.
-     *
-     * Daardoor krijg je NIET:
-     *
-     * Fantasy
-     * High Fantasy
-     * Urban Fantasy
-     *
-     * maar:
-     *
-     * Fantasy
-     *   High Fantasy
-     *   Urban Fantasy
-     */
-
-    const childKeys = new Set()
-
-    groups.forEach((group) => {
-      group.subgenres.forEach((subgenre) => {
-        childKeys.add(subgenre.key)
-      })
-    })
-
-return groups
-  .filter(
-    (group) => !childKeys.has(group.key),
-  )
-  .map((group) => {
-    /*
-     * Een hoofdgenre bestaat uit:
-     *
-     * - boeken die exact dit genre hebben
-     * - boeken die één van de subgenres hebben
+     * Exacte hoofdgenres toevoegen.
      *
      * Bijvoorbeeld:
      *
-     * Fantasy = 1
-     * Urban Fantasy = 2
+     * Fantasy → 1 boek
      *
-     * Dan is Fantasy in totaal 3 boeken.
+     * Als daarnaast Urban Fantasy bestaat:
+     *
+     * Fantasy
+     * └── Urban Fantasy
+     *
+     * Het exacte Fantasy-boek blijft dus
+     * onderdeel van Fantasy zelf.
      */
-    const totalGenreCount =
-      group.count +
-      group.subgenres.reduce(
-        (total, subgenre) =>
-          total + subgenre.count,
-        0,
+    genreMap.forEach((genre) => {
+      const exactMainGenre =
+        groups.find(
+          (group) =>
+            group.key === genre.key,
+        )
+
+      if (!exactMainGenre) {
+        return
+      }
+
+      exactMainGenre.count +=
+        genre.count
+
+      assignedGenres.add(genre.key)
+    })
+
+    /*
+     * Hoofdgenre tellers opbouwen.
+     *
+     * Een hoofdgenre bestaat uit:
+     *
+     * - exacte boeken van dat genre
+     * - alle boeken van de subgenres
+     */
+    const finalGroups = groups
+      .map((group) => {
+        const subgenreCount =
+          group.subgenres.reduce(
+            (total, subgenre) =>
+              total + subgenre.count,
+            0,
+          )
+
+        const totalCount =
+          group.count +
+          subgenreCount
+
+        return {
+          ...group,
+
+          count: totalCount,
+
+          subgenres:
+            group.subgenres.sort(
+              (a, b) =>
+                b.count - a.count,
+            ),
+
+          percentage:
+            bookCount > 0
+              ? Math.round(
+                  (totalCount /
+                    bookCount) *
+                    100,
+                )
+              : 0,
+        }
+      })
+      .filter(
+        (group) => group.count > 0,
       )
 
-    return {
-      ...group,
+    /*
+     * Genres die geen onderdeel zijn van een
+     * vast hoofdgenre blijven wel zichtbaar
+     * als zelfstandig hoofdgenre.
+     *
+     * Bijvoorbeeld:
+     *
+     * Biography
+     * Poetry
+     * Self Help
+     *
+     * Die worden niet zomaar weggegooid.
+     */
+    genreMap.forEach((genre) => {
+      if (assignedGenres.has(genre.key)) {
+        return
+      }
 
-      count: totalGenreCount,
+      const alreadyExists =
+        finalGroups.some(
+          (group) =>
+            group.key === genre.key,
+        )
 
-      subgenres: group.subgenres.sort(
-        (a, b) => b.count - a.count,
-      ),
+      if (alreadyExists) {
+        return
+      }
 
-      percentage:
-        bookCount > 0
-          ? Math.round(
-              (totalGenreCount / bookCount) * 100,
-            )
-          : 0,
-    }
-  })
-  .sort((a, b) => b.count - a.count)
+      finalGroups.push({
+        ...genre,
+        subgenres: [],
+        percentage:
+          bookCount > 0
+            ? Math.round(
+                (genre.count /
+                  bookCount) *
+                  100,
+              )
+            : 0,
+      })
+    })
+
+    return finalGroups.sort(
+      (a, b) => b.count - a.count,
+    )
   })()
 
   function toggleGenre(genreKey) {
@@ -434,7 +515,9 @@ return groups
 
           <h2>my profile</h2>
 
-          <p>A small peek in my bookworld</p>
+          <p>
+            A small peek in my bookworld
+          </p>
         </div>
 
         <div className="cute-profile-avatar-area">
@@ -494,10 +577,6 @@ return groups
             )}
           </div>
 
-          {/* =========================================
-              BOEKEN TELLERS
-              ========================================= */}
-
           <div className="cute-profile-book-stats-row">
             <div className="cute-profile-book-count">
               <span className="cute-profile-book-icon">
@@ -505,7 +584,9 @@ return groups
               </span>
 
               <div>
-                <strong>{bookCount}</strong>
+                <strong>
+                  {bookCount}
+                </strong>
 
                 <span>
                   {bookCount === 1
@@ -545,14 +626,12 @@ return groups
           <span>✦</span>
         </div>
 
-        {/* =========================================
-            GENRE STATISTIEKEN
-            ========================================= */}
-
         <section className="cute-profile-statistics">
           <div className="cute-profile-statistics-heading">
             <div>
-              <span>my reading statistics</span>
+              <span>
+                my reading statistics
+              </span>
 
               <h3>my genres</h3>
             </div>
@@ -585,7 +664,8 @@ return groups
                   )
 
                 const hasSubgenres =
-                  genre.subgenres.length > 0
+                  genre.subgenres.length >
+                  0
 
                 return (
                   <div
@@ -606,7 +686,9 @@ return groups
                           )
                         }
                       }}
-                      disabled={!hasSubgenres}
+                      disabled={
+                        !hasSubgenres
+                      }
                     >
                       <div className="cute-profile-genre-top">
                         <span>
@@ -741,10 +823,6 @@ return groups
         </div>
       </section>
 
-      {/* ===========================================
-          OWNED BOOKS MODAL
-          =========================================== */}
-
       {ownedOpen && (
         <div className="cute-profile-owned-overlay">
           <div className="cute-profile-owned-modal">
@@ -754,7 +832,9 @@ return groups
 
             <div className="cute-profile-owned-header">
               <div>
-                <span>my reading journal</span>
+                <span>
+                  my reading journal
+                </span>
 
                 <h3>books I own</h3>
               </div>
@@ -828,10 +908,6 @@ return groups
         </div>
       )}
 
-      {/* ===========================================
-          EDIT PROFILE MODAL
-          =========================================== */}
-
       {editOpen && (
         <div className="cute-profile-edit-overlay">
           <div className="cute-profile-edit-modal">
@@ -841,7 +917,9 @@ return groups
 
             <div className="cute-profile-edit-header">
               <div>
-                <span>my reading journal</span>
+                <span>
+                  my reading journal
+                </span>
 
                 <h3>edit profile</h3>
               </div>
