@@ -323,8 +323,8 @@ function Profile({
 
                 <span>
                   {bookCount === 1
-                    ? 'boek in mijn bibliotheek'
-                    : 'boeken in mijn bibliotheek'}
+                    ? 'book in my library'
+                    : 'books in my library'}
                 </span>
               </div>
             </div>
@@ -349,8 +349,8 @@ function Profile({
 
                 <span>
                   {ownedBooks.length === 1
-                    ? 'boek in bezit'
-                    : 'boeken in bezit'}
+                    ? 'owned books'
+                    : 'owned books'}
                 </span>
               </span>
             </button>
@@ -381,8 +381,7 @@ function Profile({
           </div>
 
           <p className="cute-profile-statistics-description">
-            De verdeling van alle boeken in mijn
-            bibliotheek.
+            Most read genres.
           </p>
 
           {genreStats.length === 0 ? (
@@ -390,8 +389,7 @@ function Profile({
               <span>📖</span>
 
               <p>
-                Voeg een genre toe aan je boeken
-                om hier je statistieken te zien.
+                Add a genre to your book!
               </p>
             </div>
           ) : (
