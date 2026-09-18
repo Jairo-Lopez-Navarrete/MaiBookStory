@@ -689,9 +689,6 @@ function App() {
             </div>
 
             <div className="journal-brand">
-              <span className="journal-brand-small">
-                my
-              </span>
 
               <h1>MaiBookStory</h1>
 
