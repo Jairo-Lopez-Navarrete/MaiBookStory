@@ -23,6 +23,9 @@ function Profile({
   const [editStatus, setEditStatus] =
     useState('')
 
+  const [expandedGenres, setExpandedGenres] =
+    useState({})
+
   const fileInputRef = useRef(null)
 
   useEffect(() => {
@@ -157,54 +160,239 @@ function Profile({
   )
 
   /*
+   * GENRE HELPERS
+   */
+
+  function normalizeGenre(value) {
+    return value
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+  }
+
+  function getGenreWords(value) {
+    return normalizeGenre(value)
+      .split(/[\s/&,+-]+/)
+      .filter(Boolean)
+  }
+
+  /*
    * GENRE STATISTIEKEN
    *
-   * Alle boeken worden meegenomen.
+   * We maken hier een hiërarchie van de genres.
    *
-   * Een genre wordt rechtstreeks uit book.genre gehaald.
-   * Dus als jij bijvoorbeeld "Kabouter Plop" invult,
-   * wordt "Kabouter Plop" gewoon een categorie.
+   * Voorbeeld:
    *
-   * We maken de vergelijking case-insensitive:
-   * Fantasy + fantasy = één categorie.
+   * Fantasy
+   * High Fantasy
+   * Urban Fantasy
+   * Dark Fantasy
+   *
+   * wordt:
+   *
+   * Fantasy
+   *   ├─ High Fantasy
+   *   ├─ Urban Fantasy
+   *   └─ Dark Fantasy
+   *
+   * Fantasy zelf wordt dus NOOIT nogmaals
+   * als subgenre onder Fantasy geplaatst.
    */
-  const genreMap = books.reduce(
-    (accumulator, book) => {
-      const genre = book.genre?.trim()
 
-      if (!genre) {
-        return accumulator
+  const genreGroups = (() => {
+    const genreMap = new Map()
+
+    books.forEach((book) => {
+      const originalGenre = book.genre?.trim()
+
+      if (!originalGenre) {
+        return
       }
 
-      const key = genre.toLowerCase()
+      const normalized = normalizeGenre(
+        originalGenre,
+      )
 
-      if (!accumulator[key]) {
-        accumulator[key] = {
-          name: genre,
+      if (!genreMap.has(normalized)) {
+        genreMap.set(normalized, {
+          key: normalized,
+          name: originalGenre,
           count: 0,
-        }
+        })
       }
 
-      accumulator[key].count += 1
+      genreMap.get(normalized).count += 1
+    })
 
-      return accumulator
-    },
-    {},
-  )
+    const genres = Array.from(
+      genreMap.values(),
+    )
 
-  const genreStats = Object.values(
-    genreMap,
-  )
-    .map((genre) => ({
+    const groups = genres.map((genre) => ({
       ...genre,
+      subgenres: [],
+    }))
+
+    /*
+     * Zoek automatisch naar hoofdgenres.
+     *
+     * Bijvoorbeeld:
+     *
+     * Fantasy
+     * High Fantasy
+     *
+     * De woorden van "Fantasy" zitten volledig
+     * in "High Fantasy", dus High Fantasy wordt
+     * onder Fantasy geplaatst.
+     */
+
+    genres.forEach((childGenre) => {
+      const childWords = getGenreWords(
+        childGenre.name,
+      )
+
+      const possibleParents = genres.filter(
+        (parentGenre) => {
+          /*
+           * Een genre kan nooit zijn eigen ouder zijn.
+           */
+          if (
+            parentGenre.key === childGenre.key
+          ) {
+            return false
+          }
+
+          const parentWords = getGenreWords(
+            parentGenre.name,
+          )
+
+          /*
+           * Een ouder moet korter zijn dan
+           * het subgenre.
+           */
+          if (
+            parentWords.length >=
+            childWords.length
+          ) {
+            return false
+          }
+
+          /*
+           * Alle woorden van het hoofdgenre
+           * moeten voorkomen in het subgenre.
+           */
+          return parentWords.every((word) =>
+            childWords.includes(word),
+          )
+        },
+      )
+
+      if (possibleParents.length === 0) {
+        return
+      }
+
+      /*
+       * Als er meerdere mogelijke ouders zijn,
+       * gebruiken we de meest specifieke match.
+       */
+      possibleParents.sort(
+        (a, b) =>
+          getGenreWords(b.name).length -
+          getGenreWords(a.name).length,
+      )
+
+      const parent = possibleParents[0]
+
+      const parentGroup = groups.find(
+        (group) => group.key === parent.key,
+      )
+
+      if (!parentGroup) {
+        return
+      }
+
+      parentGroup.subgenres.push({
+        ...childGenre,
+      })
+    })
+
+    /*
+     * Alle genres die onder een hoofdgenre zitten,
+     * verwijderen we uit de hoofdlijst.
+     *
+     * Daardoor krijg je NIET:
+     *
+     * Fantasy
+     * High Fantasy
+     * Urban Fantasy
+     *
+     * maar:
+     *
+     * Fantasy
+     *   High Fantasy
+     *   Urban Fantasy
+     */
+
+    const childKeys = new Set()
+
+    groups.forEach((group) => {
+      group.subgenres.forEach((subgenre) => {
+        childKeys.add(subgenre.key)
+      })
+    })
+
+return groups
+  .filter(
+    (group) => !childKeys.has(group.key),
+  )
+  .map((group) => {
+    /*
+     * Een hoofdgenre bestaat uit:
+     *
+     * - boeken die exact dit genre hebben
+     * - boeken die één van de subgenres hebben
+     *
+     * Bijvoorbeeld:
+     *
+     * Fantasy = 1
+     * Urban Fantasy = 2
+     *
+     * Dan is Fantasy in totaal 3 boeken.
+     */
+    const totalGenreCount =
+      group.count +
+      group.subgenres.reduce(
+        (total, subgenre) =>
+          total + subgenre.count,
+        0,
+      )
+
+    return {
+      ...group,
+
+      count: totalGenreCount,
+
+      subgenres: group.subgenres.sort(
+        (a, b) => b.count - a.count,
+      ),
+
       percentage:
         bookCount > 0
           ? Math.round(
-              (genre.count / bookCount) * 100,
+              (totalGenreCount / bookCount) * 100,
             )
           : 0,
+    }
+  })
+  .sort((a, b) => b.count - a.count)
+  })()
+
+  function toggleGenre(genreKey) {
+    setExpandedGenres((current) => ({
+      ...current,
+      [genreKey]: !current[genreKey],
     }))
-    .sort((a, b) => b.count - a.count)
+  }
 
   if (loading) {
     return (
@@ -311,8 +499,6 @@ function Profile({
               ========================================= */}
 
           <div className="cute-profile-book-stats-row">
-            {/* ALLE BOEKEN IN BIBLIOTHEEK */}
-
             <div className="cute-profile-book-count">
               <span className="cute-profile-book-icon">
                 📚
@@ -328,8 +514,6 @@ function Profile({
                 </span>
               </div>
             </div>
-
-            {/* BOEKEN DIE IK BEZIT */}
 
             <button
               type="button"
@@ -348,9 +532,7 @@ function Profile({
                 </strong>
 
                 <span>
-                  {ownedBooks.length === 1
-                    ? 'owned books'
-                    : 'owned books'}
+                  owned books
                 </span>
               </span>
             </button>
@@ -384,7 +566,7 @@ function Profile({
             Most read genres.
           </p>
 
-          {genreStats.length === 0 ? (
+          {genreGroups.length === 0 ? (
             <div className="cute-profile-empty-statistics">
               <span>📖</span>
 
@@ -394,38 +576,140 @@ function Profile({
             </div>
           ) : (
             <div className="cute-profile-genre-list">
-              {genreStats.map((genre) => (
-                <div
-                  className="cute-profile-genre"
-                  key={genre.name.toLowerCase()}
-                >
-                  <div className="cute-profile-genre-top">
-                    <span>
-                      {genre.name}
-                    </span>
+              {genreGroups.map((genre) => {
+                const isExpanded =
+                  Boolean(
+                    expandedGenres[
+                      genre.key
+                    ],
+                  )
 
-                    <strong>
-                      {genre.percentage}%
-                    </strong>
-                  </div>
+                const hasSubgenres =
+                  genre.subgenres.length > 0
 
-                  <div className="cute-profile-genre-bar">
-                    <div
-                      className="cute-profile-genre-bar-fill"
-                      style={{
-                        width: `${genre.percentage}%`,
+                return (
+                  <div
+                    className="cute-profile-genre-group"
+                    key={genre.key}
+                  >
+                    <button
+                      type="button"
+                      className={`cute-profile-genre ${
+                        hasSubgenres
+                          ? 'cute-profile-genre-clickable'
+                          : ''
+                      }`}
+                      onClick={() => {
+                        if (hasSubgenres) {
+                          toggleGenre(
+                            genre.key,
+                          )
+                        }
                       }}
-                    />
-                  </div>
+                      disabled={!hasSubgenres}
+                    >
+                      <div className="cute-profile-genre-top">
+                        <span>
+                          {genre.name}
+                        </span>
 
-                  <small>
-                    {genre.count}{' '}
-                    {genre.count === 1
-                      ? 'boek'
-                      : 'boeken'}
-                  </small>
-                </div>
-              ))}
+                        <strong>
+                          {genre.percentage}%
+                        </strong>
+                      </div>
+
+                      <div className="cute-profile-genre-bar">
+                        <div
+                          className="cute-profile-genre-bar-fill"
+                          style={{
+                            width: `${genre.percentage}%`,
+                          }}
+                        />
+                      </div>
+
+                      <div className="cute-profile-genre-bottom">
+                        <small>
+                          {genre.count}{' '}
+                          {genre.count === 1
+                            ? 'boek'
+                            : 'boeken'}
+                        </small>
+
+                        {hasSubgenres && (
+                          <span className="cute-profile-genre-expand">
+                            {isExpanded
+                              ? '⌃'
+                              : '⌄'}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+
+                    {isExpanded &&
+                      hasSubgenres && (
+                        <div className="cute-profile-subgenre-list">
+                          {genre.subgenres.map(
+                            (subgenre) => {
+                              const subgenrePercentage =
+                                genre.count >
+                                0
+                                  ? Math.round(
+                                      (subgenre.count /
+                                        genre.count) *
+                                        100,
+                                    )
+                                  : 0
+
+                              return (
+                                <div
+                                  key={
+                                    subgenre.key
+                                  }
+                                  className="cute-profile-subgenre"
+                                >
+                                  <div className="cute-profile-subgenre-top">
+                                    <span className="cute-profile-subgenre-name">
+                                      {
+                                        subgenre.name
+                                      }
+                                    </span>
+
+                                    <span className="cute-profile-subgenre-count">
+                                      {
+                                        subgenre.count
+                                      }{' '}
+                                      {subgenre.count ===
+                                      1
+                                        ? 'boek'
+                                        : 'boeken'}
+                                    </span>
+                                  </div>
+
+                                  <div className="cute-profile-subgenre-bar">
+                                    <div
+                                      className="cute-profile-subgenre-bar-fill"
+                                      style={{
+                                        width: `${subgenrePercentage}%`,
+                                      }}
+                                    />
+                                  </div>
+
+                                  <span className="cute-profile-subgenre-percentage">
+                                    {
+                                      subgenrePercentage
+                                    }
+                                    % van{' '}
+                                    {genre.name}
+                                  </span>
+                                </div>
+                              )
+                            },
+                          )}
+                        </div>
+                      )}
+                  </div>
+                )
+              })}
             </div>
           )}
         </section>
@@ -491,7 +775,9 @@ function Profile({
               <div className="cute-profile-owned-empty">
                 <span>📚</span>
 
-                <h4>Nog geen boeken in bezit</h4>
+                <h4>
+                  Nog geen boeken in bezit
+                </h4>
 
                 <p>
                   Markeer een boek als
@@ -556,6 +842,7 @@ function Profile({
             <div className="cute-profile-edit-header">
               <div>
                 <span>my reading journal</span>
+
                 <h3>edit profile</h3>
               </div>
 
