@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import './App.css'
 import { supabase } from './lib/supabaseClient'
 import {
@@ -19,6 +23,21 @@ import Profile from './components/Profile'
 import UserSearch from './components/UserSearch'
 import UserProfile from './components/UserProfile'
 
+const monthNames = [
+  'januari',
+  'februari',
+  'maart',
+  'april',
+  'mei',
+  'juni',
+  'juli',
+  'augustus',
+  'september',
+  'oktober',
+  'november',
+  'december',
+]
+
 function App() {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -33,6 +52,17 @@ function App() {
 
   const [deleteBook, setDeleteBook] = useState(null)
   const [deletePopupReady, setDeletePopupReady] = useState(false)
+
+  const [selectedMonth, setSelectedMonth] = useState(
+    () => new Date().getMonth() + 1,
+  )
+
+  const [selectedYear, setSelectedYear] = useState(
+    () => new Date().getFullYear(),
+  )
+
+  const swipeStartX = useRef(null)
+  const swipeStartY = useRef(null)
 
   async function loadBooks(userId) {
     const {
@@ -103,8 +133,10 @@ function App() {
           content_rating: book.content_rating,
           readability_rating: book.readability_rating,
           characters_rating: book.characters_rating,
-          world_building_rating: book.world_building_rating,
-          representation_rating: book.representation_rating,
+          world_building_rating:
+            book.world_building_rating,
+          representation_rating:
+            book.representation_rating,
           romance_rating: book.romance_rating,
           spice_rating: book.spice_rating,
           summary: book.summary,
@@ -112,6 +144,8 @@ function App() {
           review: book.review,
           quotes: book.quotes,
           cover: book.cover,
+          reading_month: book.reading_month,
+          reading_year: book.reading_year,
         })
         .select()
         .single()
@@ -228,6 +262,119 @@ function App() {
     }
   }, [deleteBook])
 
+  function getBookPeriod(book) {
+    if (
+      book.reading_month &&
+      book.reading_year
+    ) {
+      return {
+        month: Number(book.reading_month),
+        year: Number(book.reading_year),
+      }
+    }
+
+    if (book.created_at) {
+      const date = new Date(book.created_at)
+
+      return {
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      }
+    }
+
+    return null
+  }
+
+  const visibleBooks = books.filter((book) => {
+    const period = getBookPeriod(book)
+
+    if (!period) {
+      return false
+    }
+
+    return (
+      period.month === selectedMonth &&
+      period.year === selectedYear
+    )
+  })
+
+  const availableYears = Array.from(
+    new Set([
+      ...Array.from(
+        { length: 11 },
+        (_, index) =>
+          new Date().getFullYear() - 5 + index,
+      ),
+      ...books
+        .map((book) => {
+          const period = getBookPeriod(book)
+          return period?.year
+        })
+        .filter(Boolean),
+      selectedYear,
+    ]),
+  ).sort((a, b) => b - a)
+
+  function changeMonth(offset) {
+    const date = new Date(
+      selectedYear,
+      selectedMonth - 1 + offset,
+      1,
+    )
+
+    setSelectedMonth(date.getMonth() + 1)
+    setSelectedYear(date.getFullYear())
+  }
+
+  function handleMonthTouchStart(event) {
+    const touch = event.touches[0]
+
+    if (!touch) {
+      return
+    }
+
+    swipeStartX.current = touch.clientX
+    swipeStartY.current = touch.clientY
+  }
+
+  function handleMonthTouchEnd(event) {
+    if (
+      swipeStartX.current === null ||
+      swipeStartY.current === null
+    ) {
+      return
+    }
+
+    const touch = event.changedTouches[0]
+
+    if (!touch) {
+      return
+    }
+
+    const deltaX =
+      touch.clientX - swipeStartX.current
+
+    const deltaY =
+      touch.clientY - swipeStartY.current
+
+    swipeStartX.current = null
+    swipeStartY.current = null
+
+    if (Math.abs(deltaX) < 50) {
+      return
+    }
+
+    if (Math.abs(deltaX) <= Math.abs(deltaY)) {
+      return
+    }
+
+    if (deltaX < 0) {
+      changeMonth(1)
+    } else {
+      changeMonth(-1)
+    }
+  }
+
   async function handleAddBook(bookData) {
     if (!session?.user) {
       return
@@ -313,23 +460,36 @@ function App() {
         title: updatedBook.title,
         author: updatedBook.author,
         pages: updatedBook.pages,
-        recommended_by: updatedBook.recommended_by,
+        recommended_by:
+          updatedBook.recommended_by,
         genre: updatedBook.genre,
         rating: updatedBook.rating,
         plot_rating: updatedBook.plot_rating,
-        writing_rating: updatedBook.writing_rating,
-        content_rating: updatedBook.content_rating,
-        readability_rating: updatedBook.readability_rating,
-        characters_rating: updatedBook.characters_rating,
-        world_building_rating: updatedBook.world_building_rating,
-        representation_rating: updatedBook.representation_rating,
-        romance_rating: updatedBook.romance_rating,
-        spice_rating: updatedBook.spice_rating,
+        writing_rating:
+          updatedBook.writing_rating,
+        content_rating:
+          updatedBook.content_rating,
+        readability_rating:
+          updatedBook.readability_rating,
+        characters_rating:
+          updatedBook.characters_rating,
+        world_building_rating:
+          updatedBook.world_building_rating,
+        representation_rating:
+          updatedBook.representation_rating,
+        romance_rating:
+          updatedBook.romance_rating,
+        spice_rating:
+          updatedBook.spice_rating,
         summary: updatedBook.summary,
         tropes: updatedBook.tropes,
         review: updatedBook.review,
         quotes: updatedBook.quotes,
         cover: updatedBook.cover,
+        reading_month:
+          updatedBook.reading_month,
+        reading_year:
+          updatedBook.reading_year,
       })
       .eq('id', updatedBook.id)
       .eq('user_id', session.user.id)
@@ -460,6 +620,36 @@ function App() {
           </header>
 
           <main className="main-content">
+            <div className="home-top-controls">
+              <UserSearch
+                onUserSelect={setSelectedUser}
+              />
+
+              {!selectedUser && (
+                <select
+                  className="year-select"
+                  value={selectedYear}
+                  onChange={(event) =>
+                    setSelectedYear(
+                      Number(event.target.value),
+                    )
+                  }
+                  aria-label="Jaar kiezen"
+                >
+                  {availableYears.map(
+                    (year) => (
+                      <option
+                        key={year}
+                        value={year}
+                      >
+                        {year}
+                      </option>
+                    ),
+                  )}
+                </select>
+              )}
+            </div>
+
             {selectedUser ? (
               <UserProfile
                 user={selectedUser}
@@ -469,37 +659,95 @@ function App() {
               />
             ) : (
               <>
-                <UserSearch
-                  onUserSelect={setSelectedUser}
-                />
+                <section
+                  className="month-navigation"
+                  onTouchStart={
+                    handleMonthTouchStart
+                  }
+                  onTouchEnd={
+                    handleMonthTouchEnd
+                  }
+                >
+                  <button
+                    type="button"
+                    className="month-arrow"
+                    onClick={() =>
+                      changeMonth(-1)
+                    }
+                    aria-label="Vorige maand"
+                  >
+                    ‹
+                  </button>
+
+                  <div className="month-title">
+                    <span>
+                      {monthNames[
+                        selectedMonth - 1
+                      ]}
+                    </span>
+
+                    <small>
+                      {selectedYear}
+                    </small>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="month-arrow"
+                    onClick={() =>
+                      changeMonth(1)
+                    }
+                    aria-label="Volgende maand"
+                  >
+                    ›
+                  </button>
+                </section>
 
                 <section className="library-header">
                   <div>
                     <h2>Mijn boeken</h2>
 
                     <p>
-                      {books.length === 0
-                        ? 'Begin je persoonlijke bibliotheek'
-                        : `${books.length} ${
-                            books.length === 1
+                      {visibleBooks.length === 0
+                        ? `Geen boeken in ${
+                            monthNames[
+                              selectedMonth - 1
+                            ]
+                          } ${selectedYear}`
+                        : `${visibleBooks.length} ${
+                            visibleBooks.length ===
+                            1
                               ? 'boek'
                               : 'boeken'
-                          } in je bibliotheek`}
+                          } in ${
+                            monthNames[
+                              selectedMonth - 1
+                            ]
+                          } ${selectedYear}`}
                     </p>
                   </div>
                 </section>
 
-                {books.length === 0 ? (
+                {visibleBooks.length === 0 ? (
                   <div className="empty-library">
                     <div className="empty-icon">
                       📚
                     </div>
 
-                    <h2>Nog geen boeken</h2>
+                    <h2>
+                      {books.length === 0
+                        ? 'Nog geen boeken'
+                        : 'Geen boeken deze maand'}
+                    </h2>
 
                     <p>
-                      Voeg je eerste boek toe aan
-                      je persoonlijke bibliotheek.
+                      {books.length === 0
+                        ? 'Voeg je eerste boek toe aan je persoonlijke bibliotheek.'
+                        : `Er staan geen boeken in ${
+                            monthNames[
+                              selectedMonth - 1
+                            ]
+                          } ${selectedYear}.`}
                     </p>
 
                     <button
@@ -508,19 +756,25 @@ function App() {
                         setShowBookForm(true)
                       }
                     >
-                      ＋ Eerste boek toevoegen
+                      ＋ Boek toevoegen
                     </button>
                   </div>
                 ) : (
                   <section className="book-grid">
-                    {books.map((book) => (
-                      <BookCard
-                        key={book.id}
-                        book={book}
-                        onEdit={handleEditBook}
-                        onDelete={handleDeleteBook}
-                      />
-                    ))}
+                    {visibleBooks.map(
+                      (book) => (
+                        <BookCard
+                          key={book.id}
+                          book={book}
+                          onEdit={
+                            handleEditBook
+                          }
+                          onDelete={
+                            handleDeleteBook
+                          }
+                        />
+                      ),
+                    )}
                   </section>
                 )}
               </>
@@ -547,6 +801,8 @@ function App() {
       {showBookForm && (
         <BookForm
           book={editingBook}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
           onAdd={handleAddBook}
           onUpdate={handleUpdateBook}
           onClose={handleCloseForm}

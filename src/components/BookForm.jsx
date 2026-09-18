@@ -1,21 +1,53 @@
 import { useEffect, useState } from 'react'
 
-function BookForm({ book, onAdd, onUpdate, onClose }) {
+const monthNames = [
+  'januari',
+  'februari',
+  'maart',
+  'april',
+  'mei',
+  'juni',
+  'juli',
+  'augustus',
+  'september',
+  'oktober',
+  'november',
+  'december',
+]
+
+function BookForm({
+  book,
+  selectedMonth,
+  selectedYear,
+  onAdd,
+  onUpdate,
+  onClose,
+}) {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [pages, setPages] = useState('')
-  const [recommendedBy, setRecommendedBy] = useState('')
+  const [recommendedBy, setRecommendedBy] =
+    useState('')
   const [genre, setGenre] = useState('')
 
   const [rating, setRating] = useState(0)
   const [plotRating, setPlotRating] = useState(0)
-  const [writingRating, setWritingRating] = useState(0)
-  const [contentRating, setContentRating] = useState(0)
-  const [readabilityRating, setReadabilityRating] = useState(0)
-  const [charactersRating, setCharactersRating] = useState(0)
-  const [worldBuildingRating, setWorldBuildingRating] = useState(0)
-  const [representationRating, setRepresentationRating] = useState(0)
-  const [romanceRating, setRomanceRating] = useState(0)
+  const [writingRating, setWritingRating] =
+    useState(0)
+  const [contentRating, setContentRating] =
+    useState(0)
+  const [readabilityRating, setReadabilityRating] =
+    useState(0)
+  const [charactersRating, setCharactersRating] =
+    useState(0)
+  const [worldBuildingRating, setWorldBuildingRating] =
+    useState(0)
+  const [
+    representationRating,
+    setRepresentationRating,
+  ] = useState(0)
+  const [romanceRating, setRomanceRating] =
+    useState(0)
   const [spiceRating, setSpiceRating] = useState(0)
 
   const [summary, setSummary] = useState('')
@@ -24,7 +56,8 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
   const [quotes, setQuotes] = useState('')
 
   const [cover, setCover] = useState('')
-  const [coverPreview, setCoverPreview] = useState('')
+  const [coverPreview, setCoverPreview] =
+    useState('')
 
   const isEditing = Boolean(book)
 
@@ -33,13 +66,19 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
       setTitle(book.title || '')
       setAuthor(book.author || '')
       setPages(book.pages || '')
-      setRecommendedBy(book.recommended_by || '')
+      setRecommendedBy(
+        book.recommended_by || '',
+      )
       setGenre(book.genre || '')
 
       setRating(book.rating || 0)
       setPlotRating(book.plot_rating || 0)
-      setWritingRating(book.writing_rating || 0)
-      setContentRating(book.content_rating || 0)
+      setWritingRating(
+        book.writing_rating || 0,
+      )
+      setContentRating(
+        book.content_rating || 0,
+      )
       setReadabilityRating(
         book.readability_rating || 0,
       )
@@ -52,7 +91,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
       setRepresentationRating(
         book.representation_rating || 0,
       )
-      setRomanceRating(book.romance_rating || 0)
+      setRomanceRating(
+        book.romance_rating || 0,
+      )
       setSpiceRating(book.spice_rating || 0)
 
       setSummary(book.summary || '')
@@ -90,8 +131,34 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
     }
   }, [book])
 
+  function getExistingBookPeriod() {
+    if (
+      book?.reading_month &&
+      book?.reading_year
+    ) {
+      return {
+        month: Number(book.reading_month),
+        year: Number(book.reading_year),
+      }
+    }
+
+    if (book?.created_at) {
+      const date = new Date(book.created_at)
+
+      return {
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      }
+    }
+
+    return {
+      month: selectedMonth,
+      year: selectedYear,
+    }
+  }
+
   function handleImageChange(event) {
-    const file = event.target.files[0]
+    const file = event.target.files?.[0]
 
     if (!file) {
       return
@@ -132,6 +199,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
       return
     }
 
+    const existingPeriod =
+      getExistingBookPeriod()
+
     const bookData = {
       title: title.trim(),
       author: author.trim(),
@@ -168,6 +238,14 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
       cover:
         cover ||
         'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600',
+
+      reading_month: isEditing
+        ? existingPeriod.month
+        : selectedMonth,
+
+      reading_year: isEditing
+        ? existingPeriod.year
+        : selectedYear,
     }
 
     if (isEditing) {
@@ -183,21 +261,27 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
   function renderStars(value, setValue) {
     return (
       <div className="rating-selector">
-        {[1, 2, 3, 4, 5].map((number) => (
-          <button
-            key={number}
-            type="button"
-            className={
-              number <= value
-                ? 'rating-star selected'
-                : 'rating-star'
-            }
-            onClick={() => setValue(number)}
-            aria-label={`${number} van 5`}
-          >
-            {number <= value ? '★' : '☆'}
-          </button>
-        ))}
+        {[1, 2, 3, 4, 5].map(
+          (number) => (
+            <button
+              key={number}
+              type="button"
+              className={
+                number <= value
+                  ? 'rating-star selected'
+                  : 'rating-star'
+              }
+              onClick={() =>
+                setValue(number)
+              }
+              aria-label={`${number} van 5`}
+            >
+              {number <= value
+                ? '★'
+                : '☆'}
+            </button>
+          ),
+        )}
       </div>
     )
   }
@@ -205,24 +289,36 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
   function renderPeppers(value, setValue) {
     return (
       <div className="rating-selector">
-        {[1, 2, 3, 4, 5].map((number) => (
-          <button
-            key={number}
-            type="button"
-            className={
-              number <= value
-                ? 'rating-pepper selected'
-                : 'rating-pepper'
-            }
-            onClick={() => setValue(number)}
-            aria-label={`${number} van 5 spice`}
-          >
-            🌶️
-          </button>
-        ))}
+        {[1, 2, 3, 4, 5].map(
+          (number) => (
+            <button
+              key={number}
+              type="button"
+              className={
+                number <= value
+                  ? 'rating-pepper selected'
+                  : 'rating-pepper'
+              }
+              onClick={() =>
+                setValue(number)
+              }
+              aria-label={`${number} van 5 spice`}
+            >
+              🌶️
+            </button>
+          ),
+        )}
       </div>
     )
   }
+
+  const displayMonth = isEditing
+    ? getExistingBookPeriod().month
+    : selectedMonth
+
+  const displayYear = isEditing
+    ? getExistingBookPeriod().year
+    : selectedYear
 
   return (
     <div className="form-overlay">
@@ -249,6 +345,13 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
           >
             ×
           </button>
+        </div>
+
+        <div className="book-form-period">
+          📅{' '}
+          {isEditing
+            ? `Dit boek staat in ${monthNames[displayMonth - 1]} ${displayYear}`
+            : `Dit boek wordt opgeslagen in ${monthNames[displayMonth - 1]} ${displayYear}`}
         </div>
 
         <form
@@ -299,7 +402,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
                   placeholder="Titel van het boek"
                   value={title}
                   onChange={(event) =>
-                    setTitle(event.target.value)
+                    setTitle(
+                      event.target.value,
+                    )
                   }
                 />
               </div>
@@ -316,7 +421,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
                     placeholder="Auteur"
                     value={author}
                     onChange={(event) =>
-                      setAuthor(event.target.value)
+                      setAuthor(
+                        event.target.value,
+                      )
                     }
                   />
                 </div>
@@ -333,7 +440,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
                     placeholder="Aantal"
                     value={pages}
                     onChange={(event) =>
-                      setPages(event.target.value)
+                      setPages(
+                        event.target.value,
+                      )
                     }
                   />
                 </div>
@@ -369,7 +478,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
                     placeholder="Genre"
                     value={genre}
                     onChange={(event) =>
-                      setGenre(event.target.value)
+                      setGenre(
+                        event.target.value,
+                      )
                     }
                   />
                 </div>
@@ -465,7 +576,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
                 placeholder="Schrijf hier je samenvatting..."
                 value={summary}
                 onChange={(event) =>
-                  setSummary(event.target.value)
+                  setSummary(
+                    event.target.value,
+                  )
                 }
               />
             </div>
@@ -481,7 +594,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
                 placeholder="Bijvoorbeeld: enemies to lovers, found family..."
                 value={tropes}
                 onChange={(event) =>
-                  setTropes(event.target.value)
+                  setTropes(
+                    event.target.value,
+                  )
                 }
               />
             </div>
@@ -498,7 +613,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
               placeholder="Schrijf hier je review..."
               value={review}
               onChange={(event) =>
-                setReview(event.target.value)
+                setReview(
+                  event.target.value,
+                )
               }
             />
           </div>
@@ -514,7 +631,9 @@ function BookForm({ book, onAdd, onUpdate, onClose }) {
               placeholder="Zet hier je favoriete quotes..."
               value={quotes}
               onChange={(event) =>
-                setQuotes(event.target.value)
+                setQuotes(
+                  event.target.value,
+                )
               }
             />
           </div>

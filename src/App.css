@@ -2688,3 +2688,328 @@ body {
     font-size: 17px;
   }
 }
+/* =========================================
+   MAANDKALENDER + COMPACTE ZOEKKNOP
+========================================= */
+
+.home-top-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.home-top-controls .user-search {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.year-select {
+  flex: 0 0 auto;
+  min-width: 82px;
+  height: 42px;
+  padding: 0 30px 0 13px;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #222222;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.year-select:focus {
+  border-color: #999999;
+}
+
+/* Compacte zoekknop */
+
+.user-search {
+  position: relative;
+  z-index: 20;
+}
+
+.user-search-collapsed {
+  width: 42px;
+  flex: 0 0 42px;
+}
+
+.user-search-toggle {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.user-search-toggle:active {
+  transform: scale(0.96);
+}
+
+.user-search-expanded {
+  flex: 1 1 auto;
+  width: auto;
+}
+
+.user-search-input-wrap {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.user-search-icon {
+  flex: 0 0 auto;
+  font-size: 17px;
+}
+
+.user-search-input-wrap input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+}
+
+.user-search-close {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #eeeeee;
+  color: #444444;
+  font-size: 21px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.user-search-close:active {
+  transform: scale(0.92);
+}
+
+/* Zoekresultaten */
+
+.user-search-results {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(100%, 360px);
+  max-height: 320px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.user-search-result {
+  width: 100%;
+  min-height: 66px;
+  padding: 9px 12px;
+  border: none;
+  border-bottom: 1px solid #eeeeee;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-search-result:last-child {
+  border-bottom: none;
+}
+
+.user-search-result:active {
+  background: #f5f5f5;
+}
+
+.user-search-avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-search-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-search-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-search-info strong {
+  font-size: 14px;
+}
+
+.user-search-info > span {
+  font-size: 12px;
+  color: #777777;
+}
+
+.user-search-status {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-search-message {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #777777;
+}
+
+/* =========================================
+   MAANDNAVIGATIE
+========================================= */
+
+.month-navigation {
+  width: 100%;
+  min-height: 64px;
+  margin: 4px 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.month-arrow {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  padding: 0;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #333333;
+  font-size: 31px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.month-arrow:active {
+  transform: scale(0.94);
+  background: #f3f3f3;
+}
+
+.month-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.month-title span {
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: capitalize;
+  line-height: 1.15;
+}
+
+.month-title small {
+  margin-top: 3px;
+  color: #777777;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* =========================================
+   BOEKFORM - PERIODE
+========================================= */
+
+.book-form-period {
+  margin: -4px 0 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f5f5f5;
+  color: #555555;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* =========================================
+   MOBIEL
+========================================= */
+
+@media (max-width: 480px) {
+  .home-top-controls {
+    gap: 8px;
+  }
+
+  .year-select {
+    min-width: 78px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .user-search-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-search-collapsed {
+    width: 40px;
+    flex-basis: 40px;
+  }
+
+  .user-search-input-wrap {
+    height: 40px;
+  }
+
+  .month-navigation {
+    min-height: 58px;
+    margin-bottom: 12px;
+  }
+
+  .month-arrow {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .month-title span {
+    font-size: 20px;
+  }
+}

@@ -5,6 +5,7 @@ function UserSearch({ onUserSelect }) {
   const [search, setSearch] = useState('')
   const [users, setUsers] = useState([])
   const [searching, setSearching] = useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   async function handleSearch(event) {
     const value = event.target.value
@@ -13,6 +14,7 @@ function UserSearch({ onUserSelect }) {
 
     if (value.trim().length < 2) {
       setUsers([])
+      setSearching(false)
       return
     }
 
@@ -75,22 +77,67 @@ function UserSearch({ onUserSelect }) {
     setSearching(false)
   }
 
-  return (
-    <section className="user-search">
-      <input
-        type="text"
-        placeholder="🔍 Zoek gebruiker..."
-        value={search}
-        onChange={handleSearch}
-      />
+  function openSearch() {
+    setExpanded(true)
+  }
 
-      {searching && (
+  function closeSearch() {
+    setExpanded(false)
+    setSearch('')
+    setUsers([])
+    setSearching(false)
+  }
+
+  return (
+    <section
+      className={
+        expanded
+          ? 'user-search user-search-expanded'
+          : 'user-search user-search-collapsed'
+      }
+    >
+      {!expanded ? (
+        <button
+          type="button"
+          className="user-search-toggle"
+          onClick={openSearch}
+          aria-label="Gebruiker zoeken"
+        >
+          🔍
+        </button>
+      ) : (
+        <div className="user-search-input-wrap">
+          <span className="user-search-icon">
+            🔍
+          </span>
+
+          <input
+            type="text"
+            placeholder="Zoek gebruiker..."
+            value={search}
+            onChange={handleSearch}
+            autoFocus
+          />
+
+          <button
+            type="button"
+            className="user-search-close"
+            onClick={closeSearch}
+            aria-label="Zoeken sluiten"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {expanded && searching && (
         <p className="user-search-message">
           Gebruikers zoeken...
         </p>
       )}
 
-      {!searching &&
+      {expanded &&
+        !searching &&
         search.trim().length >= 2 &&
         users.length === 0 && (
           <p className="user-search-message">
@@ -98,52 +145,55 @@ function UserSearch({ onUserSelect }) {
           </p>
         )}
 
-      <div className="user-search-results">
-        {users.map((profile) => (
-          <button
-            className="user-search-result"
-            key={profile.id}
-            type="button"
-            onClick={() =>
-              onUserSelect(profile)
-            }
-          >
-            <div className="user-search-avatar">
-              {profile.avatar_url ? (
-                <img
-                  src={profile.avatar_url}
-                  alt={`Profielfoto van ${profile.username}`}
-                />
-              ) : (
-                <span>👤</span>
-              )}
-            </div>
+      {expanded && users.length > 0 && (
+        <div className="user-search-results">
+          {users.map((profile) => (
+            <button
+              className="user-search-result"
+              key={profile.id}
+              type="button"
+              onClick={() => {
+                onUserSelect(profile)
+                closeSearch()
+              }}
+            >
+              <div className="user-search-avatar">
+                {profile.avatar_url ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt={`Profielfoto van ${profile.username}`}
+                  />
+                ) : (
+                  <span>👤</span>
+                )}
+              </div>
 
-            <div className="user-search-info">
-              <strong>
-                {profile.username}
-              </strong>
+              <div className="user-search-info">
+                <strong>
+                  {profile.username}
+                </strong>
 
-              {profile.status ? (
-                <span className="user-search-status">
-                  {profile.status}
+                {profile.status ? (
+                  <span className="user-search-status">
+                    {profile.status}
+                  </span>
+                ) : (
+                  <span className="user-search-status">
+                    Nog geen status
+                  </span>
+                )}
+
+                <span>
+                  📚 {profile.bookCount}{' '}
+                  {profile.bookCount === 1
+                    ? 'boek'
+                    : 'boeken'}
                 </span>
-              ) : (
-                <span className="user-search-status">
-                  Nog geen status
-                </span>
-              )}
-
-              <span>
-                📚 {profile.bookCount}{' '}
-                {profile.bookCount === 1
-                  ? 'boek'
-                  : 'boeken'}
-              </span>
-            </div>
-          </button>
-        ))}
-      </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
     </section>
   )
 }
