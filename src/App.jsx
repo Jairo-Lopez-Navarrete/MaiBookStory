@@ -41,18 +41,26 @@ const monthNames = [
 function App() {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [showRegister, setShowRegister] = useState(false)
+  const [showRegister, setShowRegister] =
+    useState(false)
 
   const [books, setBooks] = useState([])
 
-  const [showBookForm, setShowBookForm] = useState(false)
-  const [editingBook, setEditingBook] = useState(null)
-  const [currentPage, setCurrentPage] = useState('home')
-  const [selectedUser, setSelectedUser] = useState(null)
-
-  const [deleteBook, setDeleteBook] = useState(null)
-  const [deletePopupReady, setDeletePopupReady] =
+  const [showBookForm, setShowBookForm] =
     useState(false)
+  const [editingBook, setEditingBook] =
+    useState(null)
+  const [currentPage, setCurrentPage] =
+    useState('home')
+  const [selectedUser, setSelectedUser] =
+    useState(null)
+
+  const [deleteBook, setDeleteBook] =
+    useState(null)
+  const [
+    deletePopupReady,
+    setDeletePopupReady,
+  ] = useState(false)
 
   const [selectedMonth, setSelectedMonth] =
     useState(
@@ -135,6 +143,10 @@ function App() {
             recommended_by:
               book.recommended_by,
             genre: book.genre,
+
+            // NIEUW:
+            owned: book.owned,
+
             rating: book.rating,
             plot_rating: book.plot_rating,
             writing_rating:
@@ -517,6 +529,10 @@ function App() {
           recommended_by:
             updatedBook.recommended_by,
           genre: updatedBook.genre,
+
+          // NIEUW:
+          owned: updatedBook.owned,
+
           rating: updatedBook.rating,
           plot_rating:
             updatedBook.plot_rating,
@@ -678,6 +694,10 @@ function App() {
       {currentPage === 'profile' ? (
         <Profile
           user={session.user}
+
+          // NIEUW:
+          books={books}
+
           bookCount={books.length}
           onLogout={handleLogout}
         />
@@ -689,7 +709,6 @@ function App() {
             </div>
 
             <div className="journal-brand">
-
               <h1>MaiBookStory</h1>
 
               <p>
@@ -925,13 +944,14 @@ function App() {
             <h2>Delete book?</h2>
 
             <p>
-              Do you want to delete "{deleteBook.title}"
-              ?
+              Do you want to delete "
+              {deleteBook.title}"?
             </p>
 
             {!deletePopupReady && (
               <p className="delete-popup-hint">
-                Remove your finger from the screen.
+                Remove your finger from the
+                screen.
               </p>
             )}
 
