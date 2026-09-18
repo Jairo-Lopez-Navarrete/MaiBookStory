@@ -113,7 +113,7 @@ function UserSearch({ onUserSelect }) {
 
           <input
             type="text"
-            placeholder="Zoek gebruiker..."
+            placeholder="Search user..."
             value={search}
             onChange={handleSearch}
             autoFocus
@@ -132,7 +132,7 @@ function UserSearch({ onUserSelect }) {
 
       {expanded && searching && (
         <p className="user-search-message">
-          Gebruikers zoeken...
+          Searching for users...
         </p>
       )}
 
@@ -141,7 +141,7 @@ function UserSearch({ onUserSelect }) {
         search.trim().length >= 2 &&
         users.length === 0 && (
           <p className="user-search-message">
-            Geen gebruiker gevonden.
+            No user found.
           </p>
         )}
 
@@ -179,7 +179,7 @@ function UserSearch({ onUserSelect }) {
                   </span>
                 ) : (
                   <span className="user-search-status">
-                    Nog geen status
+                    no added status
                   </span>
                 )}
 

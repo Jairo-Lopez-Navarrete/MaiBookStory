@@ -28,7 +28,7 @@ function BottomNav({
           ＋
         </span>
 
-        <span>Toevoegen</span>
+        <span>Add</span>
       </button>
 
       <button
@@ -43,7 +43,7 @@ function BottomNav({
           👤
         </span>
 
-        <span>Profiel</span>
+        <span>Profile</span>
       </button>
     </nav>
   )

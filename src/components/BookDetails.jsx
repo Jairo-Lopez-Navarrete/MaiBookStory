@@ -1,14 +1,14 @@
 const monthNames = [
-  'januari',
-  'februari',
-  'maart',
+  'january',
+  'february',
+  'march',
   'april',
-  'mei',
-  'juni',
-  'juli',
-  'augustus',
+  'may',
+  'june',
+  'july',
+  'august',
   'september',
-  'oktober',
+  'october',
   'november',
   'december',
 ]
@@ -315,7 +315,7 @@ function BookDetails({ book, onBack }) {
                   <p>{book.summary}</p>
                 ) : (
                   <span className="book-details-empty">
-                    Geen summary toegevoegd.
+                    No added summary.
                   </span>
                 )}
               </div>
@@ -332,7 +332,7 @@ function BookDetails({ book, onBack }) {
                   <p>{book.tropes}</p>
                 ) : (
                   <span className="book-details-empty">
-                    Geen tropes toegevoegd.
+                    No added tropes.
                   </span>
                 )}
               </div>
@@ -350,7 +350,7 @@ function BookDetails({ book, onBack }) {
                 <p>{book.review}</p>
               ) : (
                 <span className="book-details-empty">
-                  Geen review toegevoegd.
+                  No added review.
                 </span>
               )}
             </div>
@@ -367,7 +367,7 @@ function BookDetails({ book, onBack }) {
                 <p>{book.quotes}</p>
               ) : (
                 <span className="book-details-empty">
-                  Geen favoriete quotes toegevoegd.
+                  No favorite added quotes.
                 </span>
               )}
             </div>

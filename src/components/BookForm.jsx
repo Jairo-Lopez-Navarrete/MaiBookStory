@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 
 const monthNames = [
-  'januari',
-  'februari',
-  'maart',
+  'january',
+  'february',
+  'march',
   'april',
-  'mei',
-  'juni',
-  'juli',
-  'augustus',
+  'may',
+  'june',
+  'july',
+  'august',
   'september',
-  'oktober',
+  'october',
   'november',
   'december',
 ]

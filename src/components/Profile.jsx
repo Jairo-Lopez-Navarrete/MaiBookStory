@@ -139,7 +139,7 @@ function Profile({ user, bookCount, onLogout }) {
       <main className="main-content cute-profile-loading">
         <div className="cute-profile-loading-card">
           <span>✦</span>
-          <p>Profiel laden...</p>
+          <p>Loading profile...</p>
           <span>✦</span>
         </div>
       </main>
@@ -152,7 +152,7 @@ function Profile({ user, bookCount, onLogout }) {
         <div className="cute-profile-loading-card">
           <span>✦</span>
           <p>
-            Je profiel kon niet worden geladen.
+            Your profile couldn't be loaded.
           </p>
           <span>✦</span>
         </div>
@@ -174,7 +174,7 @@ function Profile({ user, bookCount, onLogout }) {
 
           <h2>my profile</h2>
 
-          <p>een klein kijkje in mijn boekenwereld</p>
+          <p>A small peek in my bookworld</p>
         </div>
 
         <div className="cute-profile-avatar-area">
@@ -217,7 +217,7 @@ function Profile({ user, bookCount, onLogout }) {
           />
 
           <p className="cute-profile-photo-hint">
-            tik op je foto om deze te wijzigen
+            tab your profile picture to change it
           </p>
         </div>
 
@@ -263,7 +263,7 @@ function Profile({ user, bookCount, onLogout }) {
           onClick={onLogout}
         >
           <span>♡</span>
-          Uitloggen
+          Log out
           <span>♡</span>
         </button>
 
@@ -304,7 +304,7 @@ function Profile({ user, bookCount, onLogout }) {
             </div>
 
             <label className="cute-profile-field">
-              <span>naam</span>
+              <span>name</span>
 
               <input
                 type="text"
@@ -342,7 +342,7 @@ function Profile({ user, bookCount, onLogout }) {
                   setEditOpen(false)
                 }
               >
-                Annuleren
+                Cancel
               </button>
 
               <button

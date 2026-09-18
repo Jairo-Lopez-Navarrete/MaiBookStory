@@ -648,7 +648,7 @@ function App() {
   if (loading) {
     return (
       <div className="journal-loading">
-        Even laden...
+        Loading...
       </div>
     )
   }
@@ -693,8 +693,8 @@ function App() {
               <h1>MaiBookStory</h1>
 
               <p>
-                jouw persoonlijke
-                boekenwereld
+                your personal
+                bookworld
               </p>
             </div>
 
@@ -713,7 +713,7 @@ function App() {
 
               {!selectedUser && (
                 <label className="journal-year-picker">
-                  <span>jaar</span>
+                  <span>year</span>
 
                   <select
                     value={selectedYear}
@@ -810,7 +810,7 @@ function App() {
                       </span>
 
                       <h2>
-                        Mijn boeken
+                        My books
                       </h2>
                     </div>
 
@@ -865,7 +865,7 @@ function App() {
                         }
                       >
                         <span>＋</span>
-                        Boek toevoegen
+                        Add book
                       </button>
                     </div>
                   ) : (
@@ -922,17 +922,16 @@ function App() {
       {deleteBook && (
         <div className="delete-popup-overlay">
           <div className="delete-popup">
-            <h2>Boek verwijderen?</h2>
+            <h2>Delete book?</h2>
 
             <p>
-              Wil je "{deleteBook.title}"
-              verwijderen?
+              Do you want to delete "{deleteBook.title}"
+              ?
             </p>
 
             {!deletePopupReady && (
               <p className="delete-popup-hint">
-                Haal eerst je vinger van
-                het scherm.
+                Remove your finger from the screen.
               </p>
             )}
 
@@ -949,7 +948,7 @@ function App() {
                   )
                 }}
               >
-                Annuleren
+                Cancel
               </button>
 
               <button
@@ -969,7 +968,7 @@ function App() {
                   )
                 }}
               >
-                Verwijderen
+                Delete
               </button>
             </div>
           </div>

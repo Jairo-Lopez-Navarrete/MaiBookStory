@@ -218,7 +218,7 @@ function UserProfile({ user, onBack }) {
         type="button"
         onClick={onBack}
       >
-        ← Terug
+        ← Back
       </button>
 
       <div className="profile-header">
@@ -244,7 +244,7 @@ function UserProfile({ user, onBack }) {
           <p>{profile.status}</p>
         ) : (
           <p className="profile-no-status">
-            Nog geen status toegevoegd.
+            No added status.
           </p>
         )}
 
@@ -260,38 +260,37 @@ function UserProfile({ user, onBack }) {
         )}
 
         {loading ? (
-          <p>Profiel laden...</p>
+          <p>Loading Profile...</p>
         ) : (
           <div className="profile-stats">
             <div>
               <strong>{bookCount}</strong>
-              <span>boeken</span>
+              <span>books</span>
             </div>
 
             <div>
               <strong>
                 {followerCount}
               </strong>
-              <span>volgers</span>
+              <span>Followers</span>
             </div>
 
             <div>
               <strong>
                 {followingCount}
               </strong>
-              <span>volgend</span>
+              <span>Following</span>
             </div>
           </div>
         )}
       </div>
 
       <section className="user-books">
-        <h3>📚 Boeken</h3>
+        <h3>📚 Books</h3>
 
         {books.length === 0 ? (
           <p>
-            Deze gebruiker heeft nog geen
-            boeken toegevoegd.
+            This user has no books added.
           </p>
         ) : (
           <div className="user-books-grid">
