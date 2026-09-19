@@ -554,12 +554,12 @@ function BookForm({
                 title="Cover kiezen"
               >
                 {coverPreview ? (
-                  <img
-  src={book.cover}
-  alt={`Cover van ${book.title}`}
-  draggable="false"
-/>
-                ) : (
+  <img
+    src={coverPreview}
+    alt={`Cover van ${title}`}
+    draggable="false"
+  />
+) : (
                   <div className="journal-cover-placeholder">
                     📖
                     <span>
