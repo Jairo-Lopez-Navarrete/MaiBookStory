@@ -1718,7 +1718,6 @@ body {
   .rating-pepper {
     width: 31px;
     height: 31px;
-
     font-size: 20px;
   }
 
@@ -4086,7 +4085,8 @@ body {
   transform: scale(0.9);
 }
 
-.journal-pepper {
+
+/*.journal-pepper {
   width: 21px;
   height: 25px;
   padding: 0;
@@ -4096,7 +4096,7 @@ body {
   filter: grayscale(0.3);
   font-size: 14px;
   cursor: pointer;
-}
+}*/
 
 .journal-pepper.selected {
   opacity: 1;
