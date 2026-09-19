@@ -281,13 +281,6 @@ function BookDetails({ book, onBack }) {
               </div>
 
               <div className="book-details-rating-row">
-                <span>representation</span>
-                {renderStars(
-                  book.representation_rating,
-                )}
-              </div>
-
-              <div className="book-details-rating-row">
                 <span>romance</span>
                 {renderStars(
                   book.romance_rating,

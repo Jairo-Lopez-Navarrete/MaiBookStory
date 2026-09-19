@@ -784,15 +784,6 @@ function BookForm({
               </div>
 
               <div className="journal-rating-row">
-                <span>representation</span>
-
-                {renderStars(
-                  representationRating,
-                  setRepresentationRating,
-                )}
-              </div>
-
-              <div className="journal-rating-row">
                 <span>romance</span>
 
                 {renderStars(
