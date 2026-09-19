@@ -558,8 +558,6 @@ function BookForm({
   src={book.cover}
   alt={`Cover van ${book.title}`}
   draggable="false"
-  loading="lazy"
-  decoding="async"
 />
                 ) : (
                   <div className="journal-cover-placeholder">
