@@ -4058,12 +4058,12 @@ body {
   line-height: 1.1;
 }
 
-.journal-rating-stars {
+/*.journal-rating-stars {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0;
-}
+}*/
 
 .journal-star {
   width: 21px;
@@ -6394,7 +6394,7 @@ body {
 .journal-pepper {
   position: relative;
   flex: 0 0 auto;
-  width: 21px;
+  width: 17.5px;
   height: 26px;
   padding: 0;
   border: none;
@@ -6407,7 +6407,7 @@ body {
 }
 
 .journal-pepper {
-  width: 22px;
+  width: 19px;
   height: 26px;
   font-size: 18px;
   line-height: 26px;
