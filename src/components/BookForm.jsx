@@ -555,11 +555,12 @@ function BookForm({
               >
                 {coverPreview ? (
                   <img
-                    src={coverPreview}
-                    alt={`Cover van ${
-                      title || 'het boek'
-                    }`}
-                  />
+  src={book.cover}
+  alt={`Cover van ${book.title}`}
+  draggable="false"
+  loading="lazy"
+  decoding="async"
+/>
                 ) : (
                   <div className="journal-cover-placeholder">
                     📖
