@@ -198,19 +198,18 @@ function Profile({
    */
 
   const mainGenres = [
-    'Fantasy',
-    'Romance',
-    'Thriller',
-    'Horror',
-    'Mystery',
-    'Science Fiction',
-    'Historical Fiction',
-    'Contemporary',
-    'Young Adult',
-    'Literary Fiction',
-    'Adventure',
-    'Dystopian',
-    'Paranormal',
+  'Fantasy',
+  'Romance',
+  'Thriller',
+  'Horror',
+  'SciFi',
+  'Historical',
+  'Non-fiction',
+  'Drama',
+  'Manga',
+  'Comic',
+  'Manhwa',
+  'Manhua',
   ]
 
   /*
