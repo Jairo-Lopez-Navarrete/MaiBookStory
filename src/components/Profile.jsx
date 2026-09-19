@@ -204,6 +204,7 @@ function Profile({
   'Horror',
   'SciFi',
   'Historical',
+  'Mystery',
   'Non-fiction',
   'Drama',
   'Manga',
