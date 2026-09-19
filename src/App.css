@@ -7560,3 +7560,18 @@ body {
   appearance: none;
   -webkit-appearance: none;
 }
+/* BOOK DETAILS — OVERALL STARS ALWAYS FIT */
+.book-details-overall {
+  box-sizing: border-box;
+}
+
+.book-details-overall .details-rating-stars {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.book-details-overall .details-star {
+  flex: 1 1 21px;
+  min-width: 0;
+}
